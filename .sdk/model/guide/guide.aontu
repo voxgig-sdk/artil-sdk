@@ -14,7 +14,8 @@
 # calls every agent `{id}` in its paths). The corrections below:
 #
 # - An agent's access rules and its connection are resources of their own,
-#   read and written at their own paths, not actions on the agent.
+#   read and written at their own paths, not actions on the agent. Access is
+#   read for every channel at once and set one `channel` at a time.
 # - `/me` reads the calling token's member or agent (the heuristic named it
 #   `men`); revoking the calling token is a removal of its own, so the call
 #   needs no `$action`.
@@ -32,6 +33,12 @@ guide: entity: agent: path: "/agents/{id}/connection": active: false
 guide: entity: access: path: "/agents/{id}/access": {
   rename: param: id: agent_id
   op: load: method: GET
+}
+
+# One channel's rule is set at /access/{channel}: the parameter keeps Artil's
+# name, `channel`, since no route reads a single rule by an id.
+guide: entity: access: path: "/agents/{id}/access/{channel}": {
+  rename: param: channel: channel
 }
 
 guide: entity: connection: path: "/agents/{id}/connection": {
