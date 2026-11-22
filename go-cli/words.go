@@ -93,14 +93,16 @@ func entityFor(client *sdk.ArtilSDK, name string) (sdk.ArtilEntityBase, error) {
 		return client.Connection(nil), nil
 	case "event":
 		return client.Event(nil), nil
-	case "listed_teammate":
-		return client.ListedTeammate(nil), nil
 	case "listener":
 		return client.Listener(nil), nil
-	case "men":
-		return client.Men(nil), nil
+	case "me":
+		return client.Me(nil), nil
+	case "me_token":
+		return client.MeToken(nil), nil
 	case "message":
 		return client.Message(nil), nil
+	case "teammate":
+		return client.Teammate(nil), nil
 	case "token":
 		return client.Token(nil), nil
 	case "webhook":

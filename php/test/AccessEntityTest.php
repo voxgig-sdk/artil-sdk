@@ -33,7 +33,7 @@ class AccessEntityTest extends TestCase
         $client = ArtilSDK::test(null, ["feature" => ["validate" => ["active" => true]]]);
         $err = null;
         try {
-            $client->Access(null)->update(["agent_id" => 1, "id" => 'x'], null);
+            $client->Access(null)->load(["agent_id" => 1], null);
         } catch (\Throwable $e) {
             $err = $e;
         }
@@ -45,7 +45,7 @@ class AccessEntityTest extends TestCase
         $setup = access_basic_setup(null);
         // Per-op sdk-test-control.json skip.
         $_live = !empty($setup["live"]);
-        foreach (["update"] as $_op) {
+        foreach (["update", "load"] as $_op) {
             [$_shouldSkip, $_reason] = Runner::is_control_skipped("entityOp", "access." . $_op, $_live ? "live" : "unit");
             if ($_shouldSkip) {
                 $this->markTestSkipped($_reason ?? "skipped via sdk-test-control.json");
@@ -54,7 +54,35 @@ class AccessEntityTest extends TestCase
         }
         if (!empty($setup["live"]) && getenv('VOXGIG_GETONLY_GUARD') === "TRUE") {
             fwrite(STDOUT, 'LIVE STEP {"id":"access.update.0","state":"excluded","attempted":false,"reason":"GET-only live run: needs PUT /agents/{id}/access/{channel}"}' . "\n");
-            $this->markTestSkipped('Live coverage incomplete: access.update.0 excluded (GET-only live run: needs PUT /agents/{id}/access/{channel})');
+        if (!empty($setup["live"])) {
+            Runner::live_miss(self::LIVE_STRICT, "Live entity test blocked: " . "the flow loads a access record it has no list to find");
+        }
+        $client = $setup["client"];
+
+        // Bootstrap entity data from existing test data.
+        $access_ref01_data_raw = Vs::items(Helpers::to_map(
+            Vs::getpath($setup["data"], "existing.access")));
+        $access_ref01_data = null;
+        if (count($access_ref01_data_raw) > 0) {
+            $access_ref01_data = Helpers::to_map($access_ref01_data_raw[0][1]);
+        }
+
+        if (!empty($setup["live"])) {
+            Runner::live_pace();
+        }
+        // LOAD
+        $access_ref01_ent = $client->Access(null);
+        $access_ref01_match_dt0 = [
+            "id" => $access_ref01_data["id"],
+        ];
+        $access_ref01_data_dt0_loaded = $access_ref01_ent->load($access_ref01_match_dt0, null);
+        $access_ref01_data_dt0_load_result = Helpers::to_map(is_object($access_ref01_data_dt0_loaded) && method_exists($access_ref01_data_dt0_loaded, 'data_get') ? $access_ref01_data_dt0_loaded->data_get() : $access_ref01_data_dt0_loaded);
+        $this->assertNotNull($access_ref01_data_dt0_load_result);
+        if (empty($setup["live"])) {
+            $this->assertTrue(Runner::live_same_id($access_ref01_data_dt0_load_result["id"] ?? null, $access_ref01_data["id"]));
+        }
+
+            return;
         }
 
         if (!empty($setup["live"])) {
@@ -98,6 +126,20 @@ class AccessEntityTest extends TestCase
             $this->assertTrue(Runner::live_same_id($access_ref01_resdata_up0["id"] ?? null, $access_ref01_data_up0_up["id"]));
         }
         $this->assertEquals($access_ref01_resdata_up0[$access_ref01_markdef_up0_name], $access_ref01_markdef_up0_value);
+
+        if (!empty($setup["live"])) {
+            Runner::live_pace();
+        }
+        // LOAD
+        $access_ref01_match_dt0 = [
+            "id" => $access_ref01_data["id"],
+        ];
+        $access_ref01_data_dt0_loaded = $access_ref01_ent->load($access_ref01_match_dt0, null);
+        $access_ref01_data_dt0_load_result = Helpers::to_map(is_object($access_ref01_data_dt0_loaded) && method_exists($access_ref01_data_dt0_loaded, 'data_get') ? $access_ref01_data_dt0_loaded->data_get() : $access_ref01_data_dt0_loaded);
+        $this->assertNotNull($access_ref01_data_dt0_load_result);
+        if (empty($setup["live"])) {
+            $this->assertTrue(Runner::live_same_id($access_ref01_data_dt0_load_result["id"] ?? null, $access_ref01_data["id"]));
+        }
 
     }
 }

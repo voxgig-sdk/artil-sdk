@@ -1,0 +1,15 @@
+$kind: http-request
+id: cda3e434-6ec8-5800-86e9-16f5558c6ccf
+description: |-
+  The `load` operation of **connection**.
+
+  SDK: `client.Connection().load({ agent_id: "example" })`
+url: "{{base}}/agents/:id/connection"
+method: GET
+headers:
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "{{agent_id}}"
+    description: The agent this connection belongs to.
+order: 1000

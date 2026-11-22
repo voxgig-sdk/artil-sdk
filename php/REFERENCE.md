@@ -74,21 +74,25 @@ Create a new `ConnectionEntity` instance. Pass `null` for no initial data.
 
 Create a new `EventEntity` instance. Pass `null` for no initial data.
 
-#### `ListedTeammate($data = null)`
-
-Create a new `ListedTeammateEntity` instance. Pass `null` for no initial data.
-
 #### `Listener($data = null)`
 
 Create a new `ListenerEntity` instance. Pass `null` for no initial data.
 
-#### `Men($data = null)`
+#### `Me($data = null)`
 
-Create a new `MenEntity` instance. Pass `null` for no initial data.
+Create a new `MeEntity` instance. Pass `null` for no initial data.
+
+#### `MeToken($data = null)`
+
+Create a new `MeTokenEntity` instance. Pass `null` for no initial data.
 
 #### `Message($data = null)`
 
 Create a new `MessageEntity` instance. Pass `null` for no initial data.
+
+#### `Teammate($data = null)`
+
+Create a new `TeammateEntity` instance. Pass `null` for no initial data.
 
 #### `Token($data = null)`
 
@@ -150,6 +154,14 @@ $access = $client->Access();
 | `senders` | `array` | Yes | Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members |
 
 ### Operations
+
+#### `load(array $reqmatch, ?array $ctrl = null): mixed`
+
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and throws on error.
+
+```php
+$result = $client->Access()->load(["agent_id" => "agent_id"]);
+```
 
 #### `update(array $reqdata, ?array $ctrl = null): mixed`
 
@@ -596,14 +608,22 @@ $connection = $client->Connection();
 
 ### Field Usage by Operation
 
-| Field | update |
-| --- | --- |
-| `client` | - |
-| `id` | - |
-| `machine` | Yes |
-| `tokenId` | - |
+| Field | load | update |
+| --- | --- | --- |
+| `client` | - | - |
+| `id` | - | - |
+| `machine` | - | Yes |
+| `tokenId` | - | - |
 
 ### Operations
+
+#### `load(array $reqmatch, ?array $ctrl = null): mixed`
+
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and throws on error.
+
+```php
+$result = $client->Connection()->load(["agent_id" => "agent_id"]);
+```
 
 #### `update(array $reqdata, ?array $ctrl = null): mixed`
 
@@ -670,19 +690,19 @@ $event = $client->Event();
 
 ### Field Usage by Operation
 
-| Field | load | list | create |
-| --- | --- | --- | --- |
-| `attachments` | - | - | - |
-| `channel` | - | - | - |
-| `client` | - | - | - |
-| `createdAt` | - | - | - |
-| `id` | - | - | - |
-| `messageId` | - | - | - |
-| `sender` | - | - | - |
-| `text` | - | - | - |
-| `thread` | - | - | - |
-| `toThread` | - | Yes | - |
-| `type` | - | - | - |
+| Field | list | create |
+| --- | --- | --- |
+| `attachments` | - | - |
+| `channel` | - | - |
+| `client` | - | - |
+| `createdAt` | - | - |
+| `id` | - | - |
+| `messageId` | - | - |
+| `sender` | - | - |
+| `text` | - | - |
+| `thread` | - | - |
+| `toThread` | Yes | - |
+| `type` | - | - |
 
 ### Operations
 
@@ -703,10 +723,6 @@ List entities matching the given criteria (call with no argument to list all). R
 ```php
 $results = $client->Event()->list(["agent_id" => "example"]);
 ```
-
-#### `load(array $reqmatch, ?array $ctrl = null): mixed`
-
-Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and throws on error.
 
 ### Common Methods
 
@@ -729,67 +745,6 @@ Set the entity match criteria.
 #### `make(): EventEntity`
 
 Create a new `EventEntity` instance with the same client and
-options.
-
-#### `get_name(): string`
-
-Return the entity name.
-
-
----
-
-## ListedTeammateEntity
-
-```php
-$listed_teammate = $client->ListedTeammate();
-```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `addresses` | `array` | Yes | Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number |
-| `email` | `mixed` | Yes | The agent's primary email address, or the member's |
-| `icon` | `mixed` | Yes | The agent's icon; null for members |
-| `id` | `string` | Yes | The agent's or member's id |
-| `imageUrl` | `mixed` | Yes | The member's picture from their sign-in profile, or the avatar it makes them; null for agents |
-| `kind` | `string` | Yes |  |
-| `listening` | `mixed` | Yes | Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members |
-| `name` | `mixed` | Yes |  |
-| `phone` | `mixed` | Yes | The agent's primary phone number, or the one a member added to their profile |
-| `role` | `mixed` | Yes | The member's role in the workspace; null for agents |
-
-### Operations
-
-#### `list(?array $reqmatch = null, ?array $ctrl = null): mixed`
-
-List entities matching the given criteria (call with no argument to list all). Returns an array of entities, one per record, and throws on error.
-
-```php
-$results = $client->ListedTeammate()->list();
-```
-
-### Common Methods
-
-#### `data_get(): array`
-
-Get the entity data. Returns a copy of the current data.
-
-#### `data_set($data): void`
-
-Set the entity data.
-
-#### `match_get(): array`
-
-Get the entity match criteria.
-
-#### `match_set($match): void`
-
-Set the entity match criteria.
-
-#### `make(): ListedTeammateEntity`
-
-Create a new `ListedTeammateEntity` instance with the same client and
 options.
 
 #### `get_name(): string`
@@ -845,10 +800,10 @@ Return the entity name.
 
 ---
 
-## MenEntity
+## MeEntity
 
 ```php
-$men = $client->Men();
+$me = $client->Me();
 ```
 
 ### Operations
@@ -858,12 +813,8 @@ $men = $client->Men();
 Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and throws on error.
 
 ```php
-$result = $client->Men()->load();
+$result = $client->Me()->load();
 ```
-
-#### `remove(array $reqmatch, ?array $ctrl = null): mixed`
-
-Remove the entity matching the given criteria. Returns the entity, marked as deleted, and throws on error.
 
 ### Common Methods
 
@@ -883,9 +834,55 @@ Get the entity match criteria.
 
 Set the entity match criteria.
 
-#### `make(): MenEntity`
+#### `make(): MeEntity`
 
-Create a new `MenEntity` instance with the same client and
+Create a new `MeEntity` instance with the same client and
+options.
+
+#### `get_name(): string`
+
+Return the entity name.
+
+
+---
+
+## MeTokenEntity
+
+```php
+$me_token = $client->MeToken();
+```
+
+### Operations
+
+#### `remove(array $reqmatch, ?array $ctrl = null): mixed`
+
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, and throws on error.
+
+```php
+$result = $client->MeToken()->remove();
+```
+
+### Common Methods
+
+#### `data_get(): array`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set($data): void`
+
+Set the entity data.
+
+#### `match_get(): array`
+
+Get the entity match criteria.
+
+#### `match_set($match): void`
+
+Set the entity match criteria.
+
+#### `make(): MeTokenEntity`
+
+Create a new `MeTokenEntity` instance with the same client and
 options.
 
 #### `get_name(): string`
@@ -1005,6 +1002,67 @@ Set the entity match criteria.
 #### `make(): MessageEntity`
 
 Create a new `MessageEntity` instance with the same client and
+options.
+
+#### `get_name(): string`
+
+Return the entity name.
+
+
+---
+
+## TeammateEntity
+
+```php
+$teammate = $client->Teammate();
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `addresses` | `array` | Yes | Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number |
+| `email` | `mixed` | Yes | The agent's primary email address, or the member's |
+| `icon` | `mixed` | Yes | The agent's icon; null for members |
+| `id` | `string` | Yes | The agent's or member's id |
+| `imageUrl` | `mixed` | Yes | The member's picture from their sign-in profile, or the avatar it makes them; null for agents |
+| `kind` | `string` | Yes |  |
+| `listening` | `mixed` | Yes | Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members |
+| `name` | `mixed` | Yes |  |
+| `phone` | `mixed` | Yes | The agent's primary phone number, or the one a member added to their profile |
+| `role` | `mixed` | Yes | The member's role in the workspace; null for agents |
+
+### Operations
+
+#### `list(?array $reqmatch = null, ?array $ctrl = null): mixed`
+
+List entities matching the given criteria (call with no argument to list all). Returns an array of entities, one per record, and throws on error.
+
+```php
+$results = $client->Teammate()->list();
+```
+
+### Common Methods
+
+#### `data_get(): array`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set($data): void`
+
+Set the entity data.
+
+#### `match_get(): array`
+
+Get the entity match criteria.
+
+#### `match_set($match): void`
+
+Set the entity match criteria.
+
+#### `make(): TeammateEntity`
+
+Create a new `TeammateEntity` instance with the same client and
 options.
 
 #### `get_name(): string`

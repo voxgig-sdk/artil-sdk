@@ -37,7 +37,7 @@ class TestAccessEntity:
         client = ArtilSDK.test(
             None, {"feature": {"validate": {"active": True}}})
         with pytest.raises(Exception) as err:
-            client.Access(None).update({"agent_id": 1, "id": "x"}, None)
+            client.Access(None).load({"agent_id": 1}, None)
         assert "validate_failed" == getattr(err.value, "code", None)
 
     def test_should_run_basic_flow(self):
@@ -46,14 +46,14 @@ class TestAccessEntity:
         # multiple ops; skipping any one skips the whole flow (steps depend
         # on each other).
         _live = setup.get("live", False)
-        for _op in ["update"]:
+        for _op in ["update", "load"]:
             _skip, _reason = runner.is_control_skipped("entityOp", "access." + _op, "live" if _live else "unit")
             if _skip:
                 pytest.skip(_reason or "skipped via sdk-test-control.json")
                 return
         if setup["live"] and os.environ.get("VOXGIG_GETONLY_GUARD") == "TRUE":
             print("LIVE STEP {\"id\":\"access.update.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs PUT /agents/{id}/access/{channel}\"}")
-            pytest.skip("Live coverage incomplete: access.update.0 excluded (GET-only live run: needs PUT /agents/{id}/access/{channel})")
+            return self._run_get_only_flow(setup)
 
         if setup["live"]:
             for _live_key in ["agent01"]:
@@ -88,6 +88,44 @@ class TestAccessEntity:
         if not setup["live"]:
             assert runner.live_same_id(access_ref01_resdata_up0.get("id"), access_ref01_data_up0_up["id"])
         assert access_ref01_resdata_up0[access_ref01_markdef_up0_name] == access_ref01_markdef_up0_value
+
+        if setup["live"]:
+            runner.live_pace()
+        # LOAD
+        access_ref01_match_dt0 = {
+            "id": access_ref01_data["id"],
+        }
+        access_ref01_data_dt0_loaded = access_ref01_ent.load(access_ref01_match_dt0, None)
+        access_ref01_data_dt0_load_result = helpers.to_map(runner.entity_data(access_ref01_data_dt0_loaded))
+        assert access_ref01_data_dt0_load_result is not None
+        if not setup["live"]:
+            assert runner.live_same_id(access_ref01_data_dt0_load_result.get("id"), access_ref01_data["id"])
+
+
+    def _run_get_only_flow(self, setup):
+        if setup["live"]:
+            runner.live_miss(LIVE_STRICT, "Live entity test blocked: " + "the flow loads a access record it has no list to find")
+        client = setup["client"]
+
+        # Bootstrap entity data from existing test data.
+        access_ref01_data_raw = vs.items(helpers.to_map(
+            vs.getpath(setup["data"], "existing.access")))
+        access_ref01_data = None
+        if len(access_ref01_data_raw) > 0:
+            access_ref01_data = helpers.to_map(access_ref01_data_raw[0][1])
+
+        if setup["live"]:
+            runner.live_pace()
+        # LOAD
+        access_ref01_ent = client.Access(None)
+        access_ref01_match_dt0 = {
+            "id": access_ref01_data["id"],
+        }
+        access_ref01_data_dt0_loaded = access_ref01_ent.load(access_ref01_match_dt0, None)
+        access_ref01_data_dt0_load_result = helpers.to_map(runner.entity_data(access_ref01_data_dt0_loaded))
+        assert access_ref01_data_dt0_load_result is not None
+        if not setup["live"]:
+            assert runner.live_same_id(access_ref01_data_dt0_load_result.get("id"), access_ref01_data["id"])
 
 
 

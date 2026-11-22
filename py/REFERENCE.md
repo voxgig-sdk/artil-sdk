@@ -74,21 +74,25 @@ Create a new `ConnectionEntity` instance. Pass `None` for no initial data.
 
 Create a new `EventEntity` instance. Pass `None` for no initial data.
 
-#### `ListedTeammate(data=None)`
-
-Create a new `ListedTeammateEntity` instance. Pass `None` for no initial data.
-
 #### `Listener(data=None)`
 
 Create a new `ListenerEntity` instance. Pass `None` for no initial data.
 
-#### `Men(data=None)`
+#### `Me(data=None)`
 
-Create a new `MenEntity` instance. Pass `None` for no initial data.
+Create a new `MeEntity` instance. Pass `None` for no initial data.
+
+#### `MeToken(data=None)`
+
+Create a new `MeTokenEntity` instance. Pass `None` for no initial data.
 
 #### `Message(data=None)`
 
 Create a new `MessageEntity` instance. Pass `None` for no initial data.
+
+#### `Teammate(data=None)`
+
+Create a new `TeammateEntity` instance. Pass `None` for no initial data.
 
 #### `Token(data=None)`
 
@@ -145,6 +149,14 @@ access = client.Access()
 | `senders` | `list` | Yes | Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members |
 
 ### Operations
+
+#### `load(reqmatch, ctrl=None) -> AccessEntity`
+
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and raises on error.
+
+```python
+result = client.Access().load({"agent_id": "agent_id"})
+```
 
 #### `update(reqdata, ctrl=None) -> AccessEntity`
 
@@ -593,14 +605,22 @@ connection = client.Connection()
 
 ### Field Usage by Operation
 
-| Field | update |
-| --- | --- |
-| `client` | - |
-| `id` | - |
-| `machine` | Yes |
-| `tokenId` | - |
+| Field | load | update |
+| --- | --- | --- |
+| `client` | - | - |
+| `id` | - | - |
+| `machine` | - | Yes |
+| `tokenId` | - | - |
 
 ### Operations
+
+#### `load(reqmatch, ctrl=None) -> ConnectionEntity`
+
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and raises on error.
+
+```python
+result = client.Connection().load({"agent_id": "agent_id"})
+```
 
 #### `update(reqdata, ctrl=None) -> ConnectionEntity`
 
@@ -666,19 +686,19 @@ event = client.Event()
 
 ### Field Usage by Operation
 
-| Field | load | list | create |
-| --- | --- | --- | --- |
-| `attachments` | - | - | - |
-| `channel` | - | - | - |
-| `client` | - | - | - |
-| `createdAt` | - | - | - |
-| `id` | - | - | - |
-| `messageId` | - | - | - |
-| `sender` | - | - | - |
-| `text` | - | - | - |
-| `thread` | - | - | - |
-| `toThread` | - | Yes | - |
-| `type` | - | - | - |
+| Field | list | create |
+| --- | --- | --- |
+| `attachments` | - | - |
+| `channel` | - | - |
+| `client` | - | - |
+| `createdAt` | - | - |
+| `id` | - | - |
+| `messageId` | - | - |
+| `sender` | - | - |
+| `text` | - | - |
+| `thread` | - | - |
+| `toThread` | Yes | - |
+| `type` | - | - |
 
 ### Operations
 
@@ -702,10 +722,6 @@ for event in results:
     print(event.data_get())
 ```
 
-#### `load(reqmatch, ctrl=None) -> EventEntity`
-
-Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and raises on error.
-
 ### Common Methods
 
 #### `data_get() -> dict`
@@ -727,68 +743,6 @@ Set the entity match criteria.
 #### `make() -> Entity`
 
 Create a new `EventEntity` instance with the same options.
-
-#### `get_name() -> str`
-
-Return the entity name.
-
-
----
-
-## ListedTeammateEntity
-
-```python
-listed_teammate = client.ListedTeammate()
-```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `addresses` | `list` | Yes | Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number |
-| `email` | `str | None` | Yes | The agent's primary email address, or the member's |
-| `icon` | `Any` | Yes | The agent's icon; null for members |
-| `id` | `str` | Yes | The agent's or member's id |
-| `imageUrl` | `str | None` | Yes | The member's picture from their sign-in profile, or the avatar it makes them; null for agents |
-| `kind` | `str` | Yes |  |
-| `listening` | `bool | None` | Yes | Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members |
-| `name` | `str | None` | Yes |  |
-| `phone` | `str | None` | Yes | The agent's primary phone number, or the one a member added to their profile |
-| `role` | `Any` | Yes | The member's role in the workspace; null for agents |
-
-### Operations
-
-#### `list(reqmatch=None, ctrl=None) -> list[ListedTeammateEntity]`
-
-List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list of entities, one per record, and raises on error.
-
-```python
-results = client.ListedTeammate().list()
-for listed_teammate in results:
-    print(listed_teammate.data_get())
-```
-
-### Common Methods
-
-#### `data_get() -> dict`
-
-Get the entity data.
-
-#### `data_set(data)`
-
-Set the entity data.
-
-#### `match_get() -> dict`
-
-Get the entity match criteria.
-
-#### `match_set(match)`
-
-Set the entity match criteria.
-
-#### `make() -> Entity`
-
-Create a new `ListedTeammateEntity` instance with the same options.
 
 #### `get_name() -> str`
 
@@ -844,25 +798,21 @@ Return the entity name.
 
 ---
 
-## MenEntity
+## MeEntity
 
 ```python
-men = client.Men()
+me = client.Me()
 ```
 
 ### Operations
 
-#### `load(reqmatch, ctrl=None) -> MenEntity`
+#### `load(reqmatch, ctrl=None) -> MeEntity`
 
 Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and raises on error.
 
 ```python
-result = client.Men().load()
+result = client.Me().load()
 ```
-
-#### `remove(reqmatch, ctrl=None) -> MenEntity`
-
-Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
 
 ### Common Methods
 
@@ -884,7 +834,52 @@ Set the entity match criteria.
 
 #### `make() -> Entity`
 
-Create a new `MenEntity` instance with the same options.
+Create a new `MeEntity` instance with the same options.
+
+#### `get_name() -> str`
+
+Return the entity name.
+
+
+---
+
+## MeTokenEntity
+
+```python
+me_token = client.MeToken()
+```
+
+### Operations
+
+#### `remove(reqmatch, ctrl=None) -> MeTokenEntity`
+
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
+
+```python
+result = client.MeToken().remove()
+```
+
+### Common Methods
+
+#### `data_get() -> dict`
+
+Get the entity data.
+
+#### `data_set(data)`
+
+Set the entity data.
+
+#### `match_get() -> dict`
+
+Get the entity match criteria.
+
+#### `match_set(match)`
+
+Set the entity match criteria.
+
+#### `make() -> Entity`
+
+Create a new `MeTokenEntity` instance with the same options.
 
 #### `get_name() -> str`
 
@@ -1005,6 +1000,68 @@ Set the entity match criteria.
 #### `make() -> Entity`
 
 Create a new `MessageEntity` instance with the same options.
+
+#### `get_name() -> str`
+
+Return the entity name.
+
+
+---
+
+## TeammateEntity
+
+```python
+teammate = client.Teammate()
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `addresses` | `list` | Yes | Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number |
+| `email` | `str | None` | Yes | The agent's primary email address, or the member's |
+| `icon` | `Any` | Yes | The agent's icon; null for members |
+| `id` | `str` | Yes | The agent's or member's id |
+| `imageUrl` | `str | None` | Yes | The member's picture from their sign-in profile, or the avatar it makes them; null for agents |
+| `kind` | `str` | Yes |  |
+| `listening` | `bool | None` | Yes | Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members |
+| `name` | `str | None` | Yes |  |
+| `phone` | `str | None` | Yes | The agent's primary phone number, or the one a member added to their profile |
+| `role` | `Any` | Yes | The member's role in the workspace; null for agents |
+
+### Operations
+
+#### `list(reqmatch=None, ctrl=None) -> list[TeammateEntity]`
+
+List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list of entities, one per record, and raises on error.
+
+```python
+results = client.Teammate().list()
+for teammate in results:
+    print(teammate.data_get())
+```
+
+### Common Methods
+
+#### `data_get() -> dict`
+
+Get the entity data.
+
+#### `data_set(data)`
+
+Set the entity data.
+
+#### `match_get() -> dict`
+
+Get the entity match criteria.
+
+#### `match_set(match)`
+
+Set the entity match criteria.
+
+#### `make() -> Entity`
+
+Create a new `TeammateEntity` instance with the same options.
 
 #### `get_name() -> str`
 

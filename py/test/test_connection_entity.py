@@ -37,7 +37,7 @@ class TestConnectionEntity:
         client = ArtilSDK.test(
             None, {"feature": {"validate": {"active": True}}})
         with pytest.raises(Exception) as err:
-            client.Connection(None).update({"agent_id": 1}, None)
+            client.Connection(None).load({"agent_id": 1}, None)
         assert "validate_failed" == getattr(err.value, "code", None)
 
     def test_should_run_basic_flow(self):

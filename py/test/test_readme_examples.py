@@ -84,10 +84,11 @@ _ENTITIES = {
     "Client": "client",
     "Connection": "connection",
     "Event": "event",
-    "ListedTeammate": "listed_teammate",
     "Listener": "listener",
-    "Men": "men",
+    "Me": "me",
+    "MeToken": "me_token",
     "Message": "message",
+    "Teammate": "teammate",
     "Token": "token",
     "Webhook": "webhook",
 }

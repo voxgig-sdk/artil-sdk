@@ -33,7 +33,7 @@ class ConnectionEntityTest extends TestCase
         $client = ArtilSDK::test(null, ["feature" => ["validate" => ["active" => true]]]);
         $err = null;
         try {
-            $client->Connection(null)->update(["agent_id" => 1], null);
+            $client->Connection(null)->load(["agent_id" => 1], null);
         } catch (\Throwable $e) {
             $err = $e;
         }

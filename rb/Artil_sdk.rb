@@ -377,13 +377,6 @@ class ArtilSDK
   end
 
 
-  # Canonical facade: client.ListedTeammate.list / client.ListedTeammate.load({ "id" => ... })
-  def ListedTeammate(data = nil)
-    require_relative 'entity/listed_teammate_entity'
-    ListedTeammateEntity.new(self, data)
-  end
-
-
   # Canonical facade: client.Listener.list / client.Listener.load({ "id" => ... })
   def Listener(data = nil)
     require_relative 'entity/listener_entity'
@@ -391,10 +384,17 @@ class ArtilSDK
   end
 
 
-  # Canonical facade: client.Men.list / client.Men.load({ "id" => ... })
-  def Men(data = nil)
-    require_relative 'entity/men_entity'
-    MenEntity.new(self, data)
+  # Canonical facade: client.Me.list / client.Me.load({ "id" => ... })
+  def Me(data = nil)
+    require_relative 'entity/me_entity'
+    MeEntity.new(self, data)
+  end
+
+
+  # Canonical facade: client.MeToken.list / client.MeToken.load({ "id" => ... })
+  def MeToken(data = nil)
+    require_relative 'entity/me_token_entity'
+    MeTokenEntity.new(self, data)
   end
 
 
@@ -402,6 +402,13 @@ class ArtilSDK
   def Message(data = nil)
     require_relative 'entity/message_entity'
     MessageEntity.new(self, data)
+  end
+
+
+  # Canonical facade: client.Teammate.list / client.Teammate.load({ "id" => ... })
+  def Teammate(data = nil)
+    require_relative 'entity/teammate_entity'
+    TeammateEntity.new(self, data)
   end
 
 

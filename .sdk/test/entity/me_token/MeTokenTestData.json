@@ -1,0 +1,27 @@
+{
+  "existing": {
+    "me_token": {
+      "ME_TOKEN00": {
+        "id": "ME_TOKEN00"
+      },
+      "ME_TOKEN01": {
+        "id": "ME_TOKEN01"
+      },
+      "ME_TOKEN02": {
+        "id": "ME_TOKEN02"
+      }
+    }
+  },
+  "new": {
+    "me_token": {
+      "me_token_ref01": {}
+    }
+  },
+  "requests": {
+    "DELETE /me/token": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

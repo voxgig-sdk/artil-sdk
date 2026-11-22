@@ -24,6 +24,28 @@ main: kit: flow: BasicConnectionFlow:
         }
       ]
     }
+
+    {
+      i: {
+        ref: "connection_ref01",
+        srcdatavar: "connection_ref01_data",
+        suffix: "_dt0"
+      }
+
+      m: {
+        id: "connection01"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-connection_ref01"
+          }
+        }
+      ]
+    }
   ],
   "key$": "BasicConnectionFlow"
 }

@@ -46,16 +46,6 @@
       "version": 2,
       "source": "openapi3"
     },
-    "GET /agents/{id}/access": {
-      "provenance": "operation-contract",
-      "version": 2,
-      "source": "openapi3"
-    },
-    "GET /agents/{id}/connection": {
-      "provenance": "operation-contract",
-      "version": 2,
-      "source": "openapi3"
-    },
     "DELETE /agents/{id}": {
       "provenance": "operation-contract",
       "version": 2,

@@ -533,24 +533,6 @@ class ArtilSDK implements \JsonSerializable
     }
 
 
-    private $_listed_teammate = null;
-
-    // Canonical facade: $client->ListedTeammate()->list() / ->load(["id" => ...]).
-    // PHP method names are case-insensitive, so lowercase $client->listed_teammate()
-    // resolves here too.
-    public function ListedTeammate($data = null)
-    {
-        require_once __DIR__ . '/entity/listed_teammate_entity.php';
-        if ($data === null) {
-            if ($this->_listed_teammate === null) {
-                $this->_listed_teammate = new ListedTeammateEntity($this, null);
-            }
-            return $this->_listed_teammate;
-        }
-        return new ListedTeammateEntity($this, $data);
-    }
-
-
     private $_listener = null;
 
     // Canonical facade: $client->Listener()->list() / ->load(["id" => ...]).
@@ -569,21 +551,39 @@ class ArtilSDK implements \JsonSerializable
     }
 
 
-    private $_men = null;
+    private $_me = null;
 
-    // Canonical facade: $client->Men()->list() / ->load(["id" => ...]).
-    // PHP method names are case-insensitive, so lowercase $client->men()
+    // Canonical facade: $client->Me()->list() / ->load(["id" => ...]).
+    // PHP method names are case-insensitive, so lowercase $client->me()
     // resolves here too.
-    public function Men($data = null)
+    public function Me($data = null)
     {
-        require_once __DIR__ . '/entity/men_entity.php';
+        require_once __DIR__ . '/entity/me_entity.php';
         if ($data === null) {
-            if ($this->_men === null) {
-                $this->_men = new MenEntity($this, null);
+            if ($this->_me === null) {
+                $this->_me = new MeEntity($this, null);
             }
-            return $this->_men;
+            return $this->_me;
         }
-        return new MenEntity($this, $data);
+        return new MeEntity($this, $data);
+    }
+
+
+    private $_me_token = null;
+
+    // Canonical facade: $client->MeToken()->list() / ->load(["id" => ...]).
+    // PHP method names are case-insensitive, so lowercase $client->me_token()
+    // resolves here too.
+    public function MeToken($data = null)
+    {
+        require_once __DIR__ . '/entity/me_token_entity.php';
+        if ($data === null) {
+            if ($this->_me_token === null) {
+                $this->_me_token = new MeTokenEntity($this, null);
+            }
+            return $this->_me_token;
+        }
+        return new MeTokenEntity($this, $data);
     }
 
 
@@ -602,6 +602,24 @@ class ArtilSDK implements \JsonSerializable
             return $this->_message;
         }
         return new MessageEntity($this, $data);
+    }
+
+
+    private $_teammate = null;
+
+    // Canonical facade: $client->Teammate()->list() / ->load(["id" => ...]).
+    // PHP method names are case-insensitive, so lowercase $client->teammate()
+    // resolves here too.
+    public function Teammate($data = null)
+    {
+        require_once __DIR__ . '/entity/teammate_entity.php';
+        if ($data === null) {
+            if ($this->_teammate === null) {
+                $this->_teammate = new TeammateEntity($this, null);
+            }
+            return $this->_teammate;
+        }
+        return new TeammateEntity($this, $data);
     }
 
 

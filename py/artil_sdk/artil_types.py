@@ -25,6 +25,10 @@ class Access(AccessRequired, total=False):
     id: str
 
 
+class AccessLoadMatch(TypedDict):
+    agent_id: str
+
+
 class AccessUpdateDataRequired(TypedDict):
     agent_id: str
     id: str
@@ -174,6 +178,10 @@ class Connection(TypedDict):
     tokenId: str
 
 
+class ConnectionLoadMatch(TypedDict):
+    agent_id: str
+
+
 class ConnectionUpdateDataRequired(TypedDict):
     agent_id: str
 
@@ -200,15 +208,6 @@ class Event(EventRequired, total=False):
     toThread: str
 
 
-class EventLoadMatchRequired(TypedDict):
-    agent_id: str
-
-
-class EventLoadMatch(EventLoadMatchRequired, total=False):
-    after: int
-    connection: str
-
-
 class EventListMatchRequired(TypedDict):
     agent_id: str
 
@@ -229,32 +228,6 @@ class EventCreateData(EventCreateDataRequired, total=False):
     toThread: str
 
 
-class ListedTeammate(TypedDict):
-    addresses: list
-    email: str | None
-    icon: Any
-    id: str
-    imageUrl: str | None
-    kind: str
-    listening: bool | None
-    name: str | None
-    phone: str | None
-    role: Any
-
-
-class ListedTeammateListMatch(TypedDict, total=False):
-    addresses: list
-    email: str | None
-    icon: Any
-    id: str
-    imageUrl: str | None
-    kind: str
-    listening: bool | None
-    name: str | None
-    phone: str | None
-    role: Any
-
-
 class Listener(TypedDict):
     pass
 
@@ -263,15 +236,19 @@ class ListenerListMatch(TypedDict):
     agent_id: str
 
 
-class Men(TypedDict):
+class Me(TypedDict):
     pass
 
 
-class MenLoadMatch(TypedDict):
+class MeLoadMatch(TypedDict):
     pass
 
 
-class MenRemoveMatch(TypedDict):
+class MeToken(TypedDict):
+    pass
+
+
+class MeTokenRemoveMatch(TypedDict):
     pass
 
 
@@ -336,6 +313,32 @@ class MessageCreateData(MessageCreateDataRequired, total=False):
     subject: str | None
     thread: Any
     to: list
+
+
+class Teammate(TypedDict):
+    addresses: list
+    email: str | None
+    icon: Any
+    id: str
+    imageUrl: str | None
+    kind: str
+    listening: bool | None
+    name: str | None
+    phone: str | None
+    role: Any
+
+
+class TeammateListMatch(TypedDict, total=False):
+    addresses: list
+    email: str | None
+    icon: Any
+    id: str
+    imageUrl: str | None
+    kind: str
+    listening: bool | None
+    name: str | None
+    phone: str | None
+    role: Any
 
 
 class Token(TypedDict):

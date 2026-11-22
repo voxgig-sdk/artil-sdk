@@ -11,6 +11,9 @@
 ---@field id? string
 ---@field senders table
 
+---@class AccessLoadMatch
+---@field agent_id string
+
 ---@class AccessUpdateData
 ---@field agent_id string
 ---@field id string
@@ -116,6 +119,9 @@
 ---@field machine string|nil
 ---@field tokenId string
 
+---@class ConnectionLoadMatch
+---@field agent_id string
+
 ---@class ConnectionUpdateData
 ---@field agent_id string
 ---@field client? string
@@ -134,11 +140,6 @@
 ---@field toThread? string
 ---@field type string
 
----@class EventLoadMatch
----@field agent_id string
----@field after? number
----@field connection? string
-
 ---@class EventListMatch
 ---@field agent_id string
 ---@field after? number
@@ -151,40 +152,18 @@
 ---@field thread? string
 ---@field toThread? string
 
----@class ListedTeammate
----@field addresses table
----@field email string|nil
----@field icon any
----@field id string
----@field imageUrl string|nil
----@field kind string
----@field listening boolean|nil
----@field name string|nil
----@field phone string|nil
----@field role any
-
----@class ListedTeammateListMatch
----@field addresses? table
----@field email? string|nil
----@field icon? any
----@field id? string
----@field imageUrl? string|nil
----@field kind? string
----@field listening? boolean|nil
----@field name? string|nil
----@field phone? string|nil
----@field role? any
-
 ---@class Listener
 
 ---@class ListenerListMatch
 ---@field agent_id string
 
----@class Men
+---@class Me
 
----@class MenLoadMatch
+---@class MeLoadMatch
 
----@class MenRemoveMatch
+---@class MeToken
+
+---@class MeTokenRemoveMatch
 
 ---@class Message
 ---@field addressId string
@@ -235,6 +214,30 @@
 ---@field text string
 ---@field thread? any
 ---@field to? table
+
+---@class Teammate
+---@field addresses table
+---@field email string|nil
+---@field icon any
+---@field id string
+---@field imageUrl string|nil
+---@field kind string
+---@field listening boolean|nil
+---@field name string|nil
+---@field phone string|nil
+---@field role any
+
+---@class TeammateListMatch
+---@field addresses? table
+---@field email? string|nil
+---@field icon? any
+---@field id? string
+---@field imageUrl? string|nil
+---@field kind? string
+---@field listening? boolean|nil
+---@field name? string|nil
+---@field phone? string|nil
+---@field role? any
 
 ---@class Token
 ---@field createdAt string

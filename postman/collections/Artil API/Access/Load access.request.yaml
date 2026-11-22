@@ -1,0 +1,15 @@
+$kind: http-request
+id: "609dc471-dad7-51b1-8098-3998d8b0588f"
+description: |-
+  The `load` operation of **access**.
+
+  SDK: `client.Access().load({ agent_id: "example" })`
+url: "{{base}}/agents/:id/access"
+method: GET
+headers:
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "{{agent_id}}"
+    description: The agent this access belongs to.
+order: 1000

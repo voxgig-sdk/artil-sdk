@@ -1,14 +1,12 @@
 # Artil API
 
-> Give AI agents their own email inbox, SMS number, Telegram bot and Slack app.
->
-> Artil adds to the API without notice: new endpoints, fields, values and error codes, which clients skip when they do not know them. Fields this reference lists stay. An endpoint is marked deprecated here before it is removed, and while deprecated it answers with a Deprecation header, plus a Sunset header once its removal date is set.
+Artil gives AI agents their own email inboxes, SMS numbers, Telegram bots and Slack apps, and a Message URL where other agents and teammates reach them. Its HTTP API manages agents, their addresses and access rules, sends and reads their messages, and delivers new ones by webhook.
 
 ## Start here
 
 This guide introduces the API, the client libraries, and the companion tools in this repository. Start with the API capabilities, choose a client for your application, and use the linked reference when you need exact request and response details.
 
-The selected API surface contains 14 entities and 33 HTTP routes. There are 7 SDK targets and 2 companion tools.
+The selected API surface contains 15 entities and 32 HTTP routes. There are 7 SDK targets and 2 companion tools.
 
 An entity groups related API operations. An operation can have several routes with different inputs or authentication requirements. The SDK exposes the entity and its operations using the conventions of the selected language.
 
@@ -16,9 +14,11 @@ An entity groups related API operations. An operation can have several routes wi
 
 ### Access
 
-Results: The channel&#39;s access.
+Who can wake an agent on each channel: read the rules for every channel, or set the rule for one (its `id` is the channel: email, sms, telegram, slack or url).
 
-SDK operations: `update`.
+Results: Each channel&#39;s access; The channel&#39;s access.
+
+SDK operations: `load`, `update`.
 
 Key fields to recognise:
 
@@ -26,6 +26,8 @@ Key fields to recognise:
 - `senders`: Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members
 
 ### Address
+
+An agent&#39;s email address, phone number, Telegram bot or Slack bot: list, add, read, change or remove one, or make it the one its channel sends from (`primary`).
 
 Results: The address is primary; The new address; The new phone number, which US carriers are still registering. Read it at Location until registering is false; it sends nothing until then.; The addresses; The address; The address is gone; The changed address.
 
@@ -41,6 +43,8 @@ Key fields to recognise:
 
 ### AddressSetup
 
+A link where a workspace member creates a Telegram bot or a Slack app for an agent with the provider.
+
 Results: The link.
 
 SDK operations: `create`.
@@ -51,11 +55,15 @@ Key fields to recognise:
 
 ### Agent
 
-Results: The new agent; The agents; The agent; Each channel&#39;s access; The connection; The agent is gone; The changed agent.
+An agent account in the workspace: list, create, read, rename or change the icon of one, or delete it with its addresses and messages.
+
+Results: The new agent; The agents; The agent; The agent is gone; The changed agent.
 
 SDK operations: `create`, `list`, `load`, `remove`, `update`.
 
 ### Channel
+
+The channels an agent can send and receive on, with the labels and the size limits of each.
 
 Results: The channels.
 
@@ -70,6 +78,8 @@ Key fields to recognise:
 
 ### Client
 
+The clients that can act as an agent: CLI and OAuth sign-ins, and tokens once they have been used.
+
 Results: The clients.
 
 SDK operations: `list`.
@@ -81,9 +91,11 @@ Key fields to recognise:
 
 ### Connection
 
-Results: The agent&#39;s new connection.
+The client that hears an agent&#39;s new messages: read it, or make the calling client that one (an agent&#39;s own token only).
 
-SDK operations: `update`.
+Results: The connection; The agent&#39;s new connection.
+
+SDK operations: `load`, `update`.
 
 Key fields to recognise:
 
@@ -91,9 +103,11 @@ Key fields to recognise:
 
 ### Event
 
-Results: The message.received event; The events; The event stream.
+An agent&#39;s events, such as a message arriving: list them, or send a message to the agent&#39;s Message URL (create).
 
-SDK operations: `create`, `list`, `load`.
+Results: The message.received event; The events.
+
+SDK operations: `create`, `list`.
 
 Key fields to recognise:
 
@@ -103,33 +117,33 @@ Key fields to recognise:
 - `messageId`: The message&#39;s id, to read it with
 - `text`: The text of a message Artil keeps no copy of, which comes whole
 
-### ListedTeammate
-
-Results: The team.
-
-SDK operations: `list`.
-
-Key fields to recognise:
-
-- `addresses`: Where to reach them: the agent&#39;s primary address on each channel it has one on, or the member&#39;s email address and phone number
-- `email`: The agent&#39;s primary email address, or the member&#39;s
-- `icon`: The agent&#39;s icon; null for members
-- `id`: The agent&#39;s or member&#39;s id
-- `imageUrl`: The member&#39;s picture from their sign-in profile, or the avatar it makes them; null for agents
-
 ### Listener
+
+Who hears an agent&#39;s new messages now: its connected client and its webhooks.
 
 Results: Who listens.
 
 SDK operations: `list`.
 
-### Men
+### Me
 
-Results: The signed-in member or agent; The token no longer works.
+The member or agent the calling token signs in as, and its workspace.
 
-SDK operations: `load`, `remove`.
+Results: The signed-in member or agent.
+
+SDK operations: `load`.
+
+### MeToken
+
+The calling token itself: remove it to revoke it.
+
+Results: The token no longer works.
+
+SDK operations: `remove`.
 
 ### Message
+
+An email, text, Telegram or Slack message an agent received or sent: list them (by channel, direction or counterpart), read one, or send one, which can answer (`replyTo`) or pass on (`forward`) another.
 
 Results: The sent message; The messages; The message.
 
@@ -143,13 +157,33 @@ Key fields to recognise:
 - `authorName`: The name the author goes by, when the channel tells it
 - `cc`: Whom the message names as getting a copy
 
+### Teammate
+
+The workspace&#39;s agents and members, with the addresses that reach each, and whether anyone listens to each agent.
+
+Results: The team.
+
+SDK operations: `list`.
+
+Key fields to recognise:
+
+- `addresses`: Where to reach them: the agent&#39;s primary address on each channel it has one on, or the member&#39;s email address and phone number
+- `email`: The agent&#39;s primary email address, or the member&#39;s
+- `icon`: The agent&#39;s icon; null for members
+- `id`: The agent&#39;s or member&#39;s id
+- `imageUrl`: The member&#39;s picture from their sign-in profile, or the avatar it makes them; null for agents
+
 ### Token
+
+The tokens members made for an agent, never their values: list them or revoke one.
 
 Results: The tokens; The token no longer works.
 
 SDK operations: `list`, `remove`.
 
 ### Webhook
+
+Where an agent&#39;s events are posted: list, add or remove one. Adding one returns its signing secret.
 
 Results: The webhook and its secret; The webhooks; Events are no longer posted there.
 
@@ -169,6 +203,7 @@ Use this map to locate a capability. Consult the entity reference before supplyi
 
 | Entity | SDK operation | HTTP route | Authentication |
 | --- | --- | --- | --- |
+| Access | `load` | `GET /agents/{id}/access` | Required |
 | Access | `update` | `PUT /agents/{id}/access/{channel}` | Required |
 | Address | `create` | `POST /agents/{id}/addresses/{addressId}/primary` | Required |
 | Address | `create` | `POST /agents/{id}/addresses` | Required |
@@ -180,23 +215,21 @@ Use this map to locate a capability. Consult the entity reference before supplyi
 | Agent | `create` | `POST /agents` | Required |
 | Agent | `list` | `GET /agents` | Required |
 | Agent | `load` | `GET /agents/{id}` | Required |
-| Agent | `load` | `GET /agents/{id}/access` | Required |
-| Agent | `load` | `GET /agents/{id}/connection` | Required |
 | Agent | `remove` | `DELETE /agents/{id}` | Required |
 | Agent | `update` | `PATCH /agents/{id}` | Required |
 | Channel | `list` | `GET /agents/{id}/channels` | Required |
 | Client | `list` | `GET /agents/{id}/clients` | Required |
+| Connection | `load` | `GET /agents/{id}/connection` | Required |
 | Connection | `update` | `PUT /agents/{id}/connection` | Required |
 | Event | `create` | `POST /agents/{id}/url` | Required |
 | Event | `list` | `GET /agents/{id}/events` | Required |
-| Event | `load` | `GET /agents/{id}/events/stream` | Required |
-| ListedTeammate | `list` | `GET /team` | Required |
 | Listener | `list` | `GET /agents/{id}/listeners` | Required |
-| Men | `load` | `GET /me` | Required |
-| Men | `remove` | `DELETE /me/token` | Required |
+| Me | `load` | `GET /me` | Required |
+| MeToken | `remove` | `DELETE /me/token` | Required |
 | Message | `create` | `POST /agents/{id}/messages` | Required |
 | Message | `list` | `GET /agents/{id}/messages` | Required |
 | Message | `load` | `GET /agents/{id}/messages/{messageId}` | Required |
+| Teammate | `list` | `GET /team` | Required |
 | Token | `list` | `GET /agents/{id}/tokens` | Required |
 | Token | `remove` | `DELETE /agents/{id}/tokens/{tokenId}` | Required |
 | Webhook | `create` | `POST /agents/{id}/webhooks` | Required |
@@ -252,8 +285,8 @@ Use the MCP server to expose supported API operations to an MCP client.
 
 Repository directory: `go-mcp/`. Not published. Build from the go-mcp directory.
 
-- `artil_list`: List records for an entity. Supported entities: `address`, `agent`, `channel`, `client`, `event`, `listed_teammate`, `listener`, `message`, `token`, `webhook`.
-- `artil_load`: Load one record for an entity. Supported entities: `address`, `agent`, `event`, `men`, `message`.
+- `artil_list`: List records for an entity. Supported entities: `address`, `agent`, `channel`, `client`, `event`, `listener`, `message`, `teammate`, `token`, `webhook`.
+- `artil_load`: Load one record for an entity. Supported entities: `access`, `address`, `agent`, `connection`, `me`, `message`.
 
 ## Operational features
 

@@ -11,6 +11,40 @@ const PLAN: any[] = [
   {
     "entity": "access",
     "accessor": "Access",
+    "op": "load",
+    "method": "GET",
+    "path": "/agents/{id}/access",
+    "args": [
+      {
+        "name": "agent_id",
+        "wire": "id",
+        "value": "p1"
+      }
+    ],
+    "select": {},
+    "headers": [],
+    "cookies": [],
+    "responseMedia": [
+      "application/json"
+    ],
+    "query": [],
+    "queryArgs": [],
+    "auth": [
+      [
+        {
+          "in": "header",
+          "name": "authorization",
+          "scheme": "bearer"
+        }
+      ]
+    ],
+    "status": 200,
+    "sample": {},
+    "idField": "id"
+  },
+  {
+    "entity": "access",
+    "accessor": "Access",
     "op": "update",
     "method": "PUT",
     "path": "/agents/{id}/access/{channel}",
@@ -455,81 +489,6 @@ const PLAN: any[] = [
   {
     "entity": "agent",
     "accessor": "Agent",
-    "op": "load",
-    "method": "GET",
-    "path": "/agents/{id}/access",
-    "action": "access",
-    "args": [
-      {
-        "name": "id",
-        "wire": "id",
-        "value": "p1"
-      }
-    ],
-    "select": {},
-    "headers": [],
-    "cookies": [],
-    "responseMedia": [
-      "application/json"
-    ],
-    "query": [],
-    "queryArgs": [],
-    "auth": [
-      [
-        {
-          "in": "header",
-          "name": "authorization",
-          "scheme": "bearer"
-        }
-      ]
-    ],
-    "status": 200,
-    "sample": {},
-    "idField": "id"
-  },
-  {
-    "entity": "agent",
-    "accessor": "Agent",
-    "op": "load",
-    "method": "GET",
-    "path": "/agents/{id}/connection",
-    "action": "connection",
-    "args": [
-      {
-        "name": "id",
-        "wire": "id",
-        "value": "p1"
-      }
-    ],
-    "select": {},
-    "headers": [],
-    "cookies": [],
-    "responseMedia": [
-      "application/json"
-    ],
-    "query": [],
-    "queryArgs": [],
-    "auth": [
-      [
-        {
-          "in": "header",
-          "name": "authorization",
-          "scheme": "bearer"
-        }
-      ]
-    ],
-    "status": 200,
-    "sample": {
-      "id": "x",
-      "client": "x",
-      "machine": "x",
-      "tokenId": "x"
-    },
-    "idField": "id"
-  },
-  {
-    "entity": "agent",
-    "accessor": "Agent",
     "op": "remove",
     "method": "DELETE",
     "path": "/agents/{id}",
@@ -686,6 +645,45 @@ const PLAN: any[] = [
         "lastUsedAt": "2026-01-01T00:00:00Z"
       }
     ],
+    "idField": "id"
+  },
+  {
+    "entity": "connection",
+    "accessor": "Connection",
+    "op": "load",
+    "method": "GET",
+    "path": "/agents/{id}/connection",
+    "args": [
+      {
+        "name": "agent_id",
+        "wire": "id",
+        "value": "p1"
+      }
+    ],
+    "select": {},
+    "headers": [],
+    "cookies": [],
+    "responseMedia": [
+      "application/json"
+    ],
+    "query": [],
+    "queryArgs": [],
+    "auth": [
+      [
+        {
+          "in": "header",
+          "name": "authorization",
+          "scheme": "bearer"
+        }
+      ]
+    ],
+    "status": 200,
+    "sample": {
+      "id": "x",
+      "client": "x",
+      "machine": "x",
+      "tokenId": "x"
+    },
     "idField": "id"
   },
   {
@@ -859,108 +857,6 @@ const PLAN: any[] = [
     "idField": "id"
   },
   {
-    "entity": "event",
-    "accessor": "Event",
-    "op": "load",
-    "method": "GET",
-    "path": "/agents/{id}/events/stream",
-    "action": "stream",
-    "args": [
-      {
-        "name": "agent_id",
-        "wire": "id",
-        "value": "p1"
-      }
-    ],
-    "select": {
-      "after": "v1",
-      "connection": "v1"
-    },
-    "headers": [
-      {
-        "name": "last_event_id",
-        "wire": "Last-Event-ID",
-        "value": "h1"
-      }
-    ],
-    "cookies": [],
-    "responseMedia": [
-      "text/event-stream"
-    ],
-    "query": [
-      "after",
-      "connection"
-    ],
-    "queryArgs": [
-      {
-        "name": "after",
-        "wire": "after"
-      },
-      {
-        "name": "connection",
-        "wire": "connection"
-      }
-    ],
-    "auth": [
-      [
-        {
-          "in": "header",
-          "name": "authorization",
-          "scheme": "bearer"
-        }
-      ]
-    ],
-    "status": 200,
-    "sample": null,
-    "idField": "id"
-  },
-  {
-    "entity": "listed_teammate",
-    "accessor": "ListedTeammate",
-    "op": "list",
-    "method": "GET",
-    "path": "/team",
-    "args": [],
-    "select": {},
-    "headers": [],
-    "cookies": [],
-    "responseMedia": [
-      "application/json"
-    ],
-    "query": [],
-    "queryArgs": [],
-    "auth": [
-      [
-        {
-          "in": "header",
-          "name": "authorization",
-          "scheme": "bearer"
-        }
-      ]
-    ],
-    "status": 200,
-    "sample": [
-      {
-        "id": "x",
-        "kind": "agent",
-        "name": "x",
-        "email": "x",
-        "phone": "x",
-        "addresses": [
-          {
-            "channel": "email",
-            "value": "x"
-          }
-        ],
-        "icon": "bot",
-        "imageUrl": "x",
-        "role": "admin",
-        "listening": true
-      }
-    ],
-    "idField": "id"
-  },
-  {
     "entity": "listener",
     "accessor": "Listener",
     "op": "list",
@@ -1001,8 +897,8 @@ const PLAN: any[] = [
     "idField": "id"
   },
   {
-    "entity": "men",
-    "accessor": "Men",
+    "entity": "me",
+    "accessor": "Me",
     "op": "load",
     "method": "GET",
     "path": "/me",
@@ -1042,12 +938,11 @@ const PLAN: any[] = [
     "idField": "id"
   },
   {
-    "entity": "men",
-    "accessor": "Men",
+    "entity": "me_token",
+    "accessor": "MeToken",
     "op": "remove",
     "method": "DELETE",
     "path": "/me/token",
-    "action": "token",
     "args": [],
     "select": {},
     "headers": [],
@@ -1330,6 +1225,52 @@ const PLAN: any[] = [
       "error": "x",
       "createdAt": "2026-01-01T00:00:00Z"
     },
+    "idField": "id"
+  },
+  {
+    "entity": "teammate",
+    "accessor": "Teammate",
+    "op": "list",
+    "method": "GET",
+    "path": "/team",
+    "args": [],
+    "select": {},
+    "headers": [],
+    "cookies": [],
+    "responseMedia": [
+      "application/json"
+    ],
+    "query": [],
+    "queryArgs": [],
+    "auth": [
+      [
+        {
+          "in": "header",
+          "name": "authorization",
+          "scheme": "bearer"
+        }
+      ]
+    ],
+    "status": 200,
+    "sample": [
+      {
+        "id": "x",
+        "kind": "agent",
+        "name": "x",
+        "email": "x",
+        "phone": "x",
+        "addresses": [
+          {
+            "channel": "email",
+            "value": "x"
+          }
+        ],
+        "icon": "bot",
+        "imageUrl": "x",
+        "role": "admin",
+        "listening": true
+      }
+    ],
     "idField": "id"
   },
   {

@@ -1,6 +1,8 @@
 $kind: collection
 id: "3c5434a0-e9b6-5e5e-9401-5e445d344f72"
 description: |-
+  An agent account in the workspace: list, create, read, rename or change the icon of one, or delete it with its addresses and messages.
+
   The **agent** entity. Its requests address one record by `{{agent_id}}`, which a list or a create remembers.
 
   | field | type | required | |

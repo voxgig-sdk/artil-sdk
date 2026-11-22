@@ -1,0 +1,64 @@
+{
+  "existing": {
+    "teammate": {
+      "TEAMMATE00": {
+        "addresses": [],
+        "email": "s65",
+        "icon": "s66",
+        "id": "TEAMMATE00",
+        "imageUrl": "s68",
+        "kind": "s69",
+        "listening": "s6a",
+        "name": "s6b",
+        "phone": "s6c",
+        "role": "s6d"
+      },
+      "TEAMMATE01": {
+        "addresses": [],
+        "email": "sc9",
+        "icon": "sca",
+        "id": "TEAMMATE01",
+        "imageUrl": "scc",
+        "kind": "scd",
+        "listening": "sce",
+        "name": "scf",
+        "phone": "sd0",
+        "role": "sd1"
+      },
+      "TEAMMATE02": {
+        "addresses": [],
+        "email": "s12d",
+        "icon": "s12e",
+        "id": "TEAMMATE02",
+        "imageUrl": "s130",
+        "kind": "s131",
+        "listening": "s132",
+        "name": "s133",
+        "phone": "s134",
+        "role": "s135"
+      }
+    }
+  },
+  "new": {
+    "teammate": {
+      "teammate_ref01": {
+        "addresses": [],
+        "email": "s191",
+        "icon": "s192",
+        "imageUrl": "s194",
+        "kind": "s195",
+        "listening": "s196",
+        "name": "s197",
+        "phone": "s198",
+        "role": "s199"
+      }
+    }
+  },
+  "requests": {
+    "GET /team": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

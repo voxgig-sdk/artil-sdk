@@ -39,15 +39,15 @@ client = ArtilSDK({
 })
 ```
 
-### 3. Load an address
+### 3. Load an access
 
-Address is nested under agent, so provide the `agent_id`.
+Access is nested under agent, so provide the `agent_id`.
 `load()` returns the ENTITY — call data_get() for the record — and raises on error.
 
 ```python
 try:
-    address = client.Address().load({"agent_id": "example_agent_id", "id": "example_id"})
-    print(address.data_get())
+    access = client.Access().load({"agent_id": "example_agent_id"})
+    print(access.data_get())
 except Exception as err:
     print(f"load failed: {err}")
 ```
@@ -222,10 +222,11 @@ Creates a test-mode client with mock transport. Both arguments may be `None`.
 | `Client` | `(data) -> ClientEntity` | Create a Client entity instance. |
 | `Connection` | `(data) -> ConnectionEntity` | Create a Connection entity instance. |
 | `Event` | `(data) -> EventEntity` | Create an Event entity instance. |
-| `ListedTeammate` | `(data) -> ListedTeammateEntity` | Create a ListedTeammate entity instance. |
 | `Listener` | `(data) -> ListenerEntity` | Create a Listener entity instance. |
-| `Men` | `(data) -> MenEntity` | Create a Men entity instance. |
+| `Me` | `(data) -> MeEntity` | Create a Me entity instance. |
+| `MeToken` | `(data) -> MeTokenEntity` | Create a MeToken entity instance. |
 | `Message` | `(data) -> MessageEntity` | Create a Message entity instance. |
+| `Teammate` | `(data) -> TeammateEntity` | Create a Teammate entity instance. |
 | `Token` | `(data) -> TokenEntity` | Create a Token entity instance. |
 | `Webhook` | `(data) -> WebhookEntity` | Create a Webhook entity instance. |
 
@@ -275,9 +276,9 @@ On error, `ok` is `False` and `err` contains the error value.
 | `id` |  |
 | `senders` | Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members |
 
-Operations: Update.
+Operations: Load, Update.
 
-API path: `/agents/{id}/access/{channel}`
+API path: `/agents/{id}/access`
 
 #### Address
 
@@ -359,7 +360,7 @@ API path: `/agents/{id}/clients`
 | `machine` |  |
 | `tokenId` | The agent's token the client connected with |
 
-Operations: Update.
+Operations: Load, Update.
 
 API path: `/agents/{id}/connection`
 
@@ -379,28 +380,9 @@ API path: `/agents/{id}/connection`
 | `toThread` | The thread of the agent's client to hand the message to, from a message it sent |
 | `type` |  |
 
-Operations: Create, List, Load.
+Operations: Create, List.
 
 API path: `/agents/{id}/url`
-
-#### ListedTeammate
-
-| Field | Description |
-| --- | --- |
-| `addresses` | Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number |
-| `email` | The agent's primary email address, or the member's |
-| `icon` | The agent's icon; null for members |
-| `id` | The agent's or member's id |
-| `imageUrl` | The member's picture from their sign-in profile, or the avatar it makes them; null for agents |
-| `kind` |  |
-| `listening` | Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members |
-| `name` |  |
-| `phone` | The agent's primary phone number, or the one a member added to their profile |
-| `role` | The member's role in the workspace; null for agents |
-
-Operations: List.
-
-API path: `/team`
 
 #### Listener
 
@@ -411,14 +393,23 @@ Operations: List.
 
 API path: `/agents/{id}/listeners`
 
-#### Men
+#### Me
 
 | Field | Description |
 | --- | --- |
 
-Operations: Load, Remove.
+Operations: Load.
 
 API path: `/me`
+
+#### MeToken
+
+| Field | Description |
+| --- | --- |
+
+Operations: Remove.
+
+API path: `/me/token`
 
 #### Message
 
@@ -450,6 +441,25 @@ API path: `/me`
 Operations: Create, List, Load.
 
 API path: `/agents/{id}/messages`
+
+#### Teammate
+
+| Field | Description |
+| --- | --- |
+| `addresses` | Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number |
+| `email` | The agent's primary email address, or the member's |
+| `icon` | The agent's icon; null for members |
+| `id` | The agent's or member's id |
+| `imageUrl` | The member's picture from their sign-in profile, or the avatar it makes them; null for agents |
+| `kind` |  |
+| `listening` | Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members |
+| `name` |  |
+| `phone` | The agent's primary phone number, or the one a member added to their profile |
+| `role` | The member's role in the workspace; null for agents |
+
+Operations: List.
+
+API path: `/team`
 
 #### Token
 
@@ -495,6 +505,7 @@ Create an instance: `access = client.Access()`
 
 | Method | Description |
 | --- | --- |
+| `load(match)` | Load a single entity by match criteria. |
 | `update(data)` | Update an existing entity. |
 
 #### Fields
@@ -504,6 +515,12 @@ Create an instance: `access = client.Access()`
 | `admit` | `str` | Whether anyone, the workspace's members and agents besides the listed senders, or only the listed senders wake the agent; a new agent starts with team, except on Telegram, which lists the account that creates its bot from Artil, and its… |
 | `id` | `str` |  |
 | `senders` | `list` | Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members |
+
+#### Example: Load
+
+```python
+access = client.Access().load({"agent_id": "agent_id"})
+```
 
 
 ### Address
@@ -690,6 +707,7 @@ Create an instance: `connection = client.Connection()`
 
 | Method | Description |
 | --- | --- |
+| `load(match)` | Load a single entity by match criteria. |
 | `update(data)` | Update an existing entity. |
 
 #### Fields
@@ -700,6 +718,12 @@ Create an instance: `connection = client.Connection()`
 | `id` | `str` |  |
 | `machine` | `str | None` |  |
 | `tokenId` | `str` | The agent's token the client connected with |
+
+#### Example: Load
+
+```python
+connection = client.Connection().load({"agent_id": "agent_id"})
+```
 
 
 ### Event
@@ -712,7 +736,6 @@ Create an instance: `event = client.Event()`
 | --- | --- |
 | `create(data)` | Create a new entity with the given data. |
 | `list()` | List entities, optionally matching the given criteria. |
-| `load(match)` | Load a single entity by match criteria. |
 
 #### Fields
 
@@ -745,38 +768,6 @@ event = client.Event().create({
 ```
 
 
-### ListedTeammate
-
-Create an instance: `listed_teammate = client.ListedTeammate()`
-
-#### Operations
-
-| Method | Description |
-| --- | --- |
-| `list()` | List entities, optionally matching the given criteria. |
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `addresses` | `list` | Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number |
-| `email` | `str | None` | The agent's primary email address, or the member's |
-| `icon` | `Any` | The agent's icon; null for members |
-| `id` | `str` | The agent's or member's id |
-| `imageUrl` | `str | None` | The member's picture from their sign-in profile, or the avatar it makes them; null for agents |
-| `kind` | `str` |  |
-| `listening` | `bool | None` | Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members |
-| `name` | `str | None` |  |
-| `phone` | `str | None` | The agent's primary phone number, or the one a member added to their profile |
-| `role` | `Any` | The member's role in the workspace; null for agents |
-
-#### Example: List
-
-```python
-listed_teammates = client.ListedTeammate().list()
-```
-
-
 ### Listener
 
 Create an instance: `listener = client.Listener()`
@@ -794,22 +785,32 @@ listeners = client.Listener().list({"agent_id": "example"})
 ```
 
 
-### Men
+### Me
 
-Create an instance: `men = client.Men()`
+Create an instance: `me = client.Me()`
 
 #### Operations
 
 | Method | Description |
 | --- | --- |
 | `load(match)` | Load a single entity by match criteria. |
-| `remove(match)` | Remove the matching entity. |
 
 #### Example: Load
 
 ```python
-men = client.Men().load()
+me = client.Me().load()
 ```
+
+
+### MeToken
+
+Create an instance: `me_token = client.MeToken()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `remove(match)` | Remove the matching entity. |
 
 
 ### Message
@@ -870,6 +871,38 @@ message = client.Message().create({
     "agent_id": "example_agent_id",  # str
     "text": "example_text",  # str
 })
+```
+
+
+### Teammate
+
+Create an instance: `teammate = client.Teammate()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `list()` | List entities, optionally matching the given criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `addresses` | `list` | Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number |
+| `email` | `str | None` | The agent's primary email address, or the member's |
+| `icon` | `Any` | The agent's icon; null for members |
+| `id` | `str` | The agent's or member's id |
+| `imageUrl` | `str | None` | The member's picture from their sign-in profile, or the avatar it makes them; null for agents |
+| `kind` | `str` |  |
+| `listening` | `bool | None` | Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members |
+| `name` | `str | None` |  |
+| `phone` | `str | None` | The agent's primary phone number, or the one a member added to their profile |
+| `role` | `Any` | The member's role in the workspace; null for agents |
+
+#### Example: List
+
+```python
+teammates = client.Teammate().list()
 ```
 
 

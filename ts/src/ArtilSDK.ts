@@ -8,10 +8,11 @@ import { ChannelEntity } from './entity/ChannelEntity'
 import { ClientEntity } from './entity/ClientEntity'
 import { ConnectionEntity } from './entity/ConnectionEntity'
 import { EventEntity } from './entity/EventEntity'
-import { ListedTeammateEntity } from './entity/ListedTeammateEntity'
 import { ListenerEntity } from './entity/ListenerEntity'
-import { MenEntity } from './entity/MenEntity'
+import { MeEntity } from './entity/MeEntity'
+import { MeTokenEntity } from './entity/MeTokenEntity'
 import { MessageEntity } from './entity/MessageEntity'
+import { TeammateEntity } from './entity/TeammateEntity'
 import { TokenEntity } from './entity/TokenEntity'
 import { WebhookEntity } from './entity/WebhookEntity'
 
@@ -426,15 +427,6 @@ if (null != this._secrets) {
   }
 
 
-  // Entity access: `client.ListedTeammate().list()` / `client.ListedTeammate().load({ id })`.
-  // The argument is the entity OPTIONS object (passed to the entity
-  // constructor as entopts), not initial entity data.
-  ListedTeammate(entopts?: Record<string, any>) {
-    const self = this
-    return new ListedTeammateEntity(self, entopts)
-  }
-
-
   // Entity access: `client.Listener().list()` / `client.Listener().load({ id })`.
   // The argument is the entity OPTIONS object (passed to the entity
   // constructor as entopts), not initial entity data.
@@ -444,12 +436,21 @@ if (null != this._secrets) {
   }
 
 
-  // Entity access: `client.Men().list()` / `client.Men().load({ id })`.
+  // Entity access: `client.Me().list()` / `client.Me().load({ id })`.
   // The argument is the entity OPTIONS object (passed to the entity
   // constructor as entopts), not initial entity data.
-  Men(entopts?: Record<string, any>) {
+  Me(entopts?: Record<string, any>) {
     const self = this
-    return new MenEntity(self, entopts)
+    return new MeEntity(self, entopts)
+  }
+
+
+  // Entity access: `client.MeToken().list()` / `client.MeToken().load({ id })`.
+  // The argument is the entity OPTIONS object (passed to the entity
+  // constructor as entopts), not initial entity data.
+  MeToken(entopts?: Record<string, any>) {
+    const self = this
+    return new MeTokenEntity(self, entopts)
   }
 
 
@@ -459,6 +460,15 @@ if (null != this._secrets) {
   Message(entopts?: Record<string, any>) {
     const self = this
     return new MessageEntity(self, entopts)
+  }
+
+
+  // Entity access: `client.Teammate().list()` / `client.Teammate().load({ id })`.
+  // The argument is the entity OPTIONS object (passed to the entity
+  // constructor as entopts), not initial entity data.
+  Teammate(entopts?: Record<string, any>) {
+    const self = this
+    return new TeammateEntity(self, entopts)
   }
 
 

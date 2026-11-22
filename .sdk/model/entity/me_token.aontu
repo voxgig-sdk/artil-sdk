@@ -1,0 +1,42 @@
+# Entity: me_token
+
+main: kit: entity: me_token: {
+
+  alias: field: {}
+
+  name: "me_token"
+  op: {
+    remove: {
+      name: "remove"
+      points: [
+        {
+          co: {
+            id: "DELETE /me/token"
+            source: "openapi3"
+            version: 2
+          }
+          m: "DELETE"
+          o: "/me/token"
+          s: [
+            {
+              lit: "me"
+            }
+            {
+              lit: "token"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+  fields: {
+  }
+
+
+
+}

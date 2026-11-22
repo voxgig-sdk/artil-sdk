@@ -1,0 +1,11 @@
+$kind: http-request
+id: d58b2fbf-8e7c-5a62-8d56-f2ecad59c304
+description: |-
+  The `load` operation of **me**.
+
+  SDK: `client.Me().load()`
+url: "{{base}}/me"
+method: GET
+headers:
+  Accept: application/json
+order: 1000

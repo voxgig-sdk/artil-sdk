@@ -20,6 +20,12 @@ class Access
     public array $senders;
 }
 
+/** Request payload for Access#load. */
+class AccessLoadMatch
+{
+    public string $agent_id;
+}
+
 /** Request payload for Access#update. */
 class AccessUpdateData
 {
@@ -185,6 +191,12 @@ class Connection
     public string $tokenId;
 }
 
+/** Request payload for Connection#load. */
+class ConnectionLoadMatch
+{
+    public string $agent_id;
+}
+
 /** Request payload for Connection#update. */
 class ConnectionUpdateData
 {
@@ -209,14 +221,6 @@ class Event
     public string $type;
 }
 
-/** Request payload for Event#load. */
-class EventLoadMatch
-{
-    public string $agent_id;
-    public ?int $after = null;
-    public ?string $connection = null;
-}
-
 /** Request payload for Event#list. */
 class EventListMatch
 {
@@ -235,36 +239,6 @@ class EventCreateData
     public ?string $toThread = null;
 }
 
-/** ListedTeammate entity data model. */
-class ListedTeammate
-{
-    public array $addresses;
-    public mixed $email;
-    public mixed $icon;
-    public string $id;
-    public mixed $imageUrl;
-    public string $kind;
-    public mixed $listening;
-    public mixed $name;
-    public mixed $phone;
-    public mixed $role;
-}
-
-/** Request payload for ListedTeammate#list. */
-class ListedTeammateListMatch
-{
-    public ?array $addresses = null;
-    public mixed $email = null;
-    public mixed $icon = null;
-    public ?string $id = null;
-    public mixed $imageUrl = null;
-    public ?string $kind = null;
-    public mixed $listening = null;
-    public mixed $name = null;
-    public mixed $phone = null;
-    public mixed $role = null;
-}
-
 /** Listener entity data model. */
 class Listener
 {
@@ -276,18 +250,23 @@ class ListenerListMatch
     public string $agent_id;
 }
 
-/** Men entity data model. */
-class Men
+/** Me entity data model. */
+class Me
 {
 }
 
-/** Request payload for Men#load. */
-class MenLoadMatch
+/** Request payload for Me#load. */
+class MeLoadMatch
 {
 }
 
-/** Request payload for Men#remove. */
-class MenRemoveMatch
+/** MeToken entity data model. */
+class MeToken
+{
+}
+
+/** Request payload for MeToken#remove. */
+class MeTokenRemoveMatch
 {
 }
 
@@ -351,6 +330,36 @@ class MessageCreateData
     public string $text;
     public mixed $thread = null;
     public ?array $to = null;
+}
+
+/** Teammate entity data model. */
+class Teammate
+{
+    public array $addresses;
+    public mixed $email;
+    public mixed $icon;
+    public string $id;
+    public mixed $imageUrl;
+    public string $kind;
+    public mixed $listening;
+    public mixed $name;
+    public mixed $phone;
+    public mixed $role;
+}
+
+/** Request payload for Teammate#list. */
+class TeammateListMatch
+{
+    public ?array $addresses = null;
+    public mixed $email = null;
+    public mixed $icon = null;
+    public ?string $id = null;
+    public mixed $imageUrl = null;
+    public ?string $kind = null;
+    public mixed $listening = null;
+    public mixed $name = null;
+    public mixed $phone = null;
+    public mixed $role = null;
 }
 
 /** Token entity data model. */

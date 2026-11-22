@@ -30,6 +30,11 @@
     }
   },
   "requests": {
+    "GET /agents/{id}/access": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
     "PUT /agents/{id}/access/{channel}": {
       "provenance": "operation-contract",
       "version": 2,

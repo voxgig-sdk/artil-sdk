@@ -39,7 +39,7 @@ func TestAccessEntity(t *testing.T) {
 		client := sdk.TestSDK(nil, map[string]any{
 			"feature": map[string]any{"validate": map[string]any{"active": true}},
 		})
-		_, err := client.Access(nil).Update(map[string]any{"agent_id": 1, "id": "x"}, nil)
+		_, err := client.Access(nil).Load(map[string]any{"agent_id": 1}, nil)
 		if sdkerr, ok := err.(*core.ArtilError); !ok || "validate_failed" != sdkerr.Code {
 			t.Fatalf("expected validate_failed, got %v", err)
 		}
@@ -54,7 +54,7 @@ func TestAccessEntity(t *testing.T) {
 		if setup.live {
 			_mode = "live"
 		}
-		for _, _op := range []string{"update"} {
+		for _, _op := range []string{"update", "load"} {
 			if _shouldSkip, _reason := isControlSkipped("entityOp", "access." + _op, _mode); _shouldSkip {
 				if _reason == "" {
 					_reason = "skipped via sdk-test-control.json"
@@ -65,8 +65,43 @@ func TestAccessEntity(t *testing.T) {
 		}
 		if setup.live && os.Getenv("VOXGIG_GETONLY_GUARD") == "TRUE" {
 			t.Log("LIVE STEP {\"id\":\"access.update.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs PUT /agents/{id}/access/{channel}\"}")
-			t.Skip("Live coverage incomplete: access.update.0 excluded (GET-only live run: needs PUT /agents/{id}/access/{channel})")
-			return
+		if setup.live {
+			liveMiss(t, accessEntityLiveStrict, "Live entity test blocked: %s", "the flow loads a access record it has no list to find")
+		}
+		client := setup.client
+		_ = client
+
+		// Bootstrap entity data from existing test data (no create step in flow).
+		accessRef01DataRaw := vs.Items(core.ToMapAny(vs.GetPath(setup.data, "existing.access")))
+		var accessRef01Data map[string]any
+		if len(accessRef01DataRaw) > 0 {
+			accessRef01Data = core.ToMapAny(accessRef01DataRaw[0][1])
+		}
+		// Discard guards against Go's unused-var check when the flow's steps
+		// happen not to consume the bootstrap data (e.g. list-only flows).
+		_ = accessRef01Data
+
+		if setup.live {
+			livePace()
+		}
+		// LOAD
+		accessRef01Ent := client.Access(nil)
+		accessRef01MatchDt0 := map[string]any{
+			"id": accessRef01Data["id"],
+		}
+		accessRef01DataDt0Loaded, err := accessRef01Ent.Load(accessRef01MatchDt0, nil)
+		if err != nil {
+			t.Fatalf("load failed: %v", err)
+		}
+		accessRef01DataDt0LoadResult := core.ToMapAny(entityData(accessRef01DataDt0Loaded))
+		if accessRef01DataDt0LoadResult == nil {
+			t.Fatal("expected load result to be a map")
+		}
+		if !setup.live && !liveSameId(accessRef01DataDt0LoadResult["id"], accessRef01Data["id"]) {
+			t.Fatal("expected load result id to match")
+		}
+
+		return
 		}
 
 		if setup.live {
@@ -119,6 +154,25 @@ func TestAccessEntity(t *testing.T) {
 		}
 		if accessRef01ResdataUp0[accessRef01MarkdefUp0Name] != accessRef01MarkdefUp0Value {
 			t.Fatalf("expected %s to be updated, got %v", accessRef01MarkdefUp0Name, accessRef01ResdataUp0[accessRef01MarkdefUp0Name])
+		}
+
+		if setup.live {
+			livePace()
+		}
+		// LOAD
+		accessRef01MatchDt0 := map[string]any{
+			"id": accessRef01Data["id"],
+		}
+		accessRef01DataDt0Loaded, err := accessRef01Ent.Load(accessRef01MatchDt0, nil)
+		if err != nil {
+			t.Fatalf("load failed: %v", err)
+		}
+		accessRef01DataDt0LoadResult := core.ToMapAny(entityData(accessRef01DataDt0Loaded))
+		if accessRef01DataDt0LoadResult == nil {
+			t.Fatal("expected load result to be a map")
+		}
+		if !setup.live && !liveSameId(accessRef01DataDt0LoadResult["id"], accessRef01Data["id"]) {
+			t.Fatal("expected load result id to match")
 		}
 
 	})

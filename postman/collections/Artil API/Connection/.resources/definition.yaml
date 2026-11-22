@@ -1,6 +1,8 @@
 $kind: collection
 id: "91ce7405-c0d6-59ce-b39d-70a7a381bb29"
 description: |-
+  The client that hears an agent's new messages: read it, or make the calling client that one (an agent's own token only).
+
   The **connection** entity, which belongs to a agent. Its requests address one record by `{{connection_id}}`, which a list or a create remembers.
 
   | field | type | required | |

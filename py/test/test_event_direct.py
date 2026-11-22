@@ -67,49 +67,6 @@ class TestEventDirect:
             assert len(result["data"]) == 2
             assert len(setup["calls"]) == 1
 
-    def test_should_direct_load_event(self):
-        setup = _event_direct_setup({"id": "direct01"})
-        _skip, _reason = runner.is_control_skipped("direct", "direct-load-event", "live" if setup["live"] else "unit")
-        if _skip:
-            pytest.skip(_reason or "skipped via sdk-test-control.json")
-            return
-        if setup["live"]:
-            for _live_key in ["agent01"]:
-                if setup["idmap"].get(_live_key) is None:
-                    runner.live_miss(LIVE_STRICT, f"Live test blocked: needs {_live_key} via ARTIL_TEST_EVENT_ENTID")
-
-        if setup["live"]:
-            runner.live_pace()
-        client = setup["client"]
-
-        params = {}
-        query = {}
-        if setup["live"]:
-            params["agent_id"] = setup["idmap"].get("agent01")
-            pass
-        else:
-            params["agent_id"] = "direct01"
-            pass
-
-        result = client.direct({
-            "path": "agents/{agent_id}/events/stream",
-            "method": "GET",
-            "params": params,
-            "query": query,
-        })
-        if setup["live"]:
-            if not _live_ok(result):
-                runner.live_miss(LIVE_STRICT, "Live load failed: " + runner.live_describe(result))
-            if result.get("data") is None:
-                runner.live_miss(LIVE_STRICT, "Live load returned no data: " + runner.live_describe(result))
-        else:
-            assert result["ok"] is True
-            assert helpers.to_int(result["status"]) == 200
-            assert result["data"] is not None
-            if isinstance(result["data"], dict):
-                assert result["data"]["id"] == "direct01"
-            assert len(setup["calls"]) == 1
-
 
 
 def _event_direct_setup(mockres):

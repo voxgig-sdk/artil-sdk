@@ -35,6 +35,60 @@ main: kit: entity: access: {
 
   name: "access"
   op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /agents/{id}/access"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "agent_id"
+                or: "id"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/agents/{id}/access"
+          q: {
+            exist: [
+              "agent_id"
+            ]
+          }
+          r: {
+            param: {
+              id: "agent_id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "agents"
+            }
+            {
+              var: "agent_id"
+            }
+            {
+              lit: "access"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
     update: {
       name: "update"
       points: [

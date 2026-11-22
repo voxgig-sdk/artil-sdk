@@ -1,6 +1,8 @@
 $kind: collection
 id: "658da8fa-010a-5f35-8b61-edd786468acf"
 description: |-
+  The channels an agent can send and receive on, with the labels and the size limits of each.
+
   The **channel** entity, which belongs to a agent. Its requests address one record by `{{channel_id}}`, which a list or a create remembers.
 
   | field | type | required | |

@@ -145,18 +145,6 @@ Create a new `Event` entity instance.
 
 **Returns:** `EventEntity` instance.
 
-#### `ListedTeammate(data?: object)`
-
-Create a new `ListedTeammate` entity instance.
-
-**Parameters:**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| `data` | `object` | Initial entity data. |
-
-**Returns:** `ListedTeammateEntity` instance.
-
 #### `Listener(data?: object)`
 
 Create a new `Listener` entity instance.
@@ -169,9 +157,9 @@ Create a new `Listener` entity instance.
 
 **Returns:** `ListenerEntity` instance.
 
-#### `Men(data?: object)`
+#### `Me(data?: object)`
 
-Create a new `Men` entity instance.
+Create a new `Me` entity instance.
 
 **Parameters:**
 
@@ -179,7 +167,19 @@ Create a new `Men` entity instance.
 | --- | --- | --- |
 | `data` | `object` | Initial entity data. |
 
-**Returns:** `MenEntity` instance.
+**Returns:** `MeEntity` instance.
+
+#### `MeToken(data?: object)`
+
+Create a new `MeToken` entity instance.
+
+**Parameters:**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `data` | `object` | Initial entity data. |
+
+**Returns:** `MeTokenEntity` instance.
 
 #### `Message(data?: object)`
 
@@ -192,6 +192,18 @@ Create a new `Message` entity instance.
 | `data` | `object` | Initial entity data. |
 
 **Returns:** `MessageEntity` instance.
+
+#### `Teammate(data?: object)`
+
+Create a new `Teammate` entity instance.
+
+**Parameters:**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `data` | `object` | Initial entity data. |
+
+**Returns:** `TeammateEntity` instance.
 
 #### `Token(data?: object)`
 
@@ -289,6 +301,14 @@ const access = client.Access()
 | `senders` | `any[]` | Yes | Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members |
 
 ### Operations
+
+#### `load(match: object, ctrl?: object)`
+
+Load a single entity matching the given criteria. Resolves to the entity, whose record `data()` reads.
+
+```ts
+const result = await client.Access().load({ agent_id: 'agent_id' })
+```
 
 #### `update(data: object, ctrl?: object)`
 
@@ -545,27 +565,6 @@ const agent = client.Agent()
 | `id` | - | - | - | - | - |
 | `name` | - | - | - | Yes | - |
 
-### Actions
-
-This entity exposes custom API actions in addition to the standard
-operations. Select one with `$action` in the call's argument; the
-remaining keys are sent as that action's payload.
-
-| Action | Route | Call |
-| --- | --- | --- |
-| `access` | `/agents/{id}/access` | `client.Agent().load({ $action: 'access', ... })` |
-| `connection` | `/agents/{id}/connection` | `client.Agent().load({ $action: 'connection', ... })` |
-
-An action returns that action's OWN response, which is not necessarily a
-Agent record — check the API definition for its shape.
-
-```ts
-const result = await client.Agent().load({
-  $action: 'access',
-  /* ...the action's own arguments */
-})
-```
-
 ### Operations
 
 #### `create(data: object, ctrl?: object)`
@@ -764,14 +763,22 @@ const connection = client.Connection()
 
 ### Field Usage by Operation
 
-| Field | update |
-| --- | --- |
-| `client` | - |
-| `id` | - |
-| `machine` | Yes |
-| `tokenId` | - |
+| Field | load | update |
+| --- | --- | --- |
+| `client` | - | - |
+| `id` | - | - |
+| `machine` | - | Yes |
+| `tokenId` | - | - |
 
 ### Operations
+
+#### `load(match: object, ctrl?: object)`
+
+Load a single entity matching the given criteria. Resolves to the entity, whose record `data()` reads.
+
+```ts
+const result = await client.Connection().load({ agent_id: 'agent_id' })
+```
 
 #### `update(data: object, ctrl?: object)`
 
@@ -836,39 +843,19 @@ const event = client.Event()
 
 ### Field Usage by Operation
 
-| Field | load | list | create |
-| --- | --- | --- | --- |
-| `attachments` | - | - | - |
-| `channel` | - | - | - |
-| `client` | - | - | - |
-| `createdAt` | - | - | - |
-| `id` | - | - | - |
-| `messageId` | - | - | - |
-| `sender` | - | - | - |
-| `text` | - | - | - |
-| `thread` | - | - | - |
-| `toThread` | - | Yes | - |
-| `type` | - | - | - |
-
-### Actions
-
-This entity exposes custom API actions in addition to the standard
-operations. Select one with `$action` in the call's argument; the
-remaining keys are sent as that action's payload.
-
-| Action | Route | Call |
+| Field | list | create |
 | --- | --- | --- |
-| `stream` | `/agents/{id}/events/stream` | `client.Event().load({ $action: 'stream', ... })` |
-
-An action returns that action's OWN response, which is not necessarily a
-Event record — check the API definition for its shape.
-
-```ts
-const result = await client.Event().load({
-  $action: 'stream',
-  /* ...the action's own arguments */
-})
-```
+| `attachments` | - | - |
+| `channel` | - | - |
+| `client` | - | - |
+| `createdAt` | - | - |
+| `id` | - | - |
+| `messageId` | - | - |
+| `sender` | - | - |
+| `text` | - | - |
+| `thread` | - | - |
+| `toThread` | Yes | - |
+| `type` | - | - |
 
 ### Operations
 
@@ -890,10 +877,6 @@ List entities matching the given criteria. Resolves to an array of entities, one
 const results = await client.Event().list({ agent_id: "example" })
 ```
 
-#### `load(match: object, ctrl?: object)`
-
-Load a single entity matching the given criteria. Resolves to the entity, whose record `data()` reads.
-
 ### Common Methods
 
 #### `data(data?: object)`
@@ -909,65 +892,6 @@ Get or set the entity match criteria. Works the same as `data()`.
 #### `make()`
 
 Create a new `EventEntity` instance with the same client and
-options.
-
-#### `client()`
-
-Return the parent `ArtilSDK` instance.
-
-#### `entopts()`
-
-Return a copy of the entity options.
-
-
----
-
-## ListedTeammateEntity
-
-```ts
-const listed_teammate = client.ListedTeammate()
-```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `addresses` | `any[]` | Yes | Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number |
-| `email` | `string | null` | Yes | The agent's primary email address, or the member's |
-| `icon` | `any` | Yes | The agent's icon; null for members |
-| `id` | `string` | Yes | The agent's or member's id |
-| `imageUrl` | `string | null` | Yes | The member's picture from their sign-in profile, or the avatar it makes them; null for agents |
-| `kind` | `string` | Yes |  |
-| `listening` | `boolean | null` | Yes | Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members |
-| `name` | `string | null` | Yes |  |
-| `phone` | `string | null` | Yes | The agent's primary phone number, or the one a member added to their profile |
-| `role` | `any` | Yes | The member's role in the workspace; null for agents |
-
-### Operations
-
-#### `list(match: object, ctrl?: object)`
-
-List entities matching the given criteria. Resolves to an array of entities, one per record.
-
-```ts
-const results = await client.ListedTeammate().list()
-```
-
-### Common Methods
-
-#### `data(data?: object)`
-
-Get or set the entity data. When called with data, sets the entity's
-internal data and returns the current data. When called without
-arguments, returns a copy of the current data.
-
-#### `match(match?: object)`
-
-Get or set the entity match criteria. Works the same as `data()`.
-
-#### `make()`
-
-Create a new `ListedTeammateEntity` instance with the same client and
 options.
 
 #### `client()`
@@ -1025,30 +949,10 @@ Return a copy of the entity options.
 
 ---
 
-## MenEntity
+## MeEntity
 
 ```ts
-const men = client.Men()
-```
-
-### Actions
-
-This entity exposes custom API actions in addition to the standard
-operations. Select one with `$action` in the call's argument; the
-remaining keys are sent as that action's payload.
-
-| Action | Route | Call |
-| --- | --- | --- |
-| `token` | `/me/token` | `client.Men().remove({ $action: 'token', ... })` |
-
-An action returns that action's OWN response, which is not necessarily a
-Men record — check the API definition for its shape.
-
-```ts
-const result = await client.Men().remove({
-  $action: 'token',
-  /* ...the action's own arguments */
-})
+const me = client.Me()
 ```
 
 ### Operations
@@ -1058,12 +962,8 @@ const result = await client.Men().remove({
 Load a single entity matching the given criteria. Resolves to the entity, whose record `data()` reads.
 
 ```ts
-const result = await client.Men().load()
+const result = await client.Me().load()
 ```
-
-#### `remove(match: object, ctrl?: object)`
-
-Remove the entity matching the given criteria. Resolves to the entity, marked as deleted.
 
 ### Common Methods
 
@@ -1079,7 +979,51 @@ Get or set the entity match criteria. Works the same as `data()`.
 
 #### `make()`
 
-Create a new `MenEntity` instance with the same client and
+Create a new `MeEntity` instance with the same client and
+options.
+
+#### `client()`
+
+Return the parent `ArtilSDK` instance.
+
+#### `entopts()`
+
+Return a copy of the entity options.
+
+
+---
+
+## MeTokenEntity
+
+```ts
+const me_token = client.MeToken()
+```
+
+### Operations
+
+#### `remove(match: object, ctrl?: object)`
+
+Remove the entity matching the given criteria. Resolves to the entity, marked as deleted.
+
+```ts
+const result = await client.MeToken().remove()
+```
+
+### Common Methods
+
+#### `data(data?: object)`
+
+Get or set the entity data. When called with data, sets the entity's
+internal data and returns the current data. When called without
+arguments, returns a copy of the current data.
+
+#### `match(match?: object)`
+
+Get or set the entity match criteria. Works the same as `data()`.
+
+#### `make()`
+
+Create a new `MeTokenEntity` instance with the same client and
 options.
 
 #### `client()`
@@ -1197,6 +1141,65 @@ Get or set the entity match criteria. Works the same as `data()`.
 #### `make()`
 
 Create a new `MessageEntity` instance with the same client and
+options.
+
+#### `client()`
+
+Return the parent `ArtilSDK` instance.
+
+#### `entopts()`
+
+Return a copy of the entity options.
+
+
+---
+
+## TeammateEntity
+
+```ts
+const teammate = client.Teammate()
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `addresses` | `any[]` | Yes | Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number |
+| `email` | `string | null` | Yes | The agent's primary email address, or the member's |
+| `icon` | `any` | Yes | The agent's icon; null for members |
+| `id` | `string` | Yes | The agent's or member's id |
+| `imageUrl` | `string | null` | Yes | The member's picture from their sign-in profile, or the avatar it makes them; null for agents |
+| `kind` | `string` | Yes |  |
+| `listening` | `boolean | null` | Yes | Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members |
+| `name` | `string | null` | Yes |  |
+| `phone` | `string | null` | Yes | The agent's primary phone number, or the one a member added to their profile |
+| `role` | `any` | Yes | The member's role in the workspace; null for agents |
+
+### Operations
+
+#### `list(match: object, ctrl?: object)`
+
+List entities matching the given criteria. Resolves to an array of entities, one per record.
+
+```ts
+const results = await client.Teammate().list()
+```
+
+### Common Methods
+
+#### `data(data?: object)`
+
+Get or set the entity data. When called with data, sets the entity's
+internal data and returns the current data. When called without
+arguments, returns a copy of the current data.
+
+#### `match(match?: object)`
+
+Get or set the entity match criteria. Works the same as `data()`.
+
+#### `make()`
+
+Create a new `TeammateEntity` instance with the same client and
 options.
 
 #### `client()`

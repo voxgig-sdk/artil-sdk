@@ -85,17 +85,20 @@ func init() {
 	core.NewEventEntityFunc = func(client *core.ArtilSDK, entopts map[string]any) core.ArtilEntityBase {
 		return entity.NewEventEntity(client, entopts)
 	}
-	core.NewListedTeammateEntityFunc = func(client *core.ArtilSDK, entopts map[string]any) core.ArtilEntityBase {
-		return entity.NewListedTeammateEntity(client, entopts)
-	}
 	core.NewListenerEntityFunc = func(client *core.ArtilSDK, entopts map[string]any) core.ArtilEntityBase {
 		return entity.NewListenerEntity(client, entopts)
 	}
-	core.NewMenEntityFunc = func(client *core.ArtilSDK, entopts map[string]any) core.ArtilEntityBase {
-		return entity.NewMenEntity(client, entopts)
+	core.NewMeEntityFunc = func(client *core.ArtilSDK, entopts map[string]any) core.ArtilEntityBase {
+		return entity.NewMeEntity(client, entopts)
+	}
+	core.NewMeTokenEntityFunc = func(client *core.ArtilSDK, entopts map[string]any) core.ArtilEntityBase {
+		return entity.NewMeTokenEntity(client, entopts)
 	}
 	core.NewMessageEntityFunc = func(client *core.ArtilSDK, entopts map[string]any) core.ArtilEntityBase {
 		return entity.NewMessageEntity(client, entopts)
+	}
+	core.NewTeammateEntityFunc = func(client *core.ArtilSDK, entopts map[string]any) core.ArtilEntityBase {
+		return entity.NewTeammateEntity(client, entopts)
 	}
 	core.NewTokenEntityFunc = func(client *core.ArtilSDK, entopts map[string]any) core.ArtilEntityBase {
 		return entity.NewTokenEntity(client, entopts)

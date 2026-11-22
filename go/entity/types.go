@@ -16,6 +16,11 @@ import (
 type Access struct {
 }
 
+// AccessLoadMatch is the typed request payload for Access.LoadTyped.
+type AccessLoadMatch struct {
+	AgentId string `json:"agent_id"`
+}
+
 // AccessUpdateData is the typed request payload for Access.UpdateTyped.
 type AccessUpdateData struct {
 	AgentId string `json:"agent_id"`
@@ -131,6 +136,11 @@ type ClientListMatch struct {
 type Connection struct {
 }
 
+// ConnectionLoadMatch is the typed request payload for Connection.LoadTyped.
+type ConnectionLoadMatch struct {
+	AgentId string `json:"agent_id"`
+}
+
 // ConnectionUpdateData is the typed request payload for Connection.UpdateTyped.
 type ConnectionUpdateData struct {
 	AgentId string `json:"agent_id"`
@@ -140,13 +150,6 @@ type ConnectionUpdateData struct {
 
 // Event is the typed data model for the event entity.
 type Event struct {
-}
-
-// EventLoadMatch is the typed request payload for Event.LoadTyped.
-type EventLoadMatch struct {
-	AgentId string `json:"agent_id"`
-	After *int `json:"after,omitempty"`
-	Connection *string `json:"connection,omitempty"`
 }
 
 // EventListMatch is the typed request payload for Event.ListTyped.
@@ -165,24 +168,6 @@ type EventCreateData struct {
 	ToThread *string `json:"toThread,omitempty"`
 }
 
-// ListedTeammate is the typed data model for the listed_teammate entity.
-type ListedTeammate struct {
-}
-
-// ListedTeammateListMatch is the typed request payload for ListedTeammate.ListTyped.
-type ListedTeammateListMatch struct {
-	Addresses *[]any `json:"addresses,omitempty"`
-	Email *any `json:"email,omitempty"`
-	Icon *any `json:"icon,omitempty"`
-	Id *string `json:"id,omitempty"`
-	ImageUrl *any `json:"imageUrl,omitempty"`
-	Kind *string `json:"kind,omitempty"`
-	Listening *any `json:"listening,omitempty"`
-	Name *any `json:"name,omitempty"`
-	Phone *any `json:"phone,omitempty"`
-	Role *any `json:"role,omitempty"`
-}
-
 // Listener is the typed data model for the listener entity.
 type Listener struct {
 }
@@ -192,16 +177,20 @@ type ListenerListMatch struct {
 	AgentId string `json:"agent_id"`
 }
 
-// Men is the typed data model for the men entity.
-type Men struct {
+// Me is the typed data model for the me entity.
+type Me struct {
 }
 
-// MenLoadMatch is the typed request payload for Men.LoadTyped.
-type MenLoadMatch struct {
+// MeLoadMatch is the typed request payload for Me.LoadTyped.
+type MeLoadMatch struct {
 }
 
-// MenRemoveMatch is the typed request payload for Men.RemoveTyped.
-type MenRemoveMatch struct {
+// MeToken is the typed data model for the me_token entity.
+type MeToken struct {
+}
+
+// MeTokenRemoveMatch is the typed request payload for MeToken.RemoveTyped.
+type MeTokenRemoveMatch struct {
 }
 
 // Message is the typed data model for the message entity.
@@ -238,6 +227,24 @@ type MessageCreateData struct {
 	Text string `json:"text"`
 	Thread *any `json:"thread,omitempty"`
 	To *[]any `json:"to,omitempty"`
+}
+
+// Teammate is the typed data model for the teammate entity.
+type Teammate struct {
+}
+
+// TeammateListMatch is the typed request payload for Teammate.ListTyped.
+type TeammateListMatch struct {
+	Addresses *[]any `json:"addresses,omitempty"`
+	Email *any `json:"email,omitempty"`
+	Icon *any `json:"icon,omitempty"`
+	Id *string `json:"id,omitempty"`
+	ImageUrl *any `json:"imageUrl,omitempty"`
+	Kind *string `json:"kind,omitempty"`
+	Listening *any `json:"listening,omitempty"`
+	Name *any `json:"name,omitempty"`
+	Phone *any `json:"phone,omitempty"`
+	Role *any `json:"role,omitempty"`
 }
 
 // Token is the typed data model for the token entity.

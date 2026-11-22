@@ -549,20 +549,6 @@ function ArtilSDK:Event(data)
 end
 
 
--- Idiomatic facade: client:ListedTeammate():list() / client:ListedTeammate():load({ id = ... })
--- Entity access is capitalised (PascalCase) for parity with the other SDKs.
-function ArtilSDK:ListedTeammate(data)
-  local EntityMod = require("entity.listed_teammate_entity")
-  if data == nil then
-    if self._listed_teammate == nil then
-      self._listed_teammate = EntityMod.new(self, nil)
-    end
-    return self._listed_teammate
-  end
-  return EntityMod.new(self, data)
-end
-
-
 -- Idiomatic facade: client:Listener():list() / client:Listener():load({ id = ... })
 -- Entity access is capitalised (PascalCase) for parity with the other SDKs.
 function ArtilSDK:Listener(data)
@@ -577,15 +563,29 @@ function ArtilSDK:Listener(data)
 end
 
 
--- Idiomatic facade: client:Men():list() / client:Men():load({ id = ... })
+-- Idiomatic facade: client:Me():list() / client:Me():load({ id = ... })
 -- Entity access is capitalised (PascalCase) for parity with the other SDKs.
-function ArtilSDK:Men(data)
-  local EntityMod = require("entity.men_entity")
+function ArtilSDK:Me(data)
+  local EntityMod = require("entity.me_entity")
   if data == nil then
-    if self._men == nil then
-      self._men = EntityMod.new(self, nil)
+    if self._me == nil then
+      self._me = EntityMod.new(self, nil)
     end
-    return self._men
+    return self._me
+  end
+  return EntityMod.new(self, data)
+end
+
+
+-- Idiomatic facade: client:MeToken():list() / client:MeToken():load({ id = ... })
+-- Entity access is capitalised (PascalCase) for parity with the other SDKs.
+function ArtilSDK:MeToken(data)
+  local EntityMod = require("entity.me_token_entity")
+  if data == nil then
+    if self._me_token == nil then
+      self._me_token = EntityMod.new(self, nil)
+    end
+    return self._me_token
   end
   return EntityMod.new(self, data)
 end
@@ -600,6 +600,20 @@ function ArtilSDK:Message(data)
       self._message = EntityMod.new(self, nil)
     end
     return self._message
+  end
+  return EntityMod.new(self, data)
+end
+
+
+-- Idiomatic facade: client:Teammate():list() / client:Teammate():load({ id = ... })
+-- Entity access is capitalised (PascalCase) for parity with the other SDKs.
+function ArtilSDK:Teammate(data)
+  local EntityMod = require("entity.teammate_entity")
+  if data == nil then
+    if self._teammate == nil then
+      self._teammate = EntityMod.new(self, nil)
+    end
+    return self._teammate
   end
   return EntityMod.new(self, data)
 end

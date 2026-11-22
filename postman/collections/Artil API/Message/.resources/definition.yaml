@@ -1,6 +1,8 @@
 $kind: collection
 id: aa4b50fd-4567-535a-8a31-80a809d3cba8
 description: |-
+  An email, text, Telegram or Slack message an agent received or sent: list them (by channel, direction or counterpart), read one, or send one, which can answer (`replyTo`) or pass on (`forward`) another.
+
   The **message** entity, which belongs to a agent. Its requests address one record by `{{message_id}}`, which a list or a create remembers.
 
   | field | type | required | |

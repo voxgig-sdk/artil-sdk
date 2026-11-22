@@ -25,7 +25,7 @@ class ConnectionEntityTest < Minitest::Test
     end
     client = ArtilSDK.test(nil, { "feature" => { "validate" => { "active" => true } } })
     err = assert_raises(StandardError) do
-      client.Connection(nil).update({ "agent_id" => 1 }, nil)
+      client.Connection(nil).load({ "agent_id" => 1 }, nil)
     end
     assert_equal "validate_failed", err.code
   end

@@ -54,6 +54,13 @@ func main() {
         "apikey": os.Getenv("ARTIL_APIKEY"),
     })
 
+    // Load a single access — the value is the entity; Data() reads its record.
+    access, err := client.Access(nil).Load(map[string]any{"agent_id": "example_agent_id"}, nil)
+    if err != nil {
+        panic(err)
+    }
+    fmt.Println(access.(sdk.Entity).Data())
+
     // Update a access.
     updated, err := client.Access(nil).Update(map[string]any{"agent_id": "example_agent_id", "admit": "example_admit"}, nil)
     if err != nil {
@@ -235,10 +242,11 @@ Creates a test-mode client with mock transport. Both arguments may be `nil`.
 | `Client` | `(data map[string]any) ArtilEntityBase` | Create a Client entity instance. |
 | `Connection` | `(data map[string]any) ArtilEntityBase` | Create a Connection entity instance. |
 | `Event` | `(data map[string]any) ArtilEntityBase` | Create an Event entity instance. |
-| `ListedTeammate` | `(data map[string]any) ArtilEntityBase` | Create a ListedTeammate entity instance. |
 | `Listener` | `(data map[string]any) ArtilEntityBase` | Create a Listener entity instance. |
-| `Men` | `(data map[string]any) ArtilEntityBase` | Create a Men entity instance. |
+| `Me` | `(data map[string]any) ArtilEntityBase` | Create a Me entity instance. |
+| `MeToken` | `(data map[string]any) ArtilEntityBase` | Create a MeToken entity instance. |
 | `Message` | `(data map[string]any) ArtilEntityBase` | Create a Message entity instance. |
+| `Teammate` | `(data map[string]any) ArtilEntityBase` | Create a Teammate entity instance. |
 | `Token` | `(data map[string]any) ArtilEntityBase` | Create a Token entity instance. |
 | `Webhook` | `(data map[string]any) ArtilEntityBase` | Create a Webhook entity instance. |
 
@@ -272,7 +280,7 @@ Check `err` first, then use the value directly (or the typed
 `...Typed` variants, which return the entity's model struct and a typed
 slice):
 
-    access, err := client.Access(nil).Update(map[string]any{/* fields */}, nil)
+    access, err := client.Access(nil).Load(map[string]any{"agent_id": "example"}, nil)
     if err != nil { /* handle */ }
     // access is the entity; access.(sdk.Entity).Data() reads its record
 
@@ -289,9 +297,9 @@ Only `Direct()` returns a response envelope — a `map[string]any` with
 | `"id"` |  |
 | `"senders"` | Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members |
 
-Operations: Update.
+Operations: Load, Update.
 
-API path: `/agents/{id}/access/{channel}`
+API path: `/agents/{id}/access`
 
 #### Address
 
@@ -373,7 +381,7 @@ API path: `/agents/{id}/clients`
 | `"machine"` |  |
 | `"tokenId"` | The agent's token the client connected with |
 
-Operations: Update.
+Operations: Load, Update.
 
 API path: `/agents/{id}/connection`
 
@@ -393,28 +401,9 @@ API path: `/agents/{id}/connection`
 | `"toThread"` | The thread of the agent's client to hand the message to, from a message it sent |
 | `"type"` |  |
 
-Operations: Create, List, Load.
+Operations: Create, List.
 
 API path: `/agents/{id}/url`
-
-#### ListedTeammate
-
-| Field | Description |
-| --- | --- |
-| `"addresses"` | Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number |
-| `"email"` | The agent's primary email address, or the member's |
-| `"icon"` | The agent's icon; null for members |
-| `"id"` | The agent's or member's id |
-| `"imageUrl"` | The member's picture from their sign-in profile, or the avatar it makes them; null for agents |
-| `"kind"` |  |
-| `"listening"` | Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members |
-| `"name"` |  |
-| `"phone"` | The agent's primary phone number, or the one a member added to their profile |
-| `"role"` | The member's role in the workspace; null for agents |
-
-Operations: List.
-
-API path: `/team`
 
 #### Listener
 
@@ -425,14 +414,23 @@ Operations: List.
 
 API path: `/agents/{id}/listeners`
 
-#### Men
+#### Me
 
 | Field | Description |
 | --- | --- |
 
-Operations: Load, Remove.
+Operations: Load.
 
 API path: `/me`
+
+#### MeToken
+
+| Field | Description |
+| --- | --- |
+
+Operations: Remove.
+
+API path: `/me/token`
 
 #### Message
 
@@ -464,6 +462,25 @@ API path: `/me`
 Operations: Create, List, Load.
 
 API path: `/agents/{id}/messages`
+
+#### Teammate
+
+| Field | Description |
+| --- | --- |
+| `"addresses"` | Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number |
+| `"email"` | The agent's primary email address, or the member's |
+| `"icon"` | The agent's icon; null for members |
+| `"id"` | The agent's or member's id |
+| `"imageUrl"` | The member's picture from their sign-in profile, or the avatar it makes them; null for agents |
+| `"kind"` |  |
+| `"listening"` | Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members |
+| `"name"` |  |
+| `"phone"` | The agent's primary phone number, or the one a member added to their profile |
+| `"role"` | The member's role in the workspace; null for agents |
+
+Operations: List.
+
+API path: `/team`
 
 #### Token
 
@@ -509,6 +526,7 @@ Create an instance: `access := client.Access(nil)`
 
 | Method | Description |
 | --- | --- |
+| `Load(match, ctrl)` | Load a single entity by match criteria. |
 | `Update(data, ctrl)` | Update an existing entity. |
 
 #### Fields
@@ -518,6 +536,16 @@ Create an instance: `access := client.Access(nil)`
 | `admit` | `string` | Whether anyone, the workspace's members and agents besides the listed senders, or only the listed senders wake the agent; a new agent starts with team, except on Telegram, which lists the account that creates its bot from Artil, and its… |
 | `id` | `string` |  |
 | `senders` | `[]any` | Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members |
+
+#### Example: Load
+
+```go
+access, err := client.Access(nil).Load(map[string]any{"agent_id": "agent_id"}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(access.(sdk.Entity).Data()) // the loaded entity's record
+```
 
 
 ### Address
@@ -752,6 +780,7 @@ Create an instance: `connection := client.Connection(nil)`
 
 | Method | Description |
 | --- | --- |
+| `Load(match, ctrl)` | Load a single entity by match criteria. |
 | `Update(data, ctrl)` | Update an existing entity. |
 
 #### Fields
@@ -762,6 +791,16 @@ Create an instance: `connection := client.Connection(nil)`
 | `id` | `string` |  |
 | `machine` | `any` |  |
 | `tokenId` | `string` | The agent's token the client connected with |
+
+#### Example: Load
+
+```go
+connection, err := client.Connection(nil).Load(map[string]any{"agent_id": "agent_id"}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(connection.(sdk.Entity).Data()) // the loaded entity's record
+```
 
 
 ### Event
@@ -817,45 +856,6 @@ fmt.Println(result.(sdk.Entity).Data()) // the created entity's record
 ```
 
 
-### ListedTeammate
-
-Create an instance: `listedTeammate := client.ListedTeammate(nil)`
-
-#### Operations
-
-| Method | Description |
-| --- | --- |
-| `List(match, ctrl)` | List entities matching the criteria. |
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `addresses` | `[]any` | Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number |
-| `email` | `any` | The agent's primary email address, or the member's |
-| `icon` | `any` | The agent's icon; null for members |
-| `id` | `string` | The agent's or member's id |
-| `imageUrl` | `any` | The member's picture from their sign-in profile, or the avatar it makes them; null for agents |
-| `kind` | `string` |  |
-| `listening` | `any` | Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members |
-| `name` | `any` |  |
-| `phone` | `any` | The agent's primary phone number, or the one a member added to their profile |
-| `role` | `any` | The member's role in the workspace; null for agents |
-
-#### Example: List
-
-```go
-listedTeammates, err := client.ListedTeammate(nil).List(nil, nil)
-if err != nil {
-    panic(err)
-}
-// A []any of entities, one per record.
-for _, item := range listedTeammates.([]any) {
-    fmt.Println(item.(sdk.Entity).Data())
-}
-```
-
-
 ### Listener
 
 Create an instance: `listener := client.Listener(nil)`
@@ -880,9 +880,9 @@ for _, item := range listeners.([]any) {
 ```
 
 
-### Men
+### Me
 
-Create an instance: `men := client.Men(nil)`
+Create an instance: `me := client.Me(nil)`
 
 #### Operations
 
@@ -893,12 +893,23 @@ Create an instance: `men := client.Men(nil)`
 #### Example: Load
 
 ```go
-men, err := client.Men(nil).Load(nil, nil)
+me, err := client.Me(nil).Load(nil, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(men.(sdk.Entity).Data()) // the loaded entity's record
+fmt.Println(me.(sdk.Entity).Data()) // the loaded entity's record
 ```
+
+
+### MeToken
+
+Create an instance: `meToken := client.MeToken(nil)`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `Remove(match, ctrl)` | Remove the matching entity. |
 
 
 ### Message
@@ -974,6 +985,45 @@ if err != nil {
     panic(err)
 }
 fmt.Println(result.(sdk.Entity).Data()) // the created entity's record
+```
+
+
+### Teammate
+
+Create an instance: `teammate := client.Teammate(nil)`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `List(match, ctrl)` | List entities matching the criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `addresses` | `[]any` | Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number |
+| `email` | `any` | The agent's primary email address, or the member's |
+| `icon` | `any` | The agent's icon; null for members |
+| `id` | `string` | The agent's or member's id |
+| `imageUrl` | `any` | The member's picture from their sign-in profile, or the avatar it makes them; null for agents |
+| `kind` | `string` |  |
+| `listening` | `any` | Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members |
+| `name` | `any` |  |
+| `phone` | `any` | The agent's primary phone number, or the one a member added to their profile |
+| `role` | `any` | The member's role in the workspace; null for agents |
+
+#### Example: List
+
+```go
+teammates, err := client.Teammate(nil).List(nil, nil)
+if err != nil {
+    panic(err)
+}
+// A []any of entities, one per record.
+for _, item := range teammates.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
 ```
 
 

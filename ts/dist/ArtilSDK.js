@@ -43,10 +43,11 @@ const ChannelEntity_1 = require("./entity/ChannelEntity");
 const ClientEntity_1 = require("./entity/ClientEntity");
 const ConnectionEntity_1 = require("./entity/ConnectionEntity");
 const EventEntity_1 = require("./entity/EventEntity");
-const ListedTeammateEntity_1 = require("./entity/ListedTeammateEntity");
 const ListenerEntity_1 = require("./entity/ListenerEntity");
-const MenEntity_1 = require("./entity/MenEntity");
+const MeEntity_1 = require("./entity/MeEntity");
+const MeTokenEntity_1 = require("./entity/MeTokenEntity");
 const MessageEntity_1 = require("./entity/MessageEntity");
+const TeammateEntity_1 = require("./entity/TeammateEntity");
 const TokenEntity_1 = require("./entity/TokenEntity");
 const WebhookEntity_1 = require("./entity/WebhookEntity");
 const node_util_1 = require("node:util");
@@ -360,13 +361,6 @@ class ArtilSDK {
         const self = this;
         return new EventEntity_1.EventEntity(self, entopts);
     }
-    // Entity access: `client.ListedTeammate().list()` / `client.ListedTeammate().load({ id })`.
-    // The argument is the entity OPTIONS object (passed to the entity
-    // constructor as entopts), not initial entity data.
-    ListedTeammate(entopts) {
-        const self = this;
-        return new ListedTeammateEntity_1.ListedTeammateEntity(self, entopts);
-    }
     // Entity access: `client.Listener().list()` / `client.Listener().load({ id })`.
     // The argument is the entity OPTIONS object (passed to the entity
     // constructor as entopts), not initial entity data.
@@ -374,12 +368,19 @@ class ArtilSDK {
         const self = this;
         return new ListenerEntity_1.ListenerEntity(self, entopts);
     }
-    // Entity access: `client.Men().list()` / `client.Men().load({ id })`.
+    // Entity access: `client.Me().list()` / `client.Me().load({ id })`.
     // The argument is the entity OPTIONS object (passed to the entity
     // constructor as entopts), not initial entity data.
-    Men(entopts) {
+    Me(entopts) {
         const self = this;
-        return new MenEntity_1.MenEntity(self, entopts);
+        return new MeEntity_1.MeEntity(self, entopts);
+    }
+    // Entity access: `client.MeToken().list()` / `client.MeToken().load({ id })`.
+    // The argument is the entity OPTIONS object (passed to the entity
+    // constructor as entopts), not initial entity data.
+    MeToken(entopts) {
+        const self = this;
+        return new MeTokenEntity_1.MeTokenEntity(self, entopts);
     }
     // Entity access: `client.Message().list()` / `client.Message().load({ id })`.
     // The argument is the entity OPTIONS object (passed to the entity
@@ -387,6 +388,13 @@ class ArtilSDK {
     Message(entopts) {
         const self = this;
         return new MessageEntity_1.MessageEntity(self, entopts);
+    }
+    // Entity access: `client.Teammate().list()` / `client.Teammate().load({ id })`.
+    // The argument is the entity OPTIONS object (passed to the entity
+    // constructor as entopts), not initial entity data.
+    Teammate(entopts) {
+        const self = this;
+        return new TeammateEntity_1.TeammateEntity(self, entopts);
     }
     // Entity access: `client.Token().list()` / `client.Token().load({ id })`.
     // The argument is the entity OPTIONS object (passed to the entity

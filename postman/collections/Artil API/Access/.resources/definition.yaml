@@ -1,6 +1,8 @@
 $kind: collection
 id: "36a88237-cf7d-5cf2-b3a8-d0b064981110"
 description: |-
+  Who can wake an agent on each channel: read the rules for every channel, or set the rule for one (its `id` is the channel: email, sms, telegram, slack or url).
+
   The **access** entity, which belongs to a agent. Its requests address one record by `{{access_id}}`, which a list or a create remembers.
 
   | field | type | required | |

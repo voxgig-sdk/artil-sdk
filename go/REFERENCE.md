@@ -80,21 +80,25 @@ Create a new `Connection` entity instance. Pass `nil` for no initial data.
 
 Create a new `Event` entity instance. Pass `nil` for no initial data.
 
-#### `ListedTeammate(data map[string]any) ArtilEntityBase`
-
-Create a new `ListedTeammate` entity instance. Pass `nil` for no initial data.
-
 #### `Listener(data map[string]any) ArtilEntityBase`
 
 Create a new `Listener` entity instance. Pass `nil` for no initial data.
 
-#### `Men(data map[string]any) ArtilEntityBase`
+#### `Me(data map[string]any) ArtilEntityBase`
 
-Create a new `Men` entity instance. Pass `nil` for no initial data.
+Create a new `Me` entity instance. Pass `nil` for no initial data.
+
+#### `MeToken(data map[string]any) ArtilEntityBase`
+
+Create a new `MeToken` entity instance. Pass `nil` for no initial data.
 
 #### `Message(data map[string]any) ArtilEntityBase`
 
 Create a new `Message` entity instance. Pass `nil` for no initial data.
+
+#### `Teammate(data map[string]any) ArtilEntityBase`
+
+Create a new `Teammate` entity instance. Pass `nil` for no initial data.
 
 #### `Token(data map[string]any) ArtilEntityBase`
 
@@ -156,6 +160,18 @@ fmt.Println(access.GetName()) // "access"
 | `senders` | `[]any` | Yes | Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members |
 
 ### Operations
+
+#### `Load(reqmatch, ctrl map[string]any) (any, error)`
+
+Load a single entity matching the given criteria. Returns the entity, whose record `Data()` reads; `err` is non-nil on failure.
+
+```go
+result, err := client.Access(nil).Load(map[string]any{"agent_id": "agent_id"}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(result.(sdk.Entity).Data())
+```
 
 #### `Update(reqdata, ctrl map[string]any) (any, error)`
 
@@ -684,14 +700,26 @@ fmt.Println(connection.GetName()) // "connection"
 
 ### Field Usage by Operation
 
-| Field | update |
-| --- | --- |
-| `client` | - |
-| `id` | - |
-| `machine` | Yes |
-| `tokenId` | - |
+| Field | load | update |
+| --- | --- | --- |
+| `client` | - | - |
+| `id` | - | - |
+| `machine` | - | Yes |
+| `tokenId` | - | - |
 
 ### Operations
+
+#### `Load(reqmatch, ctrl map[string]any) (any, error)`
+
+Load a single entity matching the given criteria. Returns the entity, whose record `Data()` reads; `err` is non-nil on failure.
+
+```go
+result, err := client.Connection(nil).Load(map[string]any{"agent_id": "agent_id"}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(result.(sdk.Entity).Data())
+```
 
 #### `Update(reqdata, ctrl map[string]any) (any, error)`
 
@@ -841,76 +869,6 @@ Return the entity name.
 
 ---
 
-## ListedTeammateEntity
-
-```go
-listedTeammate := client.ListedTeammate(nil)
-fmt.Println(listedTeammate.GetName()) // "listed_teammate"
-```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `addresses` | `[]any` | Yes | Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number |
-| `email` | `any` | Yes | The agent's primary email address, or the member's |
-| `icon` | `any` | Yes | The agent's icon; null for members |
-| `id` | `string` | Yes | The agent's or member's id |
-| `imageUrl` | `any` | Yes | The member's picture from their sign-in profile, or the avatar it makes them; null for agents |
-| `kind` | `string` | Yes |  |
-| `listening` | `any` | Yes | Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members |
-| `name` | `any` | Yes |  |
-| `phone` | `any` | Yes | The agent's primary phone number, or the one a member added to their profile |
-| `role` | `any` | Yes | The member's role in the workspace; null for agents |
-
-### Operations
-
-#### `List(reqmatch, ctrl map[string]any) (any, error)`
-
-List entities matching the given criteria. Returns a `[]any` of entities, one per record; `err` is non-nil on failure.
-
-```go
-results, err := client.ListedTeammate(nil).List(nil, nil)
-if err != nil {
-    panic(err)
-}
-for _, item := range results.([]any) {
-    fmt.Println(item.(sdk.Entity).Data())
-}
-```
-
-### Common Methods
-
-#### `Data(args ...any) any`
-
-Get or set the entity data. When called with data, sets the entity's
-internal data and returns the current data. When called without
-arguments, returns a copy of the current data.
-
-#### `Match(args ...any) any`
-
-Get or set the entity match criteria. Works the same as `Data()`.
-
-#### `Make() Entity`
-
-Create a new `ListedTeammateEntity` instance with the same client and
-options.
-
-#### `Stream(action string, args map[string]any, callopts map[string]any) <-chan StreamItem`
-
-Run an operation through the pipeline and send its result items on the
-returned channel, which closes when the stream ends. A `StreamItem` holds
-one item in `Item`, or in `Err` the error that ended the stream: the
-error the operation itself would return, sent as the last value. Under
-`throw: false` in `callopts["ctrl"]`, no error is sent.
-
-#### `GetName() string`
-
-Return the entity name.
-
-
----
-
 ## ListenerEntity
 
 ```go
@@ -966,11 +924,11 @@ Return the entity name.
 
 ---
 
-## MenEntity
+## MeEntity
 
 ```go
-men := client.Men(nil)
-fmt.Println(men.GetName()) // "men"
+me := client.Me(nil)
+fmt.Println(me.GetName()) // "me"
 ```
 
 ### Operations
@@ -980,7 +938,7 @@ fmt.Println(men.GetName()) // "men"
 Load a single entity matching the given criteria. Returns the entity, whose record `Data()` reads; `err` is non-nil on failure.
 
 ```go
-result, err := client.Men(nil).Load(nil, nil)
+result, err := client.Me(nil).Load(nil, nil)
 if err != nil {
     panic(err)
 }
@@ -1001,7 +959,60 @@ Get or set the entity match criteria. Works the same as `Data()`.
 
 #### `Make() Entity`
 
-Create a new `MenEntity` instance with the same client and
+Create a new `MeEntity` instance with the same client and
+options.
+
+#### `Stream(action string, args map[string]any, callopts map[string]any) <-chan StreamItem`
+
+Run an operation through the pipeline and send its result items on the
+returned channel, which closes when the stream ends. A `StreamItem` holds
+one item in `Item`, or in `Err` the error that ended the stream: the
+error the operation itself would return, sent as the last value. Under
+`throw: false` in `callopts["ctrl"]`, no error is sent.
+
+#### `GetName() string`
+
+Return the entity name.
+
+
+---
+
+## MeTokenEntity
+
+```go
+meToken := client.MeToken(nil)
+fmt.Println(meToken.GetName()) // "me_token"
+```
+
+### Operations
+
+#### `Remove(reqmatch, ctrl map[string]any) (any, error)`
+
+Remove the entity matching the given criteria. Returns the entity, marked as deleted; `err` is non-nil on failure.
+
+```go
+result, err := client.MeToken(nil).Remove(nil, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(result.(sdk.Entity).Data())
+```
+
+### Common Methods
+
+#### `Data(args ...any) any`
+
+Get or set the entity data. When called with data, sets the entity's
+internal data and returns the current data. When called without
+arguments, returns a copy of the current data.
+
+#### `Match(args ...any) any`
+
+Get or set the entity match criteria. Works the same as `Data()`.
+
+#### `Make() Entity`
+
+Create a new `MeTokenEntity` instance with the same client and
 options.
 
 #### `Stream(action string, args map[string]any, callopts map[string]any) <-chan StreamItem`
@@ -1138,6 +1149,76 @@ Get or set the entity match criteria. Works the same as `Data()`.
 #### `Make() Entity`
 
 Create a new `MessageEntity` instance with the same client and
+options.
+
+#### `Stream(action string, args map[string]any, callopts map[string]any) <-chan StreamItem`
+
+Run an operation through the pipeline and send its result items on the
+returned channel, which closes when the stream ends. A `StreamItem` holds
+one item in `Item`, or in `Err` the error that ended the stream: the
+error the operation itself would return, sent as the last value. Under
+`throw: false` in `callopts["ctrl"]`, no error is sent.
+
+#### `GetName() string`
+
+Return the entity name.
+
+
+---
+
+## TeammateEntity
+
+```go
+teammate := client.Teammate(nil)
+fmt.Println(teammate.GetName()) // "teammate"
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `addresses` | `[]any` | Yes | Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number |
+| `email` | `any` | Yes | The agent's primary email address, or the member's |
+| `icon` | `any` | Yes | The agent's icon; null for members |
+| `id` | `string` | Yes | The agent's or member's id |
+| `imageUrl` | `any` | Yes | The member's picture from their sign-in profile, or the avatar it makes them; null for agents |
+| `kind` | `string` | Yes |  |
+| `listening` | `any` | Yes | Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members |
+| `name` | `any` | Yes |  |
+| `phone` | `any` | Yes | The agent's primary phone number, or the one a member added to their profile |
+| `role` | `any` | Yes | The member's role in the workspace; null for agents |
+
+### Operations
+
+#### `List(reqmatch, ctrl map[string]any) (any, error)`
+
+List entities matching the given criteria. Returns a `[]any` of entities, one per record; `err` is non-nil on failure.
+
+```go
+results, err := client.Teammate(nil).List(nil, nil)
+if err != nil {
+    panic(err)
+}
+for _, item := range results.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
+```
+
+### Common Methods
+
+#### `Data(args ...any) any`
+
+Get or set the entity data. When called with data, sets the entity's
+internal data and returns the current data. When called without
+arguments, returns a copy of the current data.
+
+#### `Match(args ...any) any`
+
+Get or set the entity match criteria. Works the same as `Data()`.
+
+#### `Make() Entity`
+
+Create a new `TeammateEntity` instance with the same client and
 options.
 
 #### `Stream(action string, args map[string]any, callopts map[string]any) <-chan StreamItem`

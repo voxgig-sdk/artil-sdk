@@ -3,6 +3,9 @@ export interface Access {
     id?: string;
     senders: any[];
 }
+export interface AccessLoadMatch {
+    agent_id: string;
+}
 export interface AccessUpdateData {
     agent_id: string;
     id: string;
@@ -67,8 +70,6 @@ export interface Agent {
 }
 export interface AgentLoadMatch {
     id: string;
-    $action?: string;
-    [action: string]: any;
 }
 export interface AgentListMatch {
     createdAt?: string;
@@ -112,6 +113,9 @@ export interface Connection {
     machine: string | null;
     tokenId: string;
 }
+export interface ConnectionLoadMatch {
+    agent_id: string;
+}
 export interface ConnectionUpdateData {
     agent_id: string;
     client?: string;
@@ -130,13 +134,6 @@ export interface Event {
     toThread?: string;
     type: string;
 }
-export interface EventLoadMatch {
-    agent_id: string;
-    after?: number;
-    connection?: string;
-    $action?: string;
-    [action: string]: any;
-}
 export interface EventListMatch {
     agent_id: string;
     after?: number;
@@ -149,42 +146,18 @@ export interface EventCreateData {
     thread?: string;
     toThread?: string;
 }
-export interface ListedTeammate {
-    addresses: any[];
-    email: string | null;
-    icon: any;
-    id: string;
-    imageUrl: string | null;
-    kind: string;
-    listening: boolean | null;
-    name: string | null;
-    phone: string | null;
-    role: any;
-}
-export interface ListedTeammateListMatch {
-    addresses?: any[];
-    email?: string | null;
-    icon?: any;
-    id?: string;
-    imageUrl?: string | null;
-    kind?: string;
-    listening?: boolean | null;
-    name?: string | null;
-    phone?: string | null;
-    role?: any;
-}
 export interface Listener {
 }
 export interface ListenerListMatch {
     agent_id: string;
 }
-export interface Men {
+export interface Me {
 }
-export interface MenLoadMatch {
+export interface MeLoadMatch {
 }
-export interface MenRemoveMatch {
-    $action?: string;
-    [action: string]: any;
+export interface MeToken {
+}
+export interface MeTokenRemoveMatch {
 }
 export interface Message {
     addressId: string;
@@ -235,6 +208,30 @@ export interface MessageCreateData {
     text: string;
     thread?: any;
     to?: any[];
+}
+export interface Teammate {
+    addresses: any[];
+    email: string | null;
+    icon: any;
+    id: string;
+    imageUrl: string | null;
+    kind: string;
+    listening: boolean | null;
+    name: string | null;
+    phone: string | null;
+    role: any;
+}
+export interface TeammateListMatch {
+    addresses?: any[];
+    email?: string | null;
+    icon?: any;
+    id?: string;
+    imageUrl?: string | null;
+    kind?: string;
+    listening?: boolean | null;
+    name?: string | null;
+    phone?: string | null;
+    role?: any;
 }
 export interface Token {
     createdAt: string;

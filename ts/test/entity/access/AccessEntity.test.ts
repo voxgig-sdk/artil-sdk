@@ -47,7 +47,7 @@ describe('AccessEntity', async () => {
       return
     }
     const client = ArtilSDK.test(undefined, { feature: { validate: { active: true } } })
-    await assert.rejects(client.Access().update({"agent_id":1,"id":"x"} as any),
+    await assert.rejects(client.Access().load({"agent_id":1} as any),
       (err: any) => 'validate_failed' === err.code)
   })
 
@@ -56,14 +56,14 @@ describe('AccessEntity', async () => {
   test('basic', async (t) => {
 
     const live = 'TRUE' === process.env.ARTIL_TEST_LIVE
-    for (const op of ['update']) {
+    for (const op of ['update', 'load']) {
       if (!live && maybeSkipControl(t, 'entityOp', 'access.' + op, live)) return
     }
 
     
     const setup = basicSetup()
     if (setup.live) {
-      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{"admit":{"a":true,"h":"Admit","n":"admit","r":true,"sh":"Whether anyone, the workspace's members and agents besides the listed senders, or only the listed senders wake the agent; a new agent starts with team, except on Telegram, which lists the account that creates its bot from Artil, and its…","t":"`$STRING`","key$":"admit","index$":0},"id":{"a":true,"h":"Id","n":"id","r":false,"syn":true,"t":"`$STRING`","key$":"id","index$":1},"senders":{"a":true,"h":"Senders","n":"senders","r":true,"sh":"Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members","t":"`$ARRAY`","key$":"senders","index$":2}},"id":{"field":"id","name":"id"},"name":"access","op":{"update":{"input":"data","name":"update","points":[{"a":true,"bf":["admit","senders"],"co":{"id":"PUT /agents/{id}/access/{channel}","source":"openapi3","version":2},"g":{"params":[{"a":true,"k":"param","n":"agent_id","or":"id","r":true,"t":"`$STRING`","index$":0},{"a":true,"k":"param","n":"id","or":"channel","r":true,"t":"`$STRING`","index$":1}]},"k":"http","m":"PUT","o":"/agents/{id}/access/{channel}","q":{"exist":["agent_id","id"]},"r":{"param":{"channel":"id","id":"agent_id"}},"rs":{"kind":"json","media":"application/json"},"s":[{"lit":"agents"},{"var":"agent_id"},{"lit":"access"},{"var":"id"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"update"}},"relations":{"ancestors":[["$.main.kit.entity.agent"]]},"key$":"access","name__orig":"access","Name":"Access","name_":"access","name-":"access","NAME":"ACCESS","index$":0}, {"active":true,"entity":"access","key$":"BasicAccessFlow","kind":"basic","name":"BasicAccessFlow","param":{},"step":[{"a":true,"d":{"agent_id":"agent01"},"i":{"ref":"access_ref01","srcdatavar":"access_ref01_data","suffix":"_up0","textfield":"admit"},"m":{},"o":"update","s":[{"apply":"TextFieldMark","def":{"mark":"Mark01-access_ref01"}}],"v":[],"index$":0}]}, 'Access', {"PUT /agents/{id}/access/{channel}":{"protocol":"http","requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","properties":{"admit":{"type":"string","enum":["anyone","team","list"],"key$":"admit"},"senders":{"maxItems":200,"type":"array","items":{"type":"string"},"key$":"senders"}},"required":["admit","senders"]}}}},"parameters":[{"in":"path","name":"id","required":true,"description":"The agent's id","schema":{"type":"string"},"index$":0},{"schema":{"type":"string"},"in":"path","name":"channel","required":true,"index$":1}]}}, { strict: LIVE_STRICT, t }, 'TRUE' === process.env.VOXGIG_GETONLY_GUARD ? {"access.update.0":"GET-only live run: needs PUT /agents/{id}/access/{channel}"} : {})
+      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{"admit":{"a":true,"h":"Admit","n":"admit","r":true,"sh":"Whether anyone, the workspace's members and agents besides the listed senders, or only the listed senders wake the agent; a new agent starts with team, except on Telegram, which lists the account that creates its bot from Artil, and its…","t":"`$STRING`","key$":"admit","index$":0},"id":{"a":true,"h":"Id","n":"id","r":false,"syn":true,"t":"`$STRING`","key$":"id","index$":1},"senders":{"a":true,"h":"Senders","n":"senders","r":true,"sh":"Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members","t":"`$ARRAY`","key$":"senders","index$":2}},"id":{"field":"id","name":"id"},"name":"access","op":{"load":{"input":"data","name":"load","points":[{"a":true,"co":{"id":"GET /agents/{id}/access","source":"openapi3","version":2},"g":{"params":[{"a":true,"k":"param","n":"agent_id","or":"id","r":true,"t":"`$STRING`","index$":0}]},"k":"http","m":"GET","o":"/agents/{id}/access","q":{"exist":["agent_id"]},"r":{"param":{"id":"agent_id"}},"rs":{"kind":"json","media":"application/json"},"s":[{"lit":"agents"},{"var":"agent_id"},{"lit":"access"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"load"},"update":{"input":"data","name":"update","points":[{"a":true,"bf":["admit","senders"],"co":{"id":"PUT /agents/{id}/access/{channel}","source":"openapi3","version":2},"g":{"params":[{"a":true,"k":"param","n":"agent_id","or":"id","r":true,"t":"`$STRING`","index$":0},{"a":true,"k":"param","n":"id","or":"channel","r":true,"t":"`$STRING`","index$":1}]},"k":"http","m":"PUT","o":"/agents/{id}/access/{channel}","q":{"exist":["agent_id","id"]},"r":{"param":{"channel":"id","id":"agent_id"}},"rs":{"kind":"json","media":"application/json"},"s":[{"lit":"agents"},{"var":"agent_id"},{"lit":"access"},{"var":"id"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"update"}},"relations":{"ancestors":[["$.main.kit.entity.agent"]]},"key$":"access","name__orig":"access","Name":"Access","name_":"access","name-":"access","NAME":"ACCESS","index$":0}, {"active":true,"entity":"access","key$":"BasicAccessFlow","kind":"basic","name":"BasicAccessFlow","param":{},"step":[{"a":true,"d":{"agent_id":"agent01"},"i":{"ref":"access_ref01","srcdatavar":"access_ref01_data","suffix":"_up0","textfield":"admit"},"m":{},"o":"update","s":[{"apply":"TextFieldMark","def":{"mark":"Mark01-access_ref01"}}],"v":[],"index$":0},{"a":true,"d":{},"i":{"ref":"access_ref01","srcdatavar":"access_ref01_data","suffix":"_dt0"},"m":{"id":"access01"},"o":"load","s":[],"v":[{"apply":"TextFieldMark","def":{"mark":"Mark01-access_ref01"}}],"index$":1}]}, 'Access', {"GET /agents/{id}/access":{"protocol":"http","parameters":[{"in":"path","name":"id","required":true,"description":"The agent's id","schema":{"type":"string"},"index$":0}]},"PUT /agents/{id}/access/{channel}":{"protocol":"http","requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","properties":{"admit":{"type":"string","enum":["anyone","team","list"],"key$":"admit"},"senders":{"maxItems":200,"type":"array","items":{"type":"string"},"key$":"senders"}},"required":["admit","senders"]}}}},"parameters":[{"in":"path","name":"id","required":true,"description":"The agent's id","schema":{"type":"string"},"index$":0},{"schema":{"type":"string"},"in":"path","name":"channel","required":true,"index$":1}]}}, { strict: LIVE_STRICT, t }, 'TRUE' === process.env.VOXGIG_GETONLY_GUARD ? {"access.update.0":"GET-only live run: needs PUT /agents/{id}/access/{channel}"} : {})
     }
     const client = setup.client
     const struct = setup.struct
@@ -86,6 +86,13 @@ describe('AccessEntity', async () => {
     assert(access_ref01_resdata_up0.id === access_ref01_data_up0.id)
 
     assert((access_ref01_resdata_up0 as any)[access_ref01_markdef_up0.name] === access_ref01_markdef_up0.value)
+
+
+    // LOAD
+    const access_ref01_match_dt0: any = {}
+    access_ref01_match_dt0.id = access_ref01_data.id
+    const access_ref01_data_dt0 = (await access_ref01_ent.load(access_ref01_match_dt0)).data()
+    assert(access_ref01_data_dt0.id === access_ref01_data.id)
 
 
   })

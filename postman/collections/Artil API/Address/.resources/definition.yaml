@@ -1,6 +1,8 @@
 $kind: collection
 id: "1488a1f5-85d5-524d-966b-e19ef49e9085"
 description: |-
+  An agent's email address, phone number, Telegram bot or Slack bot: list, add, read, change or remove one, or make it the one its channel sends from (`primary`).
+
   The **address** entity, which belongs to a agent. Its requests address one record by `{{address_id}}`, which a list or a create remembers.
 
   | field | type | required | |

@@ -71,11 +71,6 @@
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"
-    },
-    "GET /agents/{id}/events/stream": {
-      "provenance": "operation-contract",
-      "version": 2,
-      "source": "openapi3"
     }
   }
 }

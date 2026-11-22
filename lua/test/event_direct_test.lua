@@ -75,59 +75,6 @@ describe("EventDirect", function()
     end
   end)
 
-  it("should direct-load-event", function()
-    local setup = event_direct_setup({ id = "direct01" })
-    local _should_skip, _reason = runner.is_control_skipped("direct", "direct-load-event", setup.live and "live" or "unit")
-    if _should_skip then
-      pending(_reason or "skipped via sdk-test-control.json")
-      return
-    end
-    if setup.live then
-      for _, _live_key in ipairs({"agent01"}) do
-        if setup.idmap[_live_key] == nil then
-          runner.live_miss(pending, LIVE_STRICT, "Live test blocked: needs " .. _live_key .. " via ARTIL_TEST_EVENT_ENTID")
-        end
-      end
-    end
-    if setup.live then
-      runner.live_pace()
-    end
-    local client = setup.client
-
-    local params = {}
-    local query = {}
-    if setup.live then
-      params["agent_id"] = setup.idmap["agent01"]
-    else
-      params["agent_id"] = "direct01"
-    end
-
-    local result, err = client:direct({
-      path = "agents/{agent_id}/events/stream",
-      method = "GET",
-      params = params,
-      query = query,
-    })
-    if setup.live then
-      if not live_ok(result, err) then
-        runner.live_miss(pending, LIVE_STRICT, "Live load failed: " .. runner.live_describe(result, err))
-      end
-      if result["data"] == nil then
-        runner.live_miss(pending, LIVE_STRICT, "Live load returned no data: " .. runner.live_describe(result, err))
-      end
-      assert.is_not_nil(result["data"])
-    else
-      assert.is_nil(err)
-      assert.is_true(result["ok"])
-      assert.are.equal(200, helpers.to_int(result["status"]))
-      assert.is_not_nil(result["data"])
-      if type(result["data"]) == "table" then
-        assert.are.equal("direct01", result["data"]["id"])
-      end
-      assert.are.equal(1, #setup.calls)
-    end
-  end)
-
 end)
 
 

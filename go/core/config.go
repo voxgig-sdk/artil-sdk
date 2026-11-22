@@ -188,10 +188,11 @@ func MakeConfig() map[string]any {
 				"client": map[string]any{},
 				"connection": map[string]any{},
 				"event": map[string]any{},
-				"listed_teammate": map[string]any{},
 				"listener": map[string]any{},
-				"men": map[string]any{},
+				"me": map[string]any{},
+				"me_token": map[string]any{},
 				"message": map[string]any{},
+				"teammate": map[string]any{},
 				"token": map[string]any{},
 				"webhook": map[string]any{},
 			},
@@ -225,6 +226,62 @@ func MakeConfig() map[string]any {
 				},
 				"name": "access",
 				"op": map[string]any{
+					"load": map[string]any{
+						"input": "data",
+						"name": "load",
+						"points": []any{
+							map[string]any{
+								"kind": "http",
+								"method": "GET",
+								"orig": "/agents/{id}/access",
+								"segments": []any{
+									map[string]any{
+										"lit": "agents",
+									},
+									map[string]any{
+										"var": "agent_id",
+									},
+									map[string]any{
+										"lit": "access",
+									},
+								},
+								"parts": []any{
+									"agents",
+									"{agent_id}",
+									"access",
+								},
+								"rename": map[string]any{
+									"param": map[string]any{
+										"id": "agent_id",
+									},
+								},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body`",
+								},
+								"args": map[string]any{
+									"params": []any{
+										map[string]any{
+											"name": "agent_id",
+											"orig": "id",
+											"type": "`$STRING`",
+											"kind": "param",
+											"reqd": true,
+										},
+									},
+								},
+								"select": map[string]any{
+									"exist": []any{
+										"agent_id",
+									},
+								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
+								},
+							},
+						},
+					},
 					"update": map[string]any{
 						"input": "data",
 						"name": "update",
@@ -1030,100 +1087,6 @@ func MakeConfig() map[string]any {
 									"media": "application/json",
 								},
 							},
-							map[string]any{
-								"kind": "http",
-								"method": "GET",
-								"orig": "/agents/{id}/access",
-								"segments": []any{
-									map[string]any{
-										"lit": "agents",
-									},
-									map[string]any{
-										"var": "id",
-									},
-									map[string]any{
-										"lit": "access",
-									},
-								},
-								"parts": []any{
-									"agents",
-									"{id}",
-									"access",
-								},
-								"rename": map[string]any{},
-								"transform": map[string]any{
-									"req": "`reqdata`",
-									"res": "`body`",
-								},
-								"args": map[string]any{
-									"params": []any{
-										map[string]any{
-											"name": "id",
-											"orig": "id",
-											"type": "`$STRING`",
-											"kind": "param",
-											"reqd": true,
-										},
-									},
-								},
-								"select": map[string]any{
-									"$action": "access",
-									"exist": []any{
-										"id",
-									},
-								},
-								"response": map[string]any{
-									"kind": "json",
-									"media": "application/json",
-								},
-							},
-							map[string]any{
-								"kind": "http",
-								"method": "GET",
-								"orig": "/agents/{id}/connection",
-								"segments": []any{
-									map[string]any{
-										"lit": "agents",
-									},
-									map[string]any{
-										"var": "id",
-									},
-									map[string]any{
-										"lit": "connection",
-									},
-								},
-								"parts": []any{
-									"agents",
-									"{id}",
-									"connection",
-								},
-								"rename": map[string]any{},
-								"transform": map[string]any{
-									"req": "`reqdata`",
-									"res": "`body`",
-								},
-								"args": map[string]any{
-									"params": []any{
-										map[string]any{
-											"name": "id",
-											"orig": "id",
-											"type": "`$STRING`",
-											"kind": "param",
-											"reqd": true,
-										},
-									},
-								},
-								"select": map[string]any{
-									"$action": "connection",
-									"exist": []any{
-										"id",
-									},
-								},
-								"response": map[string]any{
-									"kind": "json",
-									"media": "application/json",
-								},
-							},
 						},
 					},
 					"remove": map[string]any{
@@ -1470,6 +1433,62 @@ func MakeConfig() map[string]any {
 				},
 				"name": "connection",
 				"op": map[string]any{
+					"load": map[string]any{
+						"input": "data",
+						"name": "load",
+						"points": []any{
+							map[string]any{
+								"kind": "http",
+								"method": "GET",
+								"orig": "/agents/{id}/connection",
+								"segments": []any{
+									map[string]any{
+										"lit": "agents",
+									},
+									map[string]any{
+										"var": "agent_id",
+									},
+									map[string]any{
+										"lit": "connection",
+									},
+								},
+								"parts": []any{
+									"agents",
+									"{agent_id}",
+									"connection",
+								},
+								"rename": map[string]any{
+									"param": map[string]any{
+										"id": "agent_id",
+									},
+								},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body`",
+								},
+								"args": map[string]any{
+									"params": []any{
+										map[string]any{
+											"name": "agent_id",
+											"orig": "id",
+											"type": "`$STRING`",
+											"kind": "param",
+											"reqd": true,
+										},
+									},
+								},
+								"select": map[string]any{
+									"exist": []any{
+										"agent_id",
+									},
+								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
+								},
+							},
+						},
+					},
 					"update": map[string]any{
 						"input": "data",
 						"name": "update",
@@ -1763,89 +1782,6 @@ func MakeConfig() map[string]any {
 							},
 						},
 					},
-					"load": map[string]any{
-						"input": "data",
-						"name": "load",
-						"points": []any{
-							map[string]any{
-								"kind": "http",
-								"method": "GET",
-								"orig": "/agents/{id}/events/stream",
-								"segments": []any{
-									map[string]any{
-										"lit": "agents",
-									},
-									map[string]any{
-										"var": "agent_id",
-									},
-									map[string]any{
-										"lit": "events",
-									},
-									map[string]any{
-										"lit": "stream",
-									},
-								},
-								"parts": []any{
-									"agents",
-									"{agent_id}",
-									"events",
-									"stream",
-								},
-								"rename": map[string]any{
-									"param": map[string]any{
-										"id": "agent_id",
-									},
-								},
-								"transform": map[string]any{
-									"req": "`reqdata`",
-									"res": "`body`",
-								},
-								"args": map[string]any{
-									"header": []any{
-										map[string]any{
-											"name": "last_event_id",
-											"orig": "Last-Event-ID",
-											"type": "`$INTEGER`",
-											"kind": "header",
-										},
-									},
-									"params": []any{
-										map[string]any{
-											"name": "agent_id",
-											"orig": "id",
-											"type": "`$STRING`",
-											"kind": "param",
-											"reqd": true,
-										},
-									},
-									"query": []any{
-										map[string]any{
-											"name": "after",
-											"orig": "after",
-											"type": "`$INTEGER`",
-											"kind": "query",
-										},
-										map[string]any{
-											"name": "connection",
-											"orig": "connection",
-											"type": "`$STRING`",
-											"kind": "query",
-										},
-									},
-								},
-								"select": map[string]any{
-									"$action": "stream",
-									"exist": []any{
-										"agent_id",
-									},
-								},
-								"response": map[string]any{
-									"kind": "raw",
-									"media": "text/event-stream",
-								},
-							},
-						},
-					},
 				},
 				"relations": map[string]any{
 					"ancestors": []any{
@@ -1853,148 +1789,6 @@ func MakeConfig() map[string]any {
 							"$.main.kit.entity.agent",
 						},
 					},
-				},
-			},
-			"listed_teammate": map[string]any{
-				"fields": []any{
-					map[string]any{
-						"name": "addresses",
-						"title": "Addresses",
-						"type": "`$ARRAY`",
-						"req": true,
-						"short": "Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number",
-					},
-					map[string]any{
-						"name": "email",
-						"title": "Email",
-						"type": []any{
-							"`$ONE`",
-							[]any{
-								"`$STRING`",
-								"`$NULL`",
-							},
-						},
-						"req": true,
-						"short": "The agent's primary email address, or the member's",
-					},
-					map[string]any{
-						"name": "icon",
-						"title": "Icon",
-						"type": "`$ANY`",
-						"req": true,
-						"short": "The agent's icon; null for members",
-					},
-					map[string]any{
-						"name": "id",
-						"title": "Id",
-						"type": "`$STRING`",
-						"req": true,
-						"short": "The agent's or member's id",
-					},
-					map[string]any{
-						"name": "imageUrl",
-						"title": "Image Url",
-						"type": []any{
-							"`$ONE`",
-							[]any{
-								"`$STRING`",
-								"`$NULL`",
-							},
-						},
-						"req": true,
-						"short": "The member's picture from their sign-in profile, or the avatar it makes them; null for agents",
-					},
-					map[string]any{
-						"name": "kind",
-						"title": "Kind",
-						"type": "`$STRING`",
-						"req": true,
-					},
-					map[string]any{
-						"name": "listening",
-						"title": "Listening",
-						"type": []any{
-							"`$ONE`",
-							[]any{
-								"`$BOOLEAN`",
-								"`$NULL`",
-							},
-						},
-						"req": true,
-						"short": "Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members",
-					},
-					map[string]any{
-						"name": "name",
-						"title": "Name",
-						"type": []any{
-							"`$ONE`",
-							[]any{
-								"`$STRING`",
-								"`$NULL`",
-							},
-						},
-						"req": true,
-					},
-					map[string]any{
-						"name": "phone",
-						"title": "Phone",
-						"type": []any{
-							"`$ONE`",
-							[]any{
-								"`$STRING`",
-								"`$NULL`",
-							},
-						},
-						"req": true,
-						"short": "The agent's primary phone number, or the one a member added to their profile",
-					},
-					map[string]any{
-						"name": "role",
-						"title": "Role",
-						"type": "`$ANY`",
-						"req": true,
-						"short": "The member's role in the workspace; null for agents",
-					},
-				},
-				"id": map[string]any{
-					"field": "id",
-					"name": "id",
-				},
-				"name": "listed_teammate",
-				"op": map[string]any{
-					"list": map[string]any{
-						"input": "data",
-						"name": "list",
-						"points": []any{
-							map[string]any{
-								"kind": "http",
-								"method": "GET",
-								"orig": "/team",
-								"segments": []any{
-									map[string]any{
-										"lit": "team",
-									},
-								},
-								"parts": []any{
-									"team",
-								},
-								"rename": map[string]any{},
-								"transform": map[string]any{
-									"req": "`reqdata`",
-									"res": "`body`",
-								},
-								"args": map[string]any{},
-								"select": map[string]any{},
-								"response": map[string]any{
-									"kind": "json",
-									"media": "application/json",
-								},
-							},
-						},
-					},
-				},
-				"relations": map[string]any{
-					"ancestors": []any{},
 				},
 			},
 			"listener": map[string]any{
@@ -2066,9 +1860,9 @@ func MakeConfig() map[string]any {
 					},
 				},
 			},
-			"men": map[string]any{
+			"me": map[string]any{
 				"fields": []any{},
-				"name": "men",
+				"name": "me",
 				"op": map[string]any{
 					"load": map[string]any{
 						"input": "data",
@@ -2100,6 +1894,15 @@ func MakeConfig() map[string]any {
 							},
 						},
 					},
+				},
+				"relations": map[string]any{
+					"ancestors": []any{},
+				},
+			},
+			"me_token": map[string]any{
+				"fields": []any{},
+				"name": "me_token",
+				"op": map[string]any{
 					"remove": map[string]any{
 						"input": "data",
 						"name": "remove",
@@ -2126,9 +1929,7 @@ func MakeConfig() map[string]any {
 									"res": "`body`",
 								},
 								"args": map[string]any{},
-								"select": map[string]any{
-									"$action": "token",
-								},
+								"select": map[string]any{},
 							},
 						},
 					},
@@ -2609,6 +2410,148 @@ func MakeConfig() map[string]any {
 							"$.main.kit.entity.agent",
 						},
 					},
+				},
+			},
+			"teammate": map[string]any{
+				"fields": []any{
+					map[string]any{
+						"name": "addresses",
+						"title": "Addresses",
+						"type": "`$ARRAY`",
+						"req": true,
+						"short": "Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number",
+					},
+					map[string]any{
+						"name": "email",
+						"title": "Email",
+						"type": []any{
+							"`$ONE`",
+							[]any{
+								"`$STRING`",
+								"`$NULL`",
+							},
+						},
+						"req": true,
+						"short": "The agent's primary email address, or the member's",
+					},
+					map[string]any{
+						"name": "icon",
+						"title": "Icon",
+						"type": "`$ANY`",
+						"req": true,
+						"short": "The agent's icon; null for members",
+					},
+					map[string]any{
+						"name": "id",
+						"title": "Id",
+						"type": "`$STRING`",
+						"req": true,
+						"short": "The agent's or member's id",
+					},
+					map[string]any{
+						"name": "imageUrl",
+						"title": "Image Url",
+						"type": []any{
+							"`$ONE`",
+							[]any{
+								"`$STRING`",
+								"`$NULL`",
+							},
+						},
+						"req": true,
+						"short": "The member's picture from their sign-in profile, or the avatar it makes them; null for agents",
+					},
+					map[string]any{
+						"name": "kind",
+						"title": "Kind",
+						"type": "`$STRING`",
+						"req": true,
+					},
+					map[string]any{
+						"name": "listening",
+						"title": "Listening",
+						"type": []any{
+							"`$ONE`",
+							[]any{
+								"`$BOOLEAN`",
+								"`$NULL`",
+							},
+						},
+						"req": true,
+						"short": "Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members",
+					},
+					map[string]any{
+						"name": "name",
+						"title": "Name",
+						"type": []any{
+							"`$ONE`",
+							[]any{
+								"`$STRING`",
+								"`$NULL`",
+							},
+						},
+						"req": true,
+					},
+					map[string]any{
+						"name": "phone",
+						"title": "Phone",
+						"type": []any{
+							"`$ONE`",
+							[]any{
+								"`$STRING`",
+								"`$NULL`",
+							},
+						},
+						"req": true,
+						"short": "The agent's primary phone number, or the one a member added to their profile",
+					},
+					map[string]any{
+						"name": "role",
+						"title": "Role",
+						"type": "`$ANY`",
+						"req": true,
+						"short": "The member's role in the workspace; null for agents",
+					},
+				},
+				"id": map[string]any{
+					"field": "id",
+					"name": "id",
+				},
+				"name": "teammate",
+				"op": map[string]any{
+					"list": map[string]any{
+						"input": "data",
+						"name": "list",
+						"points": []any{
+							map[string]any{
+								"kind": "http",
+								"method": "GET",
+								"orig": "/team",
+								"segments": []any{
+									map[string]any{
+										"lit": "team",
+									},
+								},
+								"parts": []any{
+									"team",
+								},
+								"rename": map[string]any{},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body`",
+								},
+								"args": map[string]any{},
+								"select": map[string]any{},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
+								},
+							},
+						},
+					},
+				},
+				"relations": map[string]any{
+					"ancestors": []any{},
 				},
 			},
 			"token": map[string]any{

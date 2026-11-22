@@ -74,21 +74,25 @@ Create a new `Connection` entity instance. Pass `nil` for no initial data.
 
 Create a new `Event` entity instance. Pass `nil` for no initial data.
 
-#### `ListedTeammate(data = nil)`
-
-Create a new `ListedTeammate` entity instance. Pass `nil` for no initial data.
-
 #### `Listener(data = nil)`
 
 Create a new `Listener` entity instance. Pass `nil` for no initial data.
 
-#### `Men(data = nil)`
+#### `Me(data = nil)`
 
-Create a new `Men` entity instance. Pass `nil` for no initial data.
+Create a new `Me` entity instance. Pass `nil` for no initial data.
+
+#### `MeToken(data = nil)`
+
+Create a new `MeToken` entity instance. Pass `nil` for no initial data.
 
 #### `Message(data = nil)`
 
 Create a new `Message` entity instance. Pass `nil` for no initial data.
+
+#### `Teammate(data = nil)`
+
+Create a new `Teammate` entity instance. Pass `nil` for no initial data.
 
 #### `Token(data = nil)`
 
@@ -151,6 +155,14 @@ access = client.Access
 | `senders` | `Array` | Yes | Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members |
 
 ### Operations
+
+#### `load(reqmatch, ctrl = nil) -> result`
+
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get` reads, and raises on error.
+
+```ruby
+result = client.Access.load({ "agent_id" => "agent_id" })
+```
 
 #### `update(reqdata, ctrl = nil) -> result`
 
@@ -601,14 +613,22 @@ connection = client.Connection
 
 ### Field Usage by Operation
 
-| Field | update |
-| --- | --- |
-| `client` | - |
-| `id` | - |
-| `machine` | Yes |
-| `tokenId` | - |
+| Field | load | update |
+| --- | --- | --- |
+| `client` | - | - |
+| `id` | - | - |
+| `machine` | - | Yes |
+| `tokenId` | - | - |
 
 ### Operations
+
+#### `load(reqmatch, ctrl = nil) -> result`
+
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get` reads, and raises on error.
+
+```ruby
+result = client.Connection.load({ "agent_id" => "agent_id" })
+```
 
 #### `update(reqdata, ctrl = nil) -> result`
 
@@ -675,19 +695,19 @@ event = client.Event
 
 ### Field Usage by Operation
 
-| Field | load | list | create |
-| --- | --- | --- | --- |
-| `attachments` | - | - | - |
-| `channel` | - | - | - |
-| `client` | - | - | - |
-| `createdAt` | - | - | - |
-| `id` | - | - | - |
-| `messageId` | - | - | - |
-| `sender` | - | - | - |
-| `text` | - | - | - |
-| `thread` | - | - | - |
-| `toThread` | - | Yes | - |
-| `type` | - | - | - |
+| Field | list | create |
+| --- | --- | --- |
+| `attachments` | - | - |
+| `channel` | - | - |
+| `client` | - | - |
+| `createdAt` | - | - |
+| `id` | - | - |
+| `messageId` | - | - |
+| `sender` | - | - |
+| `text` | - | - |
+| `thread` | - | - |
+| `toThread` | Yes | - |
+| `type` | - | - |
 
 ### Operations
 
@@ -710,10 +730,6 @@ results = client.Event.list({ "agent_id" => "example" })
 results.each { |item| puts item.data_get }
 ```
 
-#### `load(reqmatch, ctrl = nil) -> result`
-
-Load a single entity matching the given criteria. Returns the entity, whose record `data_get` reads, and raises on error.
-
 ### Common Methods
 
 #### `data_get -> Hash`
@@ -735,68 +751,6 @@ Set the entity match criteria.
 #### `make -> Entity`
 
 Create a new `EventEntity` instance with the same client and
-options.
-
-#### `get_name -> String`
-
-Return the entity name.
-
-
----
-
-## ListedTeammateEntity
-
-```ruby
-listed_teammate = client.ListedTeammate
-```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `addresses` | `Array` | Yes | Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number |
-| `email` | `Object` | Yes | The agent's primary email address, or the member's |
-| `icon` | `Object` | Yes | The agent's icon; null for members |
-| `id` | `String` | Yes | The agent's or member's id |
-| `imageUrl` | `Object` | Yes | The member's picture from their sign-in profile, or the avatar it makes them; null for agents |
-| `kind` | `String` | Yes |  |
-| `listening` | `Object` | Yes | Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members |
-| `name` | `Object` | Yes |  |
-| `phone` | `Object` | Yes | The agent's primary phone number, or the one a member added to their profile |
-| `role` | `Object` | Yes | The member's role in the workspace; null for agents |
-
-### Operations
-
-#### `list(reqmatch = nil, ctrl = nil) -> Array`
-
-List entities matching the given criteria (call with no argument to list all). Returns an array of entities, one per record; `data_get` reads each record. Raises on error.
-
-```ruby
-results = client.ListedTeammate.list
-results.each { |item| puts item.data_get }
-```
-
-### Common Methods
-
-#### `data_get -> Hash`
-
-Get the entity data. Returns a copy of the current data.
-
-#### `data_set(data)`
-
-Set the entity data.
-
-#### `match_get -> Hash`
-
-Get the entity match criteria.
-
-#### `match_set(match)`
-
-Set the entity match criteria.
-
-#### `make -> Entity`
-
-Create a new `ListedTeammateEntity` instance with the same client and
 options.
 
 #### `get_name -> String`
@@ -853,10 +807,10 @@ Return the entity name.
 
 ---
 
-## MenEntity
+## MeEntity
 
 ```ruby
-men = client.Men
+me = client.Me
 ```
 
 ### Operations
@@ -866,12 +820,8 @@ men = client.Men
 Load a single entity matching the given criteria. Returns the entity, whose record `data_get` reads, and raises on error.
 
 ```ruby
-result = client.Men.load()
+result = client.Me.load()
 ```
-
-#### `remove(reqmatch, ctrl = nil) -> result`
-
-Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
 
 ### Common Methods
 
@@ -893,7 +843,53 @@ Set the entity match criteria.
 
 #### `make -> Entity`
 
-Create a new `MenEntity` instance with the same client and
+Create a new `MeEntity` instance with the same client and
+options.
+
+#### `get_name -> String`
+
+Return the entity name.
+
+
+---
+
+## MeTokenEntity
+
+```ruby
+me_token = client.MeToken
+```
+
+### Operations
+
+#### `remove(reqmatch, ctrl = nil) -> result`
+
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
+
+```ruby
+result = client.MeToken.remove()
+```
+
+### Common Methods
+
+#### `data_get -> Hash`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set(data)`
+
+Set the entity data.
+
+#### `match_get -> Hash`
+
+Get the entity match criteria.
+
+#### `match_set(match)`
+
+Set the entity match criteria.
+
+#### `make -> Entity`
+
+Create a new `MeTokenEntity` instance with the same client and
 options.
 
 #### `get_name -> String`
@@ -1014,6 +1010,68 @@ Set the entity match criteria.
 #### `make -> Entity`
 
 Create a new `MessageEntity` instance with the same client and
+options.
+
+#### `get_name -> String`
+
+Return the entity name.
+
+
+---
+
+## TeammateEntity
+
+```ruby
+teammate = client.Teammate
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `addresses` | `Array` | Yes | Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number |
+| `email` | `Object` | Yes | The agent's primary email address, or the member's |
+| `icon` | `Object` | Yes | The agent's icon; null for members |
+| `id` | `String` | Yes | The agent's or member's id |
+| `imageUrl` | `Object` | Yes | The member's picture from their sign-in profile, or the avatar it makes them; null for agents |
+| `kind` | `String` | Yes |  |
+| `listening` | `Object` | Yes | Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members |
+| `name` | `Object` | Yes |  |
+| `phone` | `Object` | Yes | The agent's primary phone number, or the one a member added to their profile |
+| `role` | `Object` | Yes | The member's role in the workspace; null for agents |
+
+### Operations
+
+#### `list(reqmatch = nil, ctrl = nil) -> Array`
+
+List entities matching the given criteria (call with no argument to list all). Returns an array of entities, one per record; `data_get` reads each record. Raises on error.
+
+```ruby
+results = client.Teammate.list
+results.each { |item| puts item.data_get }
+```
+
+### Common Methods
+
+#### `data_get -> Hash`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set(data)`
+
+Set the entity data.
+
+#### `match_get -> Hash`
+
+Get the entity match criteria.
+
+#### `match_set(match)`
+
+Set the entity match criteria.
+
+#### `make -> Entity`
+
+Create a new `TeammateEntity` instance with the same client and
 options.
 
 #### `get_name -> String`

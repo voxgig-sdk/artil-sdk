@@ -33,28 +33,6 @@ main: kit: flow: BasicEventFlow:
         }
       ]
     }
-
-    {
-      i: {
-        ref: "event_ref01",
-        srcdatavar: "event_ref01_data",
-        suffix: "_dt0"
-      }
-
-      m: {
-        id: "event01"
-      }
-
-      o: "load",
-      v: [
-        {
-          apply: "TextFieldMark",
-          def: {
-            mark: "Mark01-event_ref01"
-          }
-        }
-      ]
-    }
   ],
   "key$": "BasicEventFlow"
 }

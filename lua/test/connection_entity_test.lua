@@ -29,7 +29,7 @@ describe("ConnectionEntity", function()
       return
     end
     local client = sdk.test(nil, { feature = { validate = { active = true } } })
-    local _, err = client:Connection(nil):update({ ["agent_id"] = 1 }, nil)
+    local _, err = client:Connection(nil):load({ ["agent_id"] = 1 }, nil)
     assert.are.equal("validate_failed", type(err) == "table" and err.code or nil)
   end)
 

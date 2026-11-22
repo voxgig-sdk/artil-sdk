@@ -1,0 +1,10 @@
+$kind: collection
+id: "2b9cb30d-b6c7-5d88-b7bd-69490a3cf0f9"
+description: |-
+  The member or agent the calling token signs in as, and its workspace.
+
+  The **me** entity. Its requests address one record by `{{me_id}}`, which a list or a create remembers.
+
+  | field | type | required | |
+  |---|---|---|---|
+order: 10000

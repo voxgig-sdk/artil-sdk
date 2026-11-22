@@ -16,10 +16,11 @@ variables:
   client_id: ""
   connection_id: ""
   event_id: ""
-  listed_teammate_id: ""
   listener_id: ""
-  men_id: ""
+  me_id: ""
+  me_token_id: ""
   message_id: ""
+  teammate_id: ""
   token_id: ""
   webhook_id: ""
 auth:

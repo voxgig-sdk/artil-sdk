@@ -1,0 +1,9 @@
+# BasicMeTokenFlow
+
+main: kit: flow: BasicMeTokenFlow:
+{
+  entity: "me_token",
+  kind: "basic",
+  name: "BasicMeTokenFlow",
+  "key$": "BasicMeTokenFlow"
+}

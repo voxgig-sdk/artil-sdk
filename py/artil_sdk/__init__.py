@@ -402,28 +402,34 @@ class ArtilSDK:
         return EventEntity(self, data)
 
 
-    def ListedTeammate(self, data=None) -> "ListedTeammateEntity":
-        """Entity factory: client.ListedTeammate().list() / client.ListedTeammate().load({"id": ...})."""
-        from artil_sdk.entity.listed_teammate_entity import ListedTeammateEntity
-        return ListedTeammateEntity(self, data)
-
-
     def Listener(self, data=None) -> "ListenerEntity":
         """Entity factory: client.Listener().list() / client.Listener().load({"id": ...})."""
         from artil_sdk.entity.listener_entity import ListenerEntity
         return ListenerEntity(self, data)
 
 
-    def Men(self, data=None) -> "MenEntity":
-        """Entity factory: client.Men().list() / client.Men().load({"id": ...})."""
-        from artil_sdk.entity.men_entity import MenEntity
-        return MenEntity(self, data)
+    def Me(self, data=None) -> "MeEntity":
+        """Entity factory: client.Me().list() / client.Me().load({"id": ...})."""
+        from artil_sdk.entity.me_entity import MeEntity
+        return MeEntity(self, data)
+
+
+    def MeToken(self, data=None) -> "MeTokenEntity":
+        """Entity factory: client.MeToken().list() / client.MeToken().load({"id": ...})."""
+        from artil_sdk.entity.me_token_entity import MeTokenEntity
+        return MeTokenEntity(self, data)
 
 
     def Message(self, data=None) -> "MessageEntity":
         """Entity factory: client.Message().list() / client.Message().load({"id": ...})."""
         from artil_sdk.entity.message_entity import MessageEntity
         return MessageEntity(self, data)
+
+
+    def Teammate(self, data=None) -> "TeammateEntity":
+        """Entity factory: client.Teammate().list() / client.Teammate().load({"id": ...})."""
+        from artil_sdk.entity.teammate_entity import TeammateEntity
+        return TeammateEntity(self, data)
 
 
     def Token(self, data=None) -> "TokenEntity":
@@ -473,9 +479,10 @@ if TYPE_CHECKING:
     from artil_sdk.entity.client_entity import ClientEntity
     from artil_sdk.entity.connection_entity import ConnectionEntity
     from artil_sdk.entity.event_entity import EventEntity
-    from artil_sdk.entity.listed_teammate_entity import ListedTeammateEntity
     from artil_sdk.entity.listener_entity import ListenerEntity
-    from artil_sdk.entity.men_entity import MenEntity
+    from artil_sdk.entity.me_entity import MeEntity
+    from artil_sdk.entity.me_token_entity import MeTokenEntity
     from artil_sdk.entity.message_entity import MessageEntity
+    from artil_sdk.entity.teammate_entity import TeammateEntity
     from artil_sdk.entity.token_entity import TokenEntity
     from artil_sdk.entity.webhook_entity import WebhookEntity

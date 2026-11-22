@@ -450,14 +450,6 @@ func (sdk *ArtilSDK) Event(data map[string]any) ArtilEntityBase {
 }
 
 
-// ListedTeammate returns a ListedTeammate entity bound to this client.
-// Idiomatic usage: client.ListedTeammate(nil).List(nil, nil) or
-// client.ListedTeammate(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *ArtilSDK) ListedTeammate(data map[string]any) ArtilEntityBase {
-	return NewListedTeammateEntityFunc(sdk, data)
-}
-
-
 // Listener returns a Listener entity bound to this client.
 // Idiomatic usage: client.Listener(nil).List(nil, nil) or
 // client.Listener(nil).Load(map[string]any{"id": ...}, nil).
@@ -466,11 +458,19 @@ func (sdk *ArtilSDK) Listener(data map[string]any) ArtilEntityBase {
 }
 
 
-// Men returns a Men entity bound to this client.
-// Idiomatic usage: client.Men(nil).List(nil, nil) or
-// client.Men(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *ArtilSDK) Men(data map[string]any) ArtilEntityBase {
-	return NewMenEntityFunc(sdk, data)
+// Me returns a Me entity bound to this client.
+// Idiomatic usage: client.Me(nil).List(nil, nil) or
+// client.Me(nil).Load(map[string]any{"id": ...}, nil).
+func (sdk *ArtilSDK) Me(data map[string]any) ArtilEntityBase {
+	return NewMeEntityFunc(sdk, data)
+}
+
+
+// MeToken returns a MeToken entity bound to this client.
+// Idiomatic usage: client.MeToken(nil).List(nil, nil) or
+// client.MeToken(nil).Load(map[string]any{"id": ...}, nil).
+func (sdk *ArtilSDK) MeToken(data map[string]any) ArtilEntityBase {
+	return NewMeTokenEntityFunc(sdk, data)
 }
 
 
@@ -479,6 +479,14 @@ func (sdk *ArtilSDK) Men(data map[string]any) ArtilEntityBase {
 // client.Message(nil).Load(map[string]any{"id": ...}, nil).
 func (sdk *ArtilSDK) Message(data map[string]any) ArtilEntityBase {
 	return NewMessageEntityFunc(sdk, data)
+}
+
+
+// Teammate returns a Teammate entity bound to this client.
+// Idiomatic usage: client.Teammate(nil).List(nil, nil) or
+// client.Teammate(nil).Load(map[string]any{"id": ...}, nil).
+func (sdk *ArtilSDK) Teammate(data map[string]any) ArtilEntityBase {
+	return NewTeammateEntityFunc(sdk, data)
 }
 
 

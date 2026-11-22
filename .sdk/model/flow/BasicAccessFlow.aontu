@@ -28,6 +28,28 @@ main: kit: flow: BasicAccessFlow:
         }
       ]
     }
+
+    {
+      i: {
+        ref: "access_ref01",
+        srcdatavar: "access_ref01_data",
+        suffix: "_dt0"
+      }
+
+      m: {
+        id: "access01"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-access_ref01"
+          }
+        }
+      ]
+    }
   ],
   "key$": "BasicAccessFlow"
 }

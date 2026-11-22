@@ -13,13 +13,13 @@ import (
 
 // ListArgs is what an agent sends to artil_list.
 type ListArgs struct {
-	Entity string         `json:"entity" jsonschema:"one of: address | agent | channel | client | event | listed_teammate | listener | message | token | webhook"`
+	Entity string         `json:"entity" jsonschema:"one of: address | agent | channel | client | event | listener | message | teammate | token | webhook"`
 	Query  map[string]any `json:"query,omitempty" jsonschema:"optional filter map; omit it for the first page"`
 }
 
 // LoadArgs is what an agent sends to artil_load.
 type LoadArgs struct {
-	Entity string         `json:"entity" jsonschema:"one of: address | agent | men | message"`
+	Entity string         `json:"entity" jsonschema:"one of: access | address | agent | connection | me | message"`
 	Query  map[string]any `json:"query" jsonschema:"match map naming the record, such as {\"id\":1}"`
 }
 
@@ -28,7 +28,7 @@ func registerTools(server *mcp.Server, client *sdk.ArtilSDK) {
 		Name:        "artil_list",
 		Description: "List records from Artil. Args: entity, query (optional filter map; omit it for the first page). Returns the first page of records as JSON.",
 		Annotations: &mcp.ToolAnnotations{ReadOnlyHint: true},
-		InputSchema: entitySchema[ListArgs]("address", "agent", "channel", "client", "event", "listed_teammate", "listener", "message", "token", "webhook"),
+		InputSchema: entitySchema[ListArgs]("address", "agent", "channel", "client", "event", "listener", "message", "teammate", "token", "webhook"),
 	}, func(ctx context.Context, req *mcp.CallToolRequest, args ListArgs) (*mcp.CallToolResult, any, error) {
 		return runOp(ctx, client, "list", args.Entity, args.Query)
 	})
@@ -36,7 +36,7 @@ func registerTools(server *mcp.Server, client *sdk.ArtilSDK) {
 		Name:        "artil_load",
 		Description: "Load one record from Artil. Args: entity, query (match map naming the record, such as {\"id\":1}). Returns the record as JSON.",
 		Annotations: &mcp.ToolAnnotations{ReadOnlyHint: true},
-		InputSchema: entitySchema[LoadArgs]("address", "agent", "men", "message"),
+		InputSchema: entitySchema[LoadArgs]("access", "address", "agent", "connection", "me", "message"),
 	}, func(ctx context.Context, req *mcp.CallToolRequest, args LoadArgs) (*mcp.CallToolResult, any, error) {
 		return runOp(ctx, client, "load", args.Entity, args.Query)
 	})
@@ -119,14 +119,16 @@ func entityFor(client *sdk.ArtilSDK, name string) (sdk.ArtilEntityBase, error) {
 		return client.Connection(nil), nil
 	case "event":
 		return client.Event(nil), nil
-	case "listed_teammate":
-		return client.ListedTeammate(nil), nil
 	case "listener":
 		return client.Listener(nil), nil
-	case "men":
-		return client.Men(nil), nil
+	case "me":
+		return client.Me(nil), nil
+	case "me_token":
+		return client.MeToken(nil), nil
 	case "message":
 		return client.Message(nil), nil
+	case "teammate":
+		return client.Teammate(nil), nil
 	case "token":
 		return client.Token(nil), nil
 	case "webhook":

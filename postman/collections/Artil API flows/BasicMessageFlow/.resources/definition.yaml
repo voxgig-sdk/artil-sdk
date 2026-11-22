@@ -1,4 +1,4 @@
 $kind: collection
 id: "7db930cf-fbc4-55bd-862a-520be8dd04e3"
 description: "The `BasicMessageFlow` flow of **message**."
-order: 11000
+order: 10000

@@ -73,21 +73,25 @@ Create a new `Connection` entity instance. Pass `nil` for no initial data.
 
 Create a new `Event` entity instance. Pass `nil` for no initial data.
 
-#### `ListedTeammate(data)`
-
-Create a new `ListedTeammate` entity instance. Pass `nil` for no initial data.
-
 #### `Listener(data)`
 
 Create a new `Listener` entity instance. Pass `nil` for no initial data.
 
-#### `Men(data)`
+#### `Me(data)`
 
-Create a new `Men` entity instance. Pass `nil` for no initial data.
+Create a new `Me` entity instance. Pass `nil` for no initial data.
+
+#### `MeToken(data)`
+
+Create a new `MeToken` entity instance. Pass `nil` for no initial data.
 
 #### `Message(data)`
 
 Create a new `Message` entity instance. Pass `nil` for no initial data.
+
+#### `Teammate(data)`
+
+Create a new `Teammate` entity instance. Pass `nil` for no initial data.
 
 #### `Token(data)`
 
@@ -148,6 +152,14 @@ local access = client:Access(nil)
 | `senders` | `table` | Yes | Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members |
 
 ### Operations
+
+#### `load(reqmatch, ctrl) -> any, err`
+
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, or `nil` and an error on failure.
+
+```lua
+local result, err = client:Access():load({ agent_id = "agent_id" })
+```
 
 #### `update(reqdata, ctrl) -> any, err`
 
@@ -594,14 +606,22 @@ local connection = client:Connection(nil)
 
 ### Field Usage by Operation
 
-| Field | update |
-| --- | --- |
-| `client` | - |
-| `id` | - |
-| `machine` | Yes |
-| `tokenId` | - |
+| Field | load | update |
+| --- | --- | --- |
+| `client` | - | - |
+| `id` | - | - |
+| `machine` | - | Yes |
+| `tokenId` | - | - |
 
 ### Operations
+
+#### `load(reqmatch, ctrl) -> any, err`
+
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, or `nil` and an error on failure.
+
+```lua
+local result, err = client:Connection():load({ agent_id = "agent_id" })
+```
 
 #### `update(reqdata, ctrl) -> any, err`
 
@@ -668,19 +688,19 @@ local event = client:Event(nil)
 
 ### Field Usage by Operation
 
-| Field | load | list | create |
-| --- | --- | --- | --- |
-| `attachments` | - | - | - |
-| `channel` | - | - | - |
-| `client` | - | - | - |
-| `createdAt` | - | - | - |
-| `id` | - | - | - |
-| `messageId` | - | - | - |
-| `sender` | - | - | - |
-| `text` | - | - | - |
-| `thread` | - | - | - |
-| `toThread` | - | Yes | - |
-| `type` | - | - | - |
+| Field | list | create |
+| --- | --- | --- |
+| `attachments` | - | - |
+| `channel` | - | - |
+| `client` | - | - |
+| `createdAt` | - | - |
+| `id` | - | - |
+| `messageId` | - | - |
+| `sender` | - | - |
+| `text` | - | - |
+| `thread` | - | - |
+| `toThread` | Yes | - |
+| `type` | - | - |
 
 ### Operations
 
@@ -701,10 +721,6 @@ List entities matching the given criteria. Returns an array of entities, one per
 ```lua
 local results, err = client:Event():list({ agent_id = "example" })
 ```
-
-#### `load(reqmatch, ctrl) -> any, err`
-
-Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, or `nil` and an error on failure.
 
 ### Common Methods
 
@@ -727,67 +743,6 @@ Set the entity match criteria.
 #### `make() -> Entity`
 
 Create a new `EventEntity` instance with the same client and
-options.
-
-#### `get_name() -> string`
-
-Return the entity name.
-
-
----
-
-## ListedTeammateEntity
-
-```lua
-local listed_teammate = client:ListedTeammate(nil)
-```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `addresses` | `table` | Yes | Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number |
-| `email` | `string|nil` | Yes | The agent's primary email address, or the member's |
-| `icon` | `any` | Yes | The agent's icon; null for members |
-| `id` | `string` | Yes | The agent's or member's id |
-| `imageUrl` | `string|nil` | Yes | The member's picture from their sign-in profile, or the avatar it makes them; null for agents |
-| `kind` | `string` | Yes |  |
-| `listening` | `boolean|nil` | Yes | Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members |
-| `name` | `string|nil` | Yes |  |
-| `phone` | `string|nil` | Yes | The agent's primary phone number, or the one a member added to their profile |
-| `role` | `any` | Yes | The member's role in the workspace; null for agents |
-
-### Operations
-
-#### `list(reqmatch, ctrl) -> any, err`
-
-List entities matching the given criteria. Returns an array of entities, one per record, or `nil` and an error on failure.
-
-```lua
-local results, err = client:ListedTeammate():list()
-```
-
-### Common Methods
-
-#### `data_get() -> table`
-
-Get the entity data. Returns a copy of the current data.
-
-#### `data_set(data)`
-
-Set the entity data.
-
-#### `match_get() -> table`
-
-Get the entity match criteria.
-
-#### `match_set(match)`
-
-Set the entity match criteria.
-
-#### `make() -> Entity`
-
-Create a new `ListedTeammateEntity` instance with the same client and
 options.
 
 #### `get_name() -> string`
@@ -843,10 +798,10 @@ Return the entity name.
 
 ---
 
-## MenEntity
+## MeEntity
 
 ```lua
-local men = client:Men(nil)
+local me = client:Me(nil)
 ```
 
 ### Operations
@@ -856,12 +811,8 @@ local men = client:Men(nil)
 Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, or `nil` and an error on failure.
 
 ```lua
-local result, err = client:Men():load()
+local result, err = client:Me():load()
 ```
-
-#### `remove(reqmatch, ctrl) -> any, err`
-
-Remove the entity matching the given criteria. Returns the entity, marked as deleted, or `nil` and an error on failure.
 
 ### Common Methods
 
@@ -883,7 +834,53 @@ Set the entity match criteria.
 
 #### `make() -> Entity`
 
-Create a new `MenEntity` instance with the same client and
+Create a new `MeEntity` instance with the same client and
+options.
+
+#### `get_name() -> string`
+
+Return the entity name.
+
+
+---
+
+## MeTokenEntity
+
+```lua
+local me_token = client:MeToken(nil)
+```
+
+### Operations
+
+#### `remove(reqmatch, ctrl) -> any, err`
+
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, or `nil` and an error on failure.
+
+```lua
+local result, err = client:MeToken():remove()
+```
+
+### Common Methods
+
+#### `data_get() -> table`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set(data)`
+
+Set the entity data.
+
+#### `match_get() -> table`
+
+Get the entity match criteria.
+
+#### `match_set(match)`
+
+Set the entity match criteria.
+
+#### `make() -> Entity`
+
+Create a new `MeTokenEntity` instance with the same client and
 options.
 
 #### `get_name() -> string`
@@ -1003,6 +1000,67 @@ Set the entity match criteria.
 #### `make() -> Entity`
 
 Create a new `MessageEntity` instance with the same client and
+options.
+
+#### `get_name() -> string`
+
+Return the entity name.
+
+
+---
+
+## TeammateEntity
+
+```lua
+local teammate = client:Teammate(nil)
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `addresses` | `table` | Yes | Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number |
+| `email` | `string|nil` | Yes | The agent's primary email address, or the member's |
+| `icon` | `any` | Yes | The agent's icon; null for members |
+| `id` | `string` | Yes | The agent's or member's id |
+| `imageUrl` | `string|nil` | Yes | The member's picture from their sign-in profile, or the avatar it makes them; null for agents |
+| `kind` | `string` | Yes |  |
+| `listening` | `boolean|nil` | Yes | Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members |
+| `name` | `string|nil` | Yes |  |
+| `phone` | `string|nil` | Yes | The agent's primary phone number, or the one a member added to their profile |
+| `role` | `any` | Yes | The member's role in the workspace; null for agents |
+
+### Operations
+
+#### `list(reqmatch, ctrl) -> any, err`
+
+List entities matching the given criteria. Returns an array of entities, one per record, or `nil` and an error on failure.
+
+```lua
+local results, err = client:Teammate():list()
+```
+
+### Common Methods
+
+#### `data_get() -> table`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set(data)`
+
+Set the entity data.
+
+#### `match_get() -> table`
+
+Get the entity match criteria.
+
+#### `match_set(match)`
+
+Set the entity match criteria.
+
+#### `make() -> Entity`
+
+Create a new `TeammateEntity` instance with the same client and
 options.
 
 #### `get_name() -> string`

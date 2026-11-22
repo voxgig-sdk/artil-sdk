@@ -38,7 +38,7 @@ func TestConnectionEntity(t *testing.T) {
 		client := sdk.TestSDK(nil, map[string]any{
 			"feature": map[string]any{"validate": map[string]any{"active": true}},
 		})
-		_, err := client.Connection(nil).Update(map[string]any{"agent_id": 1}, nil)
+		_, err := client.Connection(nil).Load(map[string]any{"agent_id": 1}, nil)
 		if sdkerr, ok := err.(*core.ArtilError); !ok || "validate_failed" != sdkerr.Code {
 			t.Fatalf("expected validate_failed, got %v", err)
 		}

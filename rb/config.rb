@@ -204,10 +204,11 @@ module ArtilConfig
           "client" => {},
           "connection" => {},
           "event" => {},
-          "listed_teammate" => {},
           "listener" => {},
-          "men" => {},
+          "me" => {},
+          "me_token" => {},
           "message" => {},
+          "teammate" => {},
           "token" => {},
           "webhook" => {},
         },
@@ -241,6 +242,62 @@ module ArtilConfig
           },
           "name" => "access",
           "op" => {
+            "load" => {
+              "input" => "data",
+              "name" => "load",
+              "points" => [
+                {
+                  "kind" => "http",
+                  "method" => "GET",
+                  "orig" => "/agents/{id}/access",
+                  "segments" => [
+                    {
+                      "lit" => "agents",
+                    },
+                    {
+                      "var" => "agent_id",
+                    },
+                    {
+                      "lit" => "access",
+                    },
+                  ],
+                  "parts" => [
+                    "agents",
+                    "{agent_id}",
+                    "access",
+                  ],
+                  "rename" => {
+                    "param" => {
+                      "id" => "agent_id",
+                    },
+                  },
+                  "transform" => {
+                    "req" => "`reqdata`",
+                    "res" => "`body`",
+                  },
+                  "args" => {
+                    "params" => [
+                      {
+                        "name" => "agent_id",
+                        "orig" => "id",
+                        "type" => "`$STRING`",
+                        "kind" => "param",
+                        "reqd" => true,
+                      },
+                    ],
+                  },
+                  "select" => {
+                    "exist" => [
+                      "agent_id",
+                    ],
+                  },
+                  "response" => {
+                    "kind" => "json",
+                    "media" => "application/json",
+                  },
+                },
+              ],
+            },
             "update" => {
               "input" => "data",
               "name" => "update",
@@ -1046,100 +1103,6 @@ module ArtilConfig
                     "media" => "application/json",
                   },
                 },
-                {
-                  "kind" => "http",
-                  "method" => "GET",
-                  "orig" => "/agents/{id}/access",
-                  "segments" => [
-                    {
-                      "lit" => "agents",
-                    },
-                    {
-                      "var" => "id",
-                    },
-                    {
-                      "lit" => "access",
-                    },
-                  ],
-                  "parts" => [
-                    "agents",
-                    "{id}",
-                    "access",
-                  ],
-                  "rename" => {},
-                  "transform" => {
-                    "req" => "`reqdata`",
-                    "res" => "`body`",
-                  },
-                  "args" => {
-                    "params" => [
-                      {
-                        "name" => "id",
-                        "orig" => "id",
-                        "type" => "`$STRING`",
-                        "kind" => "param",
-                        "reqd" => true,
-                      },
-                    ],
-                  },
-                  "select" => {
-                    "$action" => "access",
-                    "exist" => [
-                      "id",
-                    ],
-                  },
-                  "response" => {
-                    "kind" => "json",
-                    "media" => "application/json",
-                  },
-                },
-                {
-                  "kind" => "http",
-                  "method" => "GET",
-                  "orig" => "/agents/{id}/connection",
-                  "segments" => [
-                    {
-                      "lit" => "agents",
-                    },
-                    {
-                      "var" => "id",
-                    },
-                    {
-                      "lit" => "connection",
-                    },
-                  ],
-                  "parts" => [
-                    "agents",
-                    "{id}",
-                    "connection",
-                  ],
-                  "rename" => {},
-                  "transform" => {
-                    "req" => "`reqdata`",
-                    "res" => "`body`",
-                  },
-                  "args" => {
-                    "params" => [
-                      {
-                        "name" => "id",
-                        "orig" => "id",
-                        "type" => "`$STRING`",
-                        "kind" => "param",
-                        "reqd" => true,
-                      },
-                    ],
-                  },
-                  "select" => {
-                    "$action" => "connection",
-                    "exist" => [
-                      "id",
-                    ],
-                  },
-                  "response" => {
-                    "kind" => "json",
-                    "media" => "application/json",
-                  },
-                },
               ],
             },
             "remove" => {
@@ -1486,6 +1449,62 @@ module ArtilConfig
           },
           "name" => "connection",
           "op" => {
+            "load" => {
+              "input" => "data",
+              "name" => "load",
+              "points" => [
+                {
+                  "kind" => "http",
+                  "method" => "GET",
+                  "orig" => "/agents/{id}/connection",
+                  "segments" => [
+                    {
+                      "lit" => "agents",
+                    },
+                    {
+                      "var" => "agent_id",
+                    },
+                    {
+                      "lit" => "connection",
+                    },
+                  ],
+                  "parts" => [
+                    "agents",
+                    "{agent_id}",
+                    "connection",
+                  ],
+                  "rename" => {
+                    "param" => {
+                      "id" => "agent_id",
+                    },
+                  },
+                  "transform" => {
+                    "req" => "`reqdata`",
+                    "res" => "`body`",
+                  },
+                  "args" => {
+                    "params" => [
+                      {
+                        "name" => "agent_id",
+                        "orig" => "id",
+                        "type" => "`$STRING`",
+                        "kind" => "param",
+                        "reqd" => true,
+                      },
+                    ],
+                  },
+                  "select" => {
+                    "exist" => [
+                      "agent_id",
+                    ],
+                  },
+                  "response" => {
+                    "kind" => "json",
+                    "media" => "application/json",
+                  },
+                },
+              ],
+            },
             "update" => {
               "input" => "data",
               "name" => "update",
@@ -1779,89 +1798,6 @@ module ArtilConfig
                 },
               ],
             },
-            "load" => {
-              "input" => "data",
-              "name" => "load",
-              "points" => [
-                {
-                  "kind" => "http",
-                  "method" => "GET",
-                  "orig" => "/agents/{id}/events/stream",
-                  "segments" => [
-                    {
-                      "lit" => "agents",
-                    },
-                    {
-                      "var" => "agent_id",
-                    },
-                    {
-                      "lit" => "events",
-                    },
-                    {
-                      "lit" => "stream",
-                    },
-                  ],
-                  "parts" => [
-                    "agents",
-                    "{agent_id}",
-                    "events",
-                    "stream",
-                  ],
-                  "rename" => {
-                    "param" => {
-                      "id" => "agent_id",
-                    },
-                  },
-                  "transform" => {
-                    "req" => "`reqdata`",
-                    "res" => "`body`",
-                  },
-                  "args" => {
-                    "header" => [
-                      {
-                        "name" => "last_event_id",
-                        "orig" => "Last-Event-ID",
-                        "type" => "`$INTEGER`",
-                        "kind" => "header",
-                      },
-                    ],
-                    "params" => [
-                      {
-                        "name" => "agent_id",
-                        "orig" => "id",
-                        "type" => "`$STRING`",
-                        "kind" => "param",
-                        "reqd" => true,
-                      },
-                    ],
-                    "query" => [
-                      {
-                        "name" => "after",
-                        "orig" => "after",
-                        "type" => "`$INTEGER`",
-                        "kind" => "query",
-                      },
-                      {
-                        "name" => "connection",
-                        "orig" => "connection",
-                        "type" => "`$STRING`",
-                        "kind" => "query",
-                      },
-                    ],
-                  },
-                  "select" => {
-                    "$action" => "stream",
-                    "exist" => [
-                      "agent_id",
-                    ],
-                  },
-                  "response" => {
-                    "kind" => "raw",
-                    "media" => "text/event-stream",
-                  },
-                },
-              ],
-            },
           },
           "relations" => {
             "ancestors" => [
@@ -1869,148 +1805,6 @@ module ArtilConfig
                 "$.main.kit.entity.agent",
               ],
             ],
-          },
-        },
-        "listed_teammate" => {
-          "fields" => [
-            {
-              "name" => "addresses",
-              "title" => "Addresses",
-              "type" => "`$ARRAY`",
-              "req" => true,
-              "short" => "Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number",
-            },
-            {
-              "name" => "email",
-              "title" => "Email",
-              "type" => [
-                "`$ONE`",
-                [
-                  "`$STRING`",
-                  "`$NULL`",
-                ],
-              ],
-              "req" => true,
-              "short" => "The agent's primary email address, or the member's",
-            },
-            {
-              "name" => "icon",
-              "title" => "Icon",
-              "type" => "`$ANY`",
-              "req" => true,
-              "short" => "The agent's icon; null for members",
-            },
-            {
-              "name" => "id",
-              "title" => "Id",
-              "type" => "`$STRING`",
-              "req" => true,
-              "short" => "The agent's or member's id",
-            },
-            {
-              "name" => "imageUrl",
-              "title" => "Image Url",
-              "type" => [
-                "`$ONE`",
-                [
-                  "`$STRING`",
-                  "`$NULL`",
-                ],
-              ],
-              "req" => true,
-              "short" => "The member's picture from their sign-in profile, or the avatar it makes them; null for agents",
-            },
-            {
-              "name" => "kind",
-              "title" => "Kind",
-              "type" => "`$STRING`",
-              "req" => true,
-            },
-            {
-              "name" => "listening",
-              "title" => "Listening",
-              "type" => [
-                "`$ONE`",
-                [
-                  "`$BOOLEAN`",
-                  "`$NULL`",
-                ],
-              ],
-              "req" => true,
-              "short" => "Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members",
-            },
-            {
-              "name" => "name",
-              "title" => "Name",
-              "type" => [
-                "`$ONE`",
-                [
-                  "`$STRING`",
-                  "`$NULL`",
-                ],
-              ],
-              "req" => true,
-            },
-            {
-              "name" => "phone",
-              "title" => "Phone",
-              "type" => [
-                "`$ONE`",
-                [
-                  "`$STRING`",
-                  "`$NULL`",
-                ],
-              ],
-              "req" => true,
-              "short" => "The agent's primary phone number, or the one a member added to their profile",
-            },
-            {
-              "name" => "role",
-              "title" => "Role",
-              "type" => "`$ANY`",
-              "req" => true,
-              "short" => "The member's role in the workspace; null for agents",
-            },
-          ],
-          "id" => {
-            "field" => "id",
-            "name" => "id",
-          },
-          "name" => "listed_teammate",
-          "op" => {
-            "list" => {
-              "input" => "data",
-              "name" => "list",
-              "points" => [
-                {
-                  "kind" => "http",
-                  "method" => "GET",
-                  "orig" => "/team",
-                  "segments" => [
-                    {
-                      "lit" => "team",
-                    },
-                  ],
-                  "parts" => [
-                    "team",
-                  ],
-                  "rename" => {},
-                  "transform" => {
-                    "req" => "`reqdata`",
-                    "res" => "`body`",
-                  },
-                  "args" => {},
-                  "select" => {},
-                  "response" => {
-                    "kind" => "json",
-                    "media" => "application/json",
-                  },
-                },
-              ],
-            },
-          },
-          "relations" => {
-            "ancestors" => [],
           },
         },
         "listener" => {
@@ -2082,9 +1876,9 @@ module ArtilConfig
             ],
           },
         },
-        "men" => {
+        "me" => {
           "fields" => [],
-          "name" => "men",
+          "name" => "me",
           "op" => {
             "load" => {
               "input" => "data",
@@ -2116,6 +1910,15 @@ module ArtilConfig
                 },
               ],
             },
+          },
+          "relations" => {
+            "ancestors" => [],
+          },
+        },
+        "me_token" => {
+          "fields" => [],
+          "name" => "me_token",
+          "op" => {
             "remove" => {
               "input" => "data",
               "name" => "remove",
@@ -2142,9 +1945,7 @@ module ArtilConfig
                     "res" => "`body`",
                   },
                   "args" => {},
-                  "select" => {
-                    "$action" => "token",
-                  },
+                  "select" => {},
                 },
               ],
             },
@@ -2625,6 +2426,148 @@ module ArtilConfig
                 "$.main.kit.entity.agent",
               ],
             ],
+          },
+        },
+        "teammate" => {
+          "fields" => [
+            {
+              "name" => "addresses",
+              "title" => "Addresses",
+              "type" => "`$ARRAY`",
+              "req" => true,
+              "short" => "Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number",
+            },
+            {
+              "name" => "email",
+              "title" => "Email",
+              "type" => [
+                "`$ONE`",
+                [
+                  "`$STRING`",
+                  "`$NULL`",
+                ],
+              ],
+              "req" => true,
+              "short" => "The agent's primary email address, or the member's",
+            },
+            {
+              "name" => "icon",
+              "title" => "Icon",
+              "type" => "`$ANY`",
+              "req" => true,
+              "short" => "The agent's icon; null for members",
+            },
+            {
+              "name" => "id",
+              "title" => "Id",
+              "type" => "`$STRING`",
+              "req" => true,
+              "short" => "The agent's or member's id",
+            },
+            {
+              "name" => "imageUrl",
+              "title" => "Image Url",
+              "type" => [
+                "`$ONE`",
+                [
+                  "`$STRING`",
+                  "`$NULL`",
+                ],
+              ],
+              "req" => true,
+              "short" => "The member's picture from their sign-in profile, or the avatar it makes them; null for agents",
+            },
+            {
+              "name" => "kind",
+              "title" => "Kind",
+              "type" => "`$STRING`",
+              "req" => true,
+            },
+            {
+              "name" => "listening",
+              "title" => "Listening",
+              "type" => [
+                "`$ONE`",
+                [
+                  "`$BOOLEAN`",
+                  "`$NULL`",
+                ],
+              ],
+              "req" => true,
+              "short" => "Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members",
+            },
+            {
+              "name" => "name",
+              "title" => "Name",
+              "type" => [
+                "`$ONE`",
+                [
+                  "`$STRING`",
+                  "`$NULL`",
+                ],
+              ],
+              "req" => true,
+            },
+            {
+              "name" => "phone",
+              "title" => "Phone",
+              "type" => [
+                "`$ONE`",
+                [
+                  "`$STRING`",
+                  "`$NULL`",
+                ],
+              ],
+              "req" => true,
+              "short" => "The agent's primary phone number, or the one a member added to their profile",
+            },
+            {
+              "name" => "role",
+              "title" => "Role",
+              "type" => "`$ANY`",
+              "req" => true,
+              "short" => "The member's role in the workspace; null for agents",
+            },
+          ],
+          "id" => {
+            "field" => "id",
+            "name" => "id",
+          },
+          "name" => "teammate",
+          "op" => {
+            "list" => {
+              "input" => "data",
+              "name" => "list",
+              "points" => [
+                {
+                  "kind" => "http",
+                  "method" => "GET",
+                  "orig" => "/team",
+                  "segments" => [
+                    {
+                      "lit" => "team",
+                    },
+                  ],
+                  "parts" => [
+                    "team",
+                  ],
+                  "rename" => {},
+                  "transform" => {
+                    "req" => "`reqdata`",
+                    "res" => "`body`",
+                  },
+                  "args" => {},
+                  "select" => {},
+                  "response" => {
+                    "kind" => "json",
+                    "media" => "application/json",
+                  },
+                },
+              ],
+            },
+          },
+          "relations" => {
+            "ancestors" => [],
           },
         },
         "token" => {

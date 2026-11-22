@@ -41,15 +41,15 @@ client = ArtilSDK.new({
 })
 ```
 
-### 3. Load an address
+### 3. Load an access
 
-Address is nested under agent, so provide the `agent_id`.
+Access is nested under agent, so provide the `agent_id`.
 
 ```ruby
 begin
-  # load returns the ENTITY — call data_get for the Address record (raises on error).
-  address = client.Address.load({ "agent_id" => "example_agent_id", "id" => "example_id" })
-  puts address.data_get
+  # load returns the ENTITY — call data_get for the Access record (raises on error).
+  access = client.Access.load({ "agent_id" => "example_agent_id" })
+  puts access.data_get
 rescue => err
   warn "load failed: #{err}"
 end
@@ -230,10 +230,11 @@ Creates a test-mode client with mock transport. Both arguments may be `nil`.
 | `Client` | `(data) -> ClientEntity` | Create a Client entity instance. |
 | `Connection` | `(data) -> ConnectionEntity` | Create a Connection entity instance. |
 | `Event` | `(data) -> EventEntity` | Create an Event entity instance. |
-| `ListedTeammate` | `(data) -> ListedTeammateEntity` | Create a ListedTeammate entity instance. |
 | `Listener` | `(data) -> ListenerEntity` | Create a Listener entity instance. |
-| `Men` | `(data) -> MenEntity` | Create a Men entity instance. |
+| `Me` | `(data) -> MeEntity` | Create a Me entity instance. |
+| `MeToken` | `(data) -> MeTokenEntity` | Create a MeToken entity instance. |
 | `Message` | `(data) -> MessageEntity` | Create a Message entity instance. |
+| `Teammate` | `(data) -> TeammateEntity` | Create a Teammate entity instance. |
 | `Token` | `(data) -> TokenEntity` | Create a Token entity instance. |
 | `Webhook` | `(data) -> WebhookEntity` | Create a Webhook entity instance. |
 
@@ -283,9 +284,9 @@ returns a result `Hash` with these keys:
 | `id` |  |
 | `senders` | Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members |
 
-Operations: Update.
+Operations: Load, Update.
 
-API path: `/agents/{id}/access/{channel}`
+API path: `/agents/{id}/access`
 
 #### Address
 
@@ -367,7 +368,7 @@ API path: `/agents/{id}/clients`
 | `machine` |  |
 | `tokenId` | The agent's token the client connected with |
 
-Operations: Update.
+Operations: Load, Update.
 
 API path: `/agents/{id}/connection`
 
@@ -387,28 +388,9 @@ API path: `/agents/{id}/connection`
 | `toThread` | The thread of the agent's client to hand the message to, from a message it sent |
 | `type` |  |
 
-Operations: Create, List, Load.
+Operations: Create, List.
 
 API path: `/agents/{id}/url`
-
-#### ListedTeammate
-
-| Field | Description |
-| --- | --- |
-| `addresses` | Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number |
-| `email` | The agent's primary email address, or the member's |
-| `icon` | The agent's icon; null for members |
-| `id` | The agent's or member's id |
-| `imageUrl` | The member's picture from their sign-in profile, or the avatar it makes them; null for agents |
-| `kind` |  |
-| `listening` | Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members |
-| `name` |  |
-| `phone` | The agent's primary phone number, or the one a member added to their profile |
-| `role` | The member's role in the workspace; null for agents |
-
-Operations: List.
-
-API path: `/team`
 
 #### Listener
 
@@ -419,14 +401,23 @@ Operations: List.
 
 API path: `/agents/{id}/listeners`
 
-#### Men
+#### Me
 
 | Field | Description |
 | --- | --- |
 
-Operations: Load, Remove.
+Operations: Load.
 
 API path: `/me`
+
+#### MeToken
+
+| Field | Description |
+| --- | --- |
+
+Operations: Remove.
+
+API path: `/me/token`
 
 #### Message
 
@@ -458,6 +449,25 @@ API path: `/me`
 Operations: Create, List, Load.
 
 API path: `/agents/{id}/messages`
+
+#### Teammate
+
+| Field | Description |
+| --- | --- |
+| `addresses` | Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number |
+| `email` | The agent's primary email address, or the member's |
+| `icon` | The agent's icon; null for members |
+| `id` | The agent's or member's id |
+| `imageUrl` | The member's picture from their sign-in profile, or the avatar it makes them; null for agents |
+| `kind` |  |
+| `listening` | Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members |
+| `name` |  |
+| `phone` | The agent's primary phone number, or the one a member added to their profile |
+| `role` | The member's role in the workspace; null for agents |
+
+Operations: List.
+
+API path: `/team`
 
 #### Token
 
@@ -503,6 +513,7 @@ Create an instance: `access = client.Access`
 
 | Method | Description |
 | --- | --- |
+| `load(match)` | Load a single entity by match criteria. |
 | `update(data)` | Update an existing entity. |
 
 #### Fields
@@ -512,6 +523,13 @@ Create an instance: `access = client.Access`
 | `admit` | `String` | Whether anyone, the workspace's members and agents besides the listed senders, or only the listed senders wake the agent; a new agent starts with team, except on Telegram, which lists the account that creates its bot from Artil, and its… |
 | `id` | `String` |  |
 | `senders` | `Array` | Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members |
+
+#### Example: Load
+
+```ruby
+# load returns the ENTITY — call data_get for the Access record (raises on error).
+access = client.Access.load({ "agent_id" => "agent_id" })
+```
 
 
 ### Address
@@ -708,6 +726,7 @@ Create an instance: `connection = client.Connection`
 
 | Method | Description |
 | --- | --- |
+| `load(match)` | Load a single entity by match criteria. |
 | `update(data)` | Update an existing entity. |
 
 #### Fields
@@ -718,6 +737,13 @@ Create an instance: `connection = client.Connection`
 | `id` | `String` |  |
 | `machine` | `Object` |  |
 | `tokenId` | `String` | The agent's token the client connected with |
+
+#### Example: Load
+
+```ruby
+# load returns the ENTITY — call data_get for the Connection record (raises on error).
+connection = client.Connection.load({ "agent_id" => "agent_id" })
+```
 
 
 ### Event
@@ -730,7 +756,6 @@ Create an instance: `event = client.Event`
 | --- | --- |
 | `create(data)` | Create a new entity with the given data. |
 | `list(match)` | List entities matching the criteria. |
-| `load(match)` | Load a single entity by match criteria. |
 
 #### Fields
 
@@ -765,40 +790,6 @@ event = client.Event.create({
 ```
 
 
-### ListedTeammate
-
-Create an instance: `listed_teammate = client.ListedTeammate`
-
-#### Operations
-
-| Method | Description |
-| --- | --- |
-| `list(match)` | List entities matching the criteria. |
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `addresses` | `Array` | Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number |
-| `email` | `Object` | The agent's primary email address, or the member's |
-| `icon` | `Object` | The agent's icon; null for members |
-| `id` | `String` | The agent's or member's id |
-| `imageUrl` | `Object` | The member's picture from their sign-in profile, or the avatar it makes them; null for agents |
-| `kind` | `String` |  |
-| `listening` | `Object` | Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members |
-| `name` | `Object` |  |
-| `phone` | `Object` | The agent's primary phone number, or the one a member added to their profile |
-| `role` | `Object` | The member's role in the workspace; null for agents |
-
-#### Example: List
-
-```ruby
-# list returns an Array of ListedTeammate entities, one per record (raises on error).
-listed_teammates = client.ListedTeammate.list
-listed_teammates.each { |item| puts item.data_get }
-```
-
-
 ### Listener
 
 Create an instance: `listener = client.Listener`
@@ -818,23 +809,33 @@ listeners.each { |item| puts item.data_get }
 ```
 
 
-### Men
+### Me
 
-Create an instance: `men = client.Men`
+Create an instance: `me = client.Me`
 
 #### Operations
 
 | Method | Description |
 | --- | --- |
 | `load(match)` | Load a single entity by match criteria. |
-| `remove(match)` | Remove the matching entity. |
 
 #### Example: Load
 
 ```ruby
-# load returns the ENTITY — call data_get for the Men record (raises on error).
-men = client.Men.load()
+# load returns the ENTITY — call data_get for the Me record (raises on error).
+me = client.Me.load()
 ```
+
+
+### MeToken
+
+Create an instance: `me_token = client.MeToken`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `remove(match)` | Remove the matching entity. |
 
 
 ### Message
@@ -898,6 +899,40 @@ message = client.Message.create({
   "agent_id" => "example_agent_id", # String
   "text" => "example_text", # String
 })
+```
+
+
+### Teammate
+
+Create an instance: `teammate = client.Teammate`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `list(match)` | List entities matching the criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `addresses` | `Array` | Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number |
+| `email` | `Object` | The agent's primary email address, or the member's |
+| `icon` | `Object` | The agent's icon; null for members |
+| `id` | `String` | The agent's or member's id |
+| `imageUrl` | `Object` | The member's picture from their sign-in profile, or the avatar it makes them; null for agents |
+| `kind` | `String` |  |
+| `listening` | `Object` | Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members |
+| `name` | `Object` |  |
+| `phone` | `Object` | The agent's primary phone number, or the one a member added to their profile |
+| `role` | `Object` | The member's role in the workspace; null for agents |
+
+#### Example: List
+
+```ruby
+# list returns an Array of Teammate entities, one per record (raises on error).
+teammates = client.Teammate.list
+teammates.each { |item| puts item.data_get }
 ```
 
 

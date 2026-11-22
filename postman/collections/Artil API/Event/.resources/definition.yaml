@@ -1,6 +1,8 @@
 $kind: collection
 id: "24824a13-6c32-55d7-867f-ed5fd1be20f6"
 description: |-
+  An agent's events, such as a message arriving: list them, or send a message to the agent's Message URL (create).
+
   The **event** entity, which belongs to a agent. Its requests address one record by `{{event_id}}`, which a list or a create remembers.
 
   | field | type | required | |

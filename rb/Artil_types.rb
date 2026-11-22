@@ -25,6 +25,15 @@ Access = Struct.new(
   keyword_init: true
 )
 
+# Request payload for Access#load.
+#
+# @!attribute [rw] agent_id
+#   @return [String]
+AccessLoadMatch = Struct.new(
+  :agent_id,
+  keyword_init: true
+)
+
 # Request payload for Access#update.
 #
 # @!attribute [rw] agent_id
@@ -385,6 +394,15 @@ Connection = Struct.new(
   keyword_init: true
 )
 
+# Request payload for Connection#load.
+#
+# @!attribute [rw] agent_id
+#   @return [String]
+ConnectionLoadMatch = Struct.new(
+  :agent_id,
+  keyword_init: true
+)
+
 # Request payload for Connection#update.
 #
 # @!attribute [rw] agent_id
@@ -451,23 +469,6 @@ Event = Struct.new(
   keyword_init: true
 )
 
-# Request payload for Event#load.
-#
-# @!attribute [rw] agent_id
-#   @return [String]
-#
-# @!attribute [rw] after
-#   @return [Integer, nil]
-#
-# @!attribute [rw] connection
-#   @return [String, nil]
-EventLoadMatch = Struct.new(
-  :agent_id,
-  :after,
-  :connection,
-  keyword_init: true
-)
-
 # Request payload for Event#list.
 #
 # @!attribute [rw] agent_id
@@ -510,96 +511,6 @@ EventCreateData = Struct.new(
   keyword_init: true
 )
 
-# ListedTeammate entity data model.
-#
-# @!attribute [rw] addresses
-#   @return [Array]
-#
-# @!attribute [rw] email
-#   @return [Object]
-#
-# @!attribute [rw] icon
-#   @return [Object]
-#
-# @!attribute [rw] id
-#   @return [String]
-#
-# @!attribute [rw] imageUrl
-#   @return [Object]
-#
-# @!attribute [rw] kind
-#   @return [String]
-#
-# @!attribute [rw] listening
-#   @return [Object]
-#
-# @!attribute [rw] name
-#   @return [Object]
-#
-# @!attribute [rw] phone
-#   @return [Object]
-#
-# @!attribute [rw] role
-#   @return [Object]
-ListedTeammate = Struct.new(
-  :addresses,
-  :email,
-  :icon,
-  :id,
-  :imageUrl,
-  :kind,
-  :listening,
-  :name,
-  :phone,
-  :role,
-  keyword_init: true
-)
-
-# Request payload for ListedTeammate#list.
-#
-# @!attribute [rw] addresses
-#   @return [Array, nil]
-#
-# @!attribute [rw] email
-#   @return [Object, nil]
-#
-# @!attribute [rw] icon
-#   @return [Object, nil]
-#
-# @!attribute [rw] id
-#   @return [String, nil]
-#
-# @!attribute [rw] imageUrl
-#   @return [Object, nil]
-#
-# @!attribute [rw] kind
-#   @return [String, nil]
-#
-# @!attribute [rw] listening
-#   @return [Object, nil]
-#
-# @!attribute [rw] name
-#   @return [Object, nil]
-#
-# @!attribute [rw] phone
-#   @return [Object, nil]
-#
-# @!attribute [rw] role
-#   @return [Object, nil]
-ListedTeammateListMatch = Struct.new(
-  :addresses,
-  :email,
-  :icon,
-  :id,
-  :imageUrl,
-  :kind,
-  :listening,
-  :name,
-  :phone,
-  :role,
-  keyword_init: true
-)
-
 # Listener entity data model.
 class Listener
 end
@@ -613,16 +524,20 @@ ListenerListMatch = Struct.new(
   keyword_init: true
 )
 
-# Men entity data model.
-class Men
+# Me entity data model.
+class Me
 end
 
-# Request payload for Men#load.
-class MenLoadMatch
+# Request payload for Me#load.
+class MeLoadMatch
 end
 
-# Request payload for Men#remove.
-class MenRemoveMatch
+# MeToken entity data model.
+class MeToken
+end
+
+# Request payload for MeToken#remove.
+class MeTokenRemoveMatch
 end
 
 # Message entity data model.
@@ -810,6 +725,96 @@ MessageCreateData = Struct.new(
   :text,
   :thread,
   :to,
+  keyword_init: true
+)
+
+# Teammate entity data model.
+#
+# @!attribute [rw] addresses
+#   @return [Array]
+#
+# @!attribute [rw] email
+#   @return [Object]
+#
+# @!attribute [rw] icon
+#   @return [Object]
+#
+# @!attribute [rw] id
+#   @return [String]
+#
+# @!attribute [rw] imageUrl
+#   @return [Object]
+#
+# @!attribute [rw] kind
+#   @return [String]
+#
+# @!attribute [rw] listening
+#   @return [Object]
+#
+# @!attribute [rw] name
+#   @return [Object]
+#
+# @!attribute [rw] phone
+#   @return [Object]
+#
+# @!attribute [rw] role
+#   @return [Object]
+Teammate = Struct.new(
+  :addresses,
+  :email,
+  :icon,
+  :id,
+  :imageUrl,
+  :kind,
+  :listening,
+  :name,
+  :phone,
+  :role,
+  keyword_init: true
+)
+
+# Request payload for Teammate#list.
+#
+# @!attribute [rw] addresses
+#   @return [Array, nil]
+#
+# @!attribute [rw] email
+#   @return [Object, nil]
+#
+# @!attribute [rw] icon
+#   @return [Object, nil]
+#
+# @!attribute [rw] id
+#   @return [String, nil]
+#
+# @!attribute [rw] imageUrl
+#   @return [Object, nil]
+#
+# @!attribute [rw] kind
+#   @return [String, nil]
+#
+# @!attribute [rw] listening
+#   @return [Object, nil]
+#
+# @!attribute [rw] name
+#   @return [Object, nil]
+#
+# @!attribute [rw] phone
+#   @return [Object, nil]
+#
+# @!attribute [rw] role
+#   @return [Object, nil]
+TeammateListMatch = Struct.new(
+  :addresses,
+  :email,
+  :icon,
+  :id,
+  :imageUrl,
+  :kind,
+  :listening,
+  :name,
+  :phone,
+  :role,
   keyword_init: true
 )
 

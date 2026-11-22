@@ -1,0 +1,20 @@
+$kind: collection
+id: "0d2a1f6a-383a-5356-a58a-0a41d98da8e5"
+description: |-
+  The workspace's agents and members, with the addresses that reach each, and whether anyone listens to each agent.
+
+  The **teammate** entity. Its requests address one record by `{{teammate_id}}`, which a list or a create remembers.
+
+  | field | type | required | |
+  |---|---|---|---|
+  | `addresses` | array | yes |  |
+  | `email` | string | yes |  |
+  | `icon` | any | yes |  |
+  | `id` | string | yes |  |
+  | `imageUrl` | string | yes |  |
+  | `kind` | string | yes |  |
+  | `listening` | boolean | yes |  |
+  | `name` | string | yes |  |
+  | `phone` | string | yes |  |
+  | `role` | any | yes |  |
+order: 13000

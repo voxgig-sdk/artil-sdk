@@ -1,0 +1,27 @@
+{
+  "existing": {
+    "me": {
+      "ME00": {
+        "id": "ME00"
+      },
+      "ME01": {
+        "id": "ME01"
+      },
+      "ME02": {
+        "id": "ME02"
+      }
+    }
+  },
+  "new": {
+    "me": {
+      "me_ref01": {}
+    }
+  },
+  "requests": {
+    "GET /me": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

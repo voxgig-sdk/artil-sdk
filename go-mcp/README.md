@@ -34,7 +34,7 @@ Tool-call arguments (what an agent sends):
 { "entity": "address", "query": { "agent_id": "example" } }
 
 // artil_load: one record
-{ "entity": "address", "query": { "agent_id": "example", "id": "example_id" } }
+{ "entity": "access", "query": { "agent_id": "example" } }
 ```
 
 > The rest of this guide follows the [Diátaxis](https://diataxis.fr) framework:
@@ -104,7 +104,7 @@ Args: `entity` (required), `query` (required: match map naming the record, such 
 Returns the record as JSON:
 
 ```jsonc
-{ "entity": "address", "query": { "agent_id": "example", "id": "example_id" } }
+{ "entity": "access", "query": { "agent_id": "example" } }
 ```
 
 ### Turn on the write tools
@@ -137,12 +137,12 @@ failure message (e.g. unknown entity, or an API error).
 ### Entities
 
 Each tool takes as its `entity` argument one of the entities that has its
-operation, of the 14 the SDK has:
+operation, of the 15 the SDK has:
 
 | Tool | Entities |
 |------|----------|
-| `artil_list` | address, agent, channel, client, event, listed_teammate, listener, message, token, webhook |
-| `artil_load` | address, agent, men, message |
+| `artil_list` | address, agent, channel, client, event, listener, message, teammate, token, webhook |
+| `artil_load` | access, address, agent, connection, me, message |
 
 JSON schemas are emitted by the SDK from each tool's argument struct's
 `json` / `jsonschema` tags — no schema is hand-written. Each tool's

@@ -38,13 +38,15 @@ var NewConnectionEntityFunc func(client *ArtilSDK, entopts map[string]any) Artil
 
 var NewEventEntityFunc func(client *ArtilSDK, entopts map[string]any) ArtilEntityBase
 
-var NewListedTeammateEntityFunc func(client *ArtilSDK, entopts map[string]any) ArtilEntityBase
-
 var NewListenerEntityFunc func(client *ArtilSDK, entopts map[string]any) ArtilEntityBase
 
-var NewMenEntityFunc func(client *ArtilSDK, entopts map[string]any) ArtilEntityBase
+var NewMeEntityFunc func(client *ArtilSDK, entopts map[string]any) ArtilEntityBase
+
+var NewMeTokenEntityFunc func(client *ArtilSDK, entopts map[string]any) ArtilEntityBase
 
 var NewMessageEntityFunc func(client *ArtilSDK, entopts map[string]any) ArtilEntityBase
+
+var NewTeammateEntityFunc func(client *ArtilSDK, entopts map[string]any) ArtilEntityBase
 
 var NewTokenEntityFunc func(client *ArtilSDK, entopts map[string]any) ArtilEntityBase
 

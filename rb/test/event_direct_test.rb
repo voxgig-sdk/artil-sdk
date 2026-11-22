@@ -65,57 +65,6 @@ class EventDirectTest < Minitest::Test
     end
   end
 
-  def test_direct_load_event
-    setup = event_direct_setup({ "id" => "direct01" })
-    _should_skip, _reason = Runner.is_control_skipped("direct", "direct-load-event", setup[:live] ? "live" : "unit")
-    if _should_skip
-      skip(_reason || "skipped via sdk-test-control.json")
-      return
-    end
-    if setup[:live]
-      ["agent01"].each do |_live_key|
-        if setup[:idmap][_live_key].nil?
-          Runner.live_miss(LIVE_STRICT, "Live test blocked: needs #{_live_key} via ARTIL_TEST_EVENT_ENTID")
-        end
-      end
-    end
-    Runner.live_pace if setup[:live]
-    client = setup[:client]
-
-    params = {}
-    query = {}
-    if setup[:live]
-      params["agent_id"] = setup[:idmap]["agent01"]
-    else
-      params["agent_id"] = "direct01"
-    end
-
-    result = client.direct({
-      "path" => "agents/{agent_id}/events/stream",
-      "method" => "GET",
-      "params" => params,
-      "query" => query,
-    })
-    if setup[:live]
-      unless live_ok(result)
-        Runner.live_miss(LIVE_STRICT, "Live load failed: " + Runner.live_describe(result))
-      end
-      if result["data"].nil?
-        Runner.live_miss(LIVE_STRICT, "Live load returned no data: " + Runner.live_describe(result))
-      end
-      assert !result["data"].nil?
-    else
-      assert_nil result["err"]
-      assert result["ok"]
-      assert_equal 200, Helpers.to_int(result["status"])
-      assert !result["data"].nil?
-      if result["data"].is_a?(Hash)
-        assert_equal "direct01", result["data"]["id"]
-      end
-      assert_equal 1, setup[:calls].length
-    end
-  end
-
 end
 
 

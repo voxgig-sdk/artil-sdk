@@ -38,15 +38,15 @@ $client = new ArtilSDK([
 ]);
 ```
 
-### 3. Load an address
+### 3. Load an access
 
-Address is nested under agent, so provide the `agent_id`.
+Access is nested under agent, so provide the `agent_id`.
 
 ```php
 try {
-    // load() returns the ENTITY — call data_get() for the Address record (throws on error).
-    $address = $client->Address()->load(["agent_id" => "example_agent_id", "id" => "example_id"]);
-    print_r($address->data_get());
+    // load() returns the ENTITY — call data_get() for the Access record (throws on error).
+    $access = $client->Access()->load(["agent_id" => "example_agent_id"]);
+    print_r($access->data_get());
 } catch (\Throwable $err) {
     echo "Error: " . $err->getMessage();
 }
@@ -235,10 +235,11 @@ Creates a test-mode client with mock transport. Both arguments may be `null`.
 | `Client` | `($data): ClientEntity` | Create a Client entity instance. |
 | `Connection` | `($data): ConnectionEntity` | Create a Connection entity instance. |
 | `Event` | `($data): EventEntity` | Create an Event entity instance. |
-| `ListedTeammate` | `($data): ListedTeammateEntity` | Create a ListedTeammate entity instance. |
 | `Listener` | `($data): ListenerEntity` | Create a Listener entity instance. |
-| `Men` | `($data): MenEntity` | Create a Men entity instance. |
+| `Me` | `($data): MeEntity` | Create a Me entity instance. |
+| `MeToken` | `($data): MeTokenEntity` | Create a MeToken entity instance. |
 | `Message` | `($data): MessageEntity` | Create a Message entity instance. |
+| `Teammate` | `($data): TeammateEntity` | Create a Teammate entity instance. |
 | `Token` | `($data): TokenEntity` | Create a Token entity instance. |
 | `Webhook` | `($data): WebhookEntity` | Create a Webhook entity instance. |
 
@@ -288,9 +289,9 @@ On error, `ok` is `false` and `$err` contains the error value.
 | `id` |  |
 | `senders` | Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members |
 
-Operations: Update.
+Operations: Load, Update.
 
-API path: `/agents/{id}/access/{channel}`
+API path: `/agents/{id}/access`
 
 #### Address
 
@@ -372,7 +373,7 @@ API path: `/agents/{id}/clients`
 | `machine` |  |
 | `tokenId` | The agent's token the client connected with |
 
-Operations: Update.
+Operations: Load, Update.
 
 API path: `/agents/{id}/connection`
 
@@ -392,28 +393,9 @@ API path: `/agents/{id}/connection`
 | `toThread` | The thread of the agent's client to hand the message to, from a message it sent |
 | `type` |  |
 
-Operations: Create, List, Load.
+Operations: Create, List.
 
 API path: `/agents/{id}/url`
-
-#### ListedTeammate
-
-| Field | Description |
-| --- | --- |
-| `addresses` | Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number |
-| `email` | The agent's primary email address, or the member's |
-| `icon` | The agent's icon; null for members |
-| `id` | The agent's or member's id |
-| `imageUrl` | The member's picture from their sign-in profile, or the avatar it makes them; null for agents |
-| `kind` |  |
-| `listening` | Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members |
-| `name` |  |
-| `phone` | The agent's primary phone number, or the one a member added to their profile |
-| `role` | The member's role in the workspace; null for agents |
-
-Operations: List.
-
-API path: `/team`
 
 #### Listener
 
@@ -424,14 +406,23 @@ Operations: List.
 
 API path: `/agents/{id}/listeners`
 
-#### Men
+#### Me
 
 | Field | Description |
 | --- | --- |
 
-Operations: Load, Remove.
+Operations: Load.
 
 API path: `/me`
+
+#### MeToken
+
+| Field | Description |
+| --- | --- |
+
+Operations: Remove.
+
+API path: `/me/token`
 
 #### Message
 
@@ -463,6 +454,25 @@ API path: `/me`
 Operations: Create, List, Load.
 
 API path: `/agents/{id}/messages`
+
+#### Teammate
+
+| Field | Description |
+| --- | --- |
+| `addresses` | Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number |
+| `email` | The agent's primary email address, or the member's |
+| `icon` | The agent's icon; null for members |
+| `id` | The agent's or member's id |
+| `imageUrl` | The member's picture from their sign-in profile, or the avatar it makes them; null for agents |
+| `kind` |  |
+| `listening` | Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members |
+| `name` |  |
+| `phone` | The agent's primary phone number, or the one a member added to their profile |
+| `role` | The member's role in the workspace; null for agents |
+
+Operations: List.
+
+API path: `/team`
 
 #### Token
 
@@ -508,6 +518,7 @@ Create an instance: `$access = $client->Access();`
 
 | Method | Description |
 | --- | --- |
+| `load(match)` | Load a single entity by match criteria. |
 | `update(data)` | Update an existing entity. |
 
 #### Fields
@@ -517,6 +528,13 @@ Create an instance: `$access = $client->Access();`
 | `admit` | `string` | Whether anyone, the workspace's members and agents besides the listed senders, or only the listed senders wake the agent; a new agent starts with team, except on Telegram, which lists the account that creates its bot from Artil, and its… |
 | `id` | `string` |  |
 | `senders` | `array` | Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members |
+
+#### Example: Load
+
+```php
+// load() returns the ENTITY — call data_get() for the Access record (throws on error).
+$access = $client->Access()->load(["agent_id" => "agent_id"]);
+```
 
 
 ### Address
@@ -709,6 +727,7 @@ Create an instance: `$connection = $client->Connection();`
 
 | Method | Description |
 | --- | --- |
+| `load(match)` | Load a single entity by match criteria. |
 | `update(data)` | Update an existing entity. |
 
 #### Fields
@@ -719,6 +738,13 @@ Create an instance: `$connection = $client->Connection();`
 | `id` | `string` |  |
 | `machine` | `mixed` |  |
 | `tokenId` | `string` | The agent's token the client connected with |
+
+#### Example: Load
+
+```php
+// load() returns the ENTITY — call data_get() for the Connection record (throws on error).
+$connection = $client->Connection()->load(["agent_id" => "agent_id"]);
+```
 
 
 ### Event
@@ -731,7 +757,6 @@ Create an instance: `$event = $client->Event();`
 | --- | --- |
 | `create(data)` | Create a new entity with the given data. |
 | `list(match)` | List entities matching the criteria. |
-| `load(match)` | Load a single entity by match criteria. |
 
 #### Fields
 
@@ -765,39 +790,6 @@ $event = $client->Event()->create([
 ```
 
 
-### ListedTeammate
-
-Create an instance: `$listed_teammate = $client->ListedTeammate();`
-
-#### Operations
-
-| Method | Description |
-| --- | --- |
-| `list(match)` | List entities matching the criteria. |
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `addresses` | `array` | Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number |
-| `email` | `mixed` | The agent's primary email address, or the member's |
-| `icon` | `mixed` | The agent's icon; null for members |
-| `id` | `string` | The agent's or member's id |
-| `imageUrl` | `mixed` | The member's picture from their sign-in profile, or the avatar it makes them; null for agents |
-| `kind` | `string` |  |
-| `listening` | `mixed` | Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members |
-| `name` | `mixed` |  |
-| `phone` | `mixed` | The agent's primary phone number, or the one a member added to their profile |
-| `role` | `mixed` | The member's role in the workspace; null for agents |
-
-#### Example: List
-
-```php
-// list() returns an array of ListedTeammate entities, one per record (throws on error).
-$listed_teammates = $client->ListedTeammate()->list();
-```
-
-
 ### Listener
 
 Create an instance: `$listener = $client->Listener();`
@@ -816,23 +808,33 @@ $listeners = $client->Listener()->list(["agent_id" => "example"]);
 ```
 
 
-### Men
+### Me
 
-Create an instance: `$men = $client->Men();`
+Create an instance: `$me = $client->Me();`
 
 #### Operations
 
 | Method | Description |
 | --- | --- |
 | `load(match)` | Load a single entity by match criteria. |
-| `remove(match)` | Remove the matching entity. |
 
 #### Example: Load
 
 ```php
-// load() returns the ENTITY — call data_get() for the Men record (throws on error).
-$men = $client->Men()->load();
+// load() returns the ENTITY — call data_get() for the Me record (throws on error).
+$me = $client->Me()->load();
 ```
+
+
+### MeToken
+
+Create an instance: `$me_token = $client->MeToken();`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `remove(match)` | Remove the matching entity. |
 
 
 ### Message
@@ -895,6 +897,39 @@ $message = $client->Message()->create([
     "agent_id" => null, // string
     "text" => null, // string
 ]);
+```
+
+
+### Teammate
+
+Create an instance: `$teammate = $client->Teammate();`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `list(match)` | List entities matching the criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `addresses` | `array` | Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number |
+| `email` | `mixed` | The agent's primary email address, or the member's |
+| `icon` | `mixed` | The agent's icon; null for members |
+| `id` | `string` | The agent's or member's id |
+| `imageUrl` | `mixed` | The member's picture from their sign-in profile, or the avatar it makes them; null for agents |
+| `kind` | `string` |  |
+| `listening` | `mixed` | Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members |
+| `name` | `mixed` |  |
+| `phone` | `mixed` | The agent's primary phone number, or the one a member added to their profile |
+| `role` | `mixed` | The member's role in the workspace; null for agents |
+
+#### Example: List
+
+```php
+// list() returns an array of Teammate entities, one per record (throws on error).
+$teammates = $client->Teammate()->list();
 ```
 
 

@@ -1,0 +1,10 @@
+$kind: collection
+id: "81bc2eab-1524-5708-83f0-62a7c5e9908a"
+description: |-
+  The calling token itself: remove it to revoke it.
+
+  The **me_token** entity. Its requests address one record by `{{me_token_id}}`, which a list or a create remembers.
+
+  | field | type | required | |
+  |---|---|---|---|
+order: 11000

@@ -1,8 +1,0 @@
-$kind: collection
-id: "3d239c72-165a-54f2-952e-6db06705f131"
-description: |-
-  The **men** entity. Its requests address one record by `{{men_id}}`, which a list or a create remembers.
-
-  | field | type | required | |
-  |---|---|---|---|
-order: 11000

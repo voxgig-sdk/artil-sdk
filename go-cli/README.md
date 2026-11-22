@@ -19,15 +19,17 @@ make build
 export ARTIL_APIKEY=apikey_xxx
 
 # 4. Each command line is ONE boru expression, run against the API:
+./artil-cli load 1 access            # {id:1} shorthand
+./artil-cli load '{id:1}' access       # explicit match map
 ./artil-cli update '{name:"x"}' access
 ./artil-cli list address
 
 # 5. Override the API base URL for a single call
-ARTIL_BASE=https://api.example.com ./artil-cli update '{id:1}' access
+ARTIL_BASE=https://api.example.com ./artil-cli load 1 access
 
 # 6. No arguments -> interactive REPL
 ./artil-cli
-artil> update '{id:1}' access
+artil> load 1 access
 artil> /quit
 ```
 
@@ -53,7 +55,7 @@ artil> /quit
    arguments to open the REPL):
 
    ```sh
-   ./dist/*/artil-cli update '{id:1}' access
+   ./dist/*/artil-cli load 1 access
    ```
 
 4. **Go interactive.** Run the binary with no arguments to open the REPL, then
@@ -62,6 +64,16 @@ artil> /quit
 That is the whole loop: *build → set key → evaluate boru expressions*.
 
 ## How-to guides
+
+### Load a single record
+
+```sh
+./artil-cli load 1 access          # scalar shorthand for {id:1}
+./artil-cli load '{id:1}' access     # explicit match map
+```
+
+The query is either a **scalar** (`1`, treated as `{id:1}`) or a **match map**
+(`{id:1}`, `{slug:"acme"}`). Quote the map so your shell passes it through intact.
 
 ### Update a record
 
@@ -79,7 +91,7 @@ Configuration is read from the environment — nothing is written to disk:
 ```sh
 export ARTIL_APIKEY=apikey_xxx             # API key
 export ARTIL_BASE=https://api.example.com  # optional: override the API base URL
-./artil-cli update '{id:1}' access
+./artil-cli load 1 access
 ```
 
 Both are injectable by a secrets vault, so the key never has to be typed inline.
@@ -91,7 +103,7 @@ evaluated as its own boru expression:
 
 ```text
 $ ./artil-cli
-artil> update '{id:1}' access
+artil> load 1 access
 artil> /help
 artil> /quit
 ```
@@ -106,7 +118,7 @@ make build-all   # linux/darwin/windows x amd64/arm64, under dist/<os>-<arch>/
 ### Discover the available entities
 
 `/help` in the REPL prints the full entity list, or see [Entities](#entities)
-below — this SDK exposes 14 entities.
+below — this SDK exposes 15 entities.
 
 ## Reference
 
@@ -161,9 +173,9 @@ Meta-commands use the `/` prefix (everything else on a line is evaluated as boru
 
 ### Entities
 
-The 14 entities this SDK exposes (any is valid as `<entity>`):
+The 15 entities this SDK exposes (any is valid as `<entity>`):
 
-access address address_setup agent channel client connection event listed_teammate listener men message token webhook
+access address address_setup agent channel client connection event listener me me_token message teammate token webhook
 
 ## Explanation
 

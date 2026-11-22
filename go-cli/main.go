@@ -20,7 +20,7 @@ import (
 const prompt = "artil"
 
 // entitiesHelp is the space-separated entity list shown by /help.
-const entitiesHelp = "access address address_setup agent channel client connection event listed_teammate listener men message token webhook"
+const entitiesHelp = "access address address_setup agent channel client connection event listener me me_token message teammate token webhook"
 
 func main() {
 	os.Exit(run(os.Args[1:], os.Stdin, os.Stdout, os.Stderr))
