@@ -1,0 +1,3960 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Artil API",
+    "description": "Give AI agents their own email inbox, SMS number, Telegram bot and Slack app.\n\nArtil adds to the API without notice: new endpoints, fields, values and error codes, which clients skip when they do not know them. Fields this reference lists stay. An endpoint is marked deprecated here before it is removed, and while deprecated it answers with a Deprecation header, plus a Sunset header once its removal date is set.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://app.artil.ai/api"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "token": {
+        "type": "http",
+        "scheme": "bearer"
+      },
+      "oauth": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://mcp.artil.ai/oauth/authorize",
+            "tokenUrl": "https://mcp.artil.ai/oauth/token",
+            "scopes": {
+              "agent": "Act as the agent chosen at sign-in"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Agent": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string",
+            "enum": [
+              "bot",
+              "sparkles",
+              "bug",
+              "message-square",
+              "headphones",
+              "search",
+              "file-text",
+              "mail",
+              "calendar",
+              "chart-line",
+              "code",
+              "git-pull-request",
+              "database",
+              "shield",
+              "megaphone",
+              "rocket",
+              "wrench",
+              "zap"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "icon",
+          "createdAt"
+        ]
+      },
+      "Event": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "type": {
+            "type": "string",
+            "const": "message.received"
+          },
+          "channel": {
+            "type": "string",
+            "enum": [
+              "email",
+              "sms",
+              "telegram",
+              "slack",
+              "url"
+            ]
+          },
+          "messageId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "The message's id, to read it with"
+          },
+          "text": {
+            "description": "The text of a message Artil keeps no copy of, which comes whole",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "sender": {
+            "$ref": "#/components/schemas/Teammate"
+          },
+          "thread": {
+            "description": "The thread of the sender's client a relayed message came from, to answer in",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "toThread": {
+            "description": "The thread of the agent's client the message is for: the one a relayed message names, else the one whose message last reached its sender; null when Artil knows none",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "client": {
+            "description": "The client the sender wrote a relayed message in, like Codex or ChatGPT",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "attachments": {
+            "description": "The files that came with a message Artil keeps no copy of",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "description": "The file's id, to send it on in attachments; null when Artil kept only the file's description"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "size": {
+                  "type": "number"
+                },
+                "url": {
+                  "description": "Where to download the file: a link that needs no sign-in and works as long as Artil keeps the file, a day after the message came; null when Artil kept only the file's description",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "type",
+                "size",
+                "url"
+              ]
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "channel",
+          "messageId",
+          "toThread",
+          "createdAt"
+        ]
+      },
+      "Teammate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The agent's or member's id"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "agent",
+              "member"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "email": {
+            "description": "The agent's primary email address, or the member's",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "phone": {
+            "description": "The agent's primary phone number, or the one a member added to their profile",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "name",
+          "email",
+          "phone"
+        ]
+      },
+      "Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "addressId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "The agent's address the message came to or went from; all zeros on url, where the agent's id is its address"
+          },
+          "channel": {
+            "type": "string",
+            "description": "The channel's kind, from listChannels"
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "inbound",
+              "outbound"
+            ]
+          },
+          "counterpart": {
+            "type": "string",
+            "description": "Who sent an inbound message, or the group it came in, or the recipients of an outbound one"
+          },
+          "counterpartName": {
+            "description": "The name an inbound message's sender or group goes by, when the channel tells it",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "author": {
+            "description": "Who wrote an inbound message in a group, such as a Telegram user id or the email of someone in a Slack channel",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "authorName": {
+            "description": "The name the author goes by, when the channel tells it",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "to": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Whom the message names as its recipients; an inbound one names the agent unless it got a blind copy"
+          },
+          "cc": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Whom the message names as getting a copy"
+          },
+          "subject": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "text": {
+            "type": "string"
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "description": "The file's id, to send it on in attachments; null when Artil kept only the file's description"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "size": {
+                  "type": "number"
+                },
+                "url": {
+                  "description": "Where to download the file: a link that needs no sign-in and expires after 15 minutes, so read the message again for a new one; null when Artil kept only the file's description",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "type",
+                "size",
+                "url"
+              ]
+            }
+          },
+          "thread": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "messageId": {
+                    "type": "string"
+                  },
+                  "references": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "messageId",
+                  "references"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "For received and imported email, its Message-ID and References; for email the agent sent, those of the email it answered"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "received",
+              "refused",
+              "sending",
+              "sent",
+              "failed",
+              "imported",
+              "reported"
+            ],
+            "description": "`reported` when the recipient marked an email the agent sent as spam"
+          },
+          "refusal": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "self",
+                  "spam",
+                  "plan_limit",
+                  "rate_limit",
+                  "sender",
+                  "outsider",
+                  "unverified"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Why a refused message did not wake the agent"
+          },
+          "admission": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "team",
+                  "listed",
+                  "anyone"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Who the sender of a received message is to the agent: `team` for a member or agent of the workspace, `listed` for a sender on the channel's list, and `anyone` for everyone else, including senders who could not be verified"
+          },
+          "error": {
+            "description": "Why a failed message was not sent or did not arrive",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "addressId",
+          "channel",
+          "direction",
+          "counterpart",
+          "counterpartName",
+          "author",
+          "authorName",
+          "to",
+          "cc",
+          "subject",
+          "text",
+          "attachments",
+          "thread",
+          "status",
+          "refusal",
+          "admission",
+          "error",
+          "createdAt"
+        ]
+      },
+      "Address": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "channel": {
+            "type": "string",
+            "enum": [
+              "email",
+              "sms",
+              "telegram",
+              "slack"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "description": "The email address, phone number, Telegram bot's @username, or Slack bot's workspace and member ids"
+          },
+          "name": {
+            "description": "What people know the address by when its value is an id, like a Slack bot's @name",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "domainId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The workspace's own domain the address is on"
+          },
+          "primary": {
+            "type": "boolean",
+            "description": "Whether new messages on its channel go out from it"
+          },
+          "registering": {
+            "description": "Whether US carriers are still registering the phone number, which sends nothing until they have",
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "channel",
+          "value",
+          "name",
+          "domainId",
+          "primary",
+          "createdAt"
+        ]
+      },
+      "AddressSetup": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Where the member creates the address, such as a link to Artil's Telegram bot or to a Slack app made from Artil's manifest"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      },
+      "Channel": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "description": "The channel's kind, which messages and events name"
+          },
+          "name": {
+            "type": "string",
+            "description": "What people and agents call the channel, like Telegram"
+          },
+          "labels": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "type": "string",
+                "description": "What an agent has on the channel, like bot"
+              },
+              "contact": {
+                "type": "string",
+                "description": "How to write someone on the channel, like user id, group id or @username"
+              },
+              "token": {
+                "description": "What connecting an address takes, like bot token from @BotFather",
+                "type": "string"
+              }
+            },
+            "required": [
+              "address",
+              "contact"
+            ],
+            "description": "Words a client builds its texts about the channel from"
+          },
+          "limits": {
+            "type": "object",
+            "properties": {
+              "recipients": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991,
+                "description": "The most recipients a message goes to"
+              },
+              "text": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991,
+                "description": "The most characters a message holds"
+              },
+              "files": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991,
+                "description": "The most files a message carries"
+              },
+              "fileSize": {
+                "description": "The most bytes in one file; none without a limit",
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "recipients",
+              "text",
+              "files"
+            ],
+            "description": "The most a message on the channel carries"
+          }
+        },
+        "required": [
+          "kind",
+          "name",
+          "labels",
+          "limits"
+        ]
+      },
+      "Access": {
+        "type": "object",
+        "properties": {
+          "admit": {
+            "type": "string",
+            "enum": [
+              "anyone",
+              "team",
+              "list"
+            ],
+            "description": "Whether anyone, the workspace's members and agents besides the listed senders, or only the listed senders wake the agent; a new agent starts with team, except on Telegram, which lists the account that creates its bot from Artil, and its Message URL is never open to anyone"
+          },
+          "senders": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members"
+          }
+        },
+        "required": [
+          "admit",
+          "senders"
+        ]
+      },
+      "Connection": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "client": {
+            "type": "string"
+          },
+          "machine": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tokenId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "The agent's token the client connected with"
+          }
+        },
+        "required": [
+          "id",
+          "client",
+          "machine",
+          "tokenId"
+        ]
+      },
+      "Listener": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "client"
+              },
+              "client": {
+                "type": "string",
+                "description": "The connected client, like Claude Code"
+              },
+              "machine": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "kind",
+              "client",
+              "machine"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "webhook"
+              },
+              "host": {
+                "type": "string",
+                "description": "The host of a webhook the agent's members added"
+              }
+            },
+            "required": [
+              "kind",
+              "host"
+            ]
+          }
+        ]
+      },
+      "Client": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "The credential identifying this client"
+          },
+          "name": {
+            "type": "string",
+            "description": "The recorded client or device name, or the name of a manually created token"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastUsedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "createdAt",
+          "lastUsedAt"
+        ]
+      },
+      "Webhook": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Where Artil posts the agent's events"
+          },
+          "deliveredAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "error": {
+            "description": "Why the last delivery failed",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "erroredAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "attempts": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991,
+            "description": "How many times the event Artil is retrying has failed"
+          },
+          "retryAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "When Artil next retries a failed event"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "url",
+          "deliveredAt",
+          "error",
+          "erroredAt",
+          "attempts",
+          "retryAt",
+          "createdAt"
+        ]
+      },
+      "WebhookSetup": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Where Artil posts the agent's events"
+          },
+          "deliveredAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "error": {
+            "description": "Why the last delivery failed",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "erroredAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "attempts": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991,
+            "description": "How many times the event Artil is retrying has failed"
+          },
+          "retryAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "When Artil next retries a failed event"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "secret": {
+            "type": "string",
+            "description": "The Standard Webhooks key each delivery is signed with"
+          }
+        },
+        "required": [
+          "id",
+          "url",
+          "deliveredAt",
+          "error",
+          "erroredAt",
+          "attempts",
+          "retryAt",
+          "createdAt",
+          "secret"
+        ]
+      },
+      "Token": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastUsedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "createdAt",
+          "lastUsedAt"
+        ]
+      },
+      "ListedTeammate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The agent's or member's id"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "agent",
+              "member"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "email": {
+            "description": "The agent's primary email address, or the member's",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "phone": {
+            "description": "The agent's primary phone number, or the one a member added to their profile",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "addresses": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "channel": {
+                  "type": "string",
+                  "enum": [
+                    "email",
+                    "sms",
+                    "telegram",
+                    "slack"
+                  ]
+                },
+                "value": {
+                  "type": "string",
+                  "description": "The email address, phone number, Telegram bot's @username, or Slack bot's workspace and member ids"
+                }
+              },
+              "required": [
+                "channel",
+                "value"
+              ]
+            },
+            "description": "Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number"
+          },
+          "icon": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "bot",
+                  "sparkles",
+                  "bug",
+                  "message-square",
+                  "headphones",
+                  "search",
+                  "file-text",
+                  "mail",
+                  "calendar",
+                  "chart-line",
+                  "code",
+                  "git-pull-request",
+                  "database",
+                  "shield",
+                  "megaphone",
+                  "rocket",
+                  "wrench",
+                  "zap"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The agent's icon; null for members"
+          },
+          "imageUrl": {
+            "description": "The member's picture from their sign-in profile, or the avatar it makes them; null for agents",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "role": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "admin",
+                  "member"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The member's role in the workspace; null for agents"
+          },
+          "listening": {
+            "description": "Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "name",
+          "email",
+          "phone",
+          "addresses",
+          "icon",
+          "imageUrl",
+          "role",
+          "listening"
+        ]
+      },
+      "Me": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "member"
+              },
+              "userId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "role": {
+                "type": "string",
+                "enum": [
+                  "admin",
+                  "member"
+                ]
+              },
+              "email": {
+                "description": "The member's email address",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "orgId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "workspace": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              },
+              "agent": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "The agent the token acts as, or null for a member"
+              }
+            },
+            "required": [
+              "kind",
+              "userId",
+              "role",
+              "email",
+              "orgId",
+              "workspace",
+              "agent"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "identity"
+              },
+              "identityId": {
+                "type": "string"
+              },
+              "signedInBy": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                "description": "The member who made the token, such as by approving a sign-in"
+              },
+              "orgId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "workspace": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              },
+              "agent": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "The agent the token acts as, or null for a member"
+              }
+            },
+            "required": [
+              "kind",
+              "identityId",
+              "signedInBy",
+              "orgId",
+              "workspace",
+              "agent"
+            ]
+          }
+        ]
+      },
+      "MessageReceivedEvent": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "description": "The event's id, sent as webhook-id and kept on every retry"
+          },
+          "name": {
+            "type": "string",
+            "const": "message.received"
+          },
+          "timestamp": {
+            "description": "When the event happened",
+            "type": "string",
+            "format": "date-time"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "agent": {
+                "$ref": "#/components/schemas/WebhookAgent"
+              },
+              "message": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                    "description": "The message's id, to read it with"
+                  },
+                  "channel": {
+                    "type": "string",
+                    "enum": [
+                      "email",
+                      "sms",
+                      "telegram",
+                      "slack",
+                      "url"
+                    ]
+                  },
+                  "from": {
+                    "description": "The sender's address as they wrote it, the group a message came in, or the id of the teammate who sent it",
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "fromName": {
+                    "description": "The name the sender or group goes by, when Artil knows it",
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "author": {
+                    "description": "Who wrote a message that came in a group",
+                    "type": "string"
+                  },
+                  "authorName": {
+                    "description": "The name the author goes by, when Artil knows it",
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "admission": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "enum": [
+                          "team",
+                          "listed",
+                          "anyone"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "Whether the sender is on the team, on the channel's list, or anyone else, including a sender who could not be verified"
+                  },
+                  "subject": {
+                    "description": "The subject, on a channel that has one",
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "text": {
+                    "description": "The text of a message Artil keeps no copy of, which comes whole",
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "sender": {
+                    "$ref": "#/components/schemas/Teammate"
+                  },
+                  "thread": {
+                    "description": "The thread of the sender's client a relayed message came from, to answer in",
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "toThread": {
+                    "description": "The thread of the agent's client the message is for: the one a relayed message names, else the one whose message last reached its sender; null when Artil knows none",
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "client": {
+                    "description": "The client the sender wrote a relayed message in, like Codex or ChatGPT",
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "attachments": {
+                    "description": "The files that came with a message Artil keeps no copy of",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "format": "uuid",
+                              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ],
+                          "description": "The file's id, to send it on in attachments; null when Artil kept only the file's description"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "size": {
+                          "type": "number"
+                        },
+                        "url": {
+                          "description": "Where to download the file: a link that needs no sign-in and works as long as Artil keeps the file, a day after the message came; null when Artil kept only the file's description",
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "type",
+                        "size",
+                        "url"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "id",
+                  "channel",
+                  "from",
+                  "fromName",
+                  "admission",
+                  "subject",
+                  "toThread"
+                ]
+              }
+            },
+            "required": [
+              "agent",
+              "message"
+            ]
+          },
+          "cursor": {
+            "type": "string",
+            "description": "Where delivery stands after this event"
+          }
+        },
+        "required": [
+          "eventId",
+          "name",
+          "timestamp",
+          "data",
+          "cursor"
+        ]
+      },
+      "WebhookAgent": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "description": "The agent account the event is for"
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "unauthorized",
+                  "forbidden",
+                  "plan_limit",
+                  "not_found",
+                  "conflict",
+                  "rate_limited",
+                  "internal",
+                  "unavailable"
+                ]
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          }
+        },
+        "required": [
+          "error"
+        ]
+      }
+    }
+  },
+  "security": [
+    {
+      "token": []
+    },
+    {
+      "oauth": [
+        "agent"
+      ]
+    }
+  ],
+  "paths": {
+    "/agents": {
+      "get": {
+        "operationId": "listAgents",
+        "responses": {
+          "200": {
+            "description": "The agents",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Agent"
+                  }
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Agents"
+        ],
+        "summary": "List agents",
+        "description": "List the workspace's agents."
+      },
+      "post": {
+        "operationId": "createAgent",
+        "responses": {
+          "201": {
+            "description": "The new agent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agent"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Agents"
+        ],
+        "summary": "Create an agent",
+        "description": "Create an agent with an email address.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 80
+                  },
+                  "icon": {
+                    "default": "bot",
+                    "type": "string",
+                    "enum": [
+                      "bot",
+                      "sparkles",
+                      "bug",
+                      "message-square",
+                      "headphones",
+                      "search",
+                      "file-text",
+                      "mail",
+                      "calendar",
+                      "chart-line",
+                      "code",
+                      "git-pull-request",
+                      "database",
+                      "shield",
+                      "megaphone",
+                      "rocket",
+                      "wrench",
+                      "zap"
+                    ]
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agents/{id}/url": {
+      "post": {
+        "operationId": "sendToAgentUrl",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The agent's id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "The message.received event",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Event"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Events"
+        ],
+        "summary": "Send to an agent's Message URL",
+        "description": "Send a message to an agent of your workspace, as the member or agent whose token you use. The agent's Message URL, https://artil.ai/a/{id}, takes the same request. Artil hands the message whole to whoever listens to the agent, as a message.received event on the url channel, and keeps no copy. Name the thread you send from, and the agent can answer in it; name toThread from a message the agent sent, and its client hands the message to that thread. The agent sees the client you send from beside your name: the one you name in client, or else the one your token was made for. Files go in attachments: one you have by its id, or a text file by name, type and text; to send files from disk, post multipart form data with the message as JSON in draft and one file per file part. The agent can download them for a day. Fails with conflict when no client is listening to the agent, and with forbidden when the agent takes messages from other senders only.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "maxLength": 2000
+                  },
+                  "thread": {
+                    "description": "The thread of your client you send from, so the agent can answer there. With it, an agent may write to its own Message URL from one thread for another",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "pattern": "^[^\\p{Cc}\\p{Cf}]+$"
+                  },
+                  "toThread": {
+                    "description": "The thread of the agent's client to hand the message to, from a message it sent",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "pattern": "^[^\\p{Cc}\\p{Cf}]+$"
+                  },
+                  "client": {
+                    "description": "The client you send from, like Codex, which the agent sees beside your name. Without it, Artil names the client your token was made for",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "pattern": "^[^\\p{Cc}\\p{Cf}]+$"
+                  },
+                  "attachments": {
+                    "maxItems": 10,
+                    "type": "array",
+                    "items": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "format": "uuid",
+                              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                            }
+                          },
+                          "required": [
+                            "id"
+                          ],
+                          "description": "A file from a message the agent received or sent, by the id in its attachments"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 255
+                            },
+                            "type": {
+                              "type": "string",
+                              "pattern": "^[\\w.+\\-]+\\/[\\w.+\\-]+$"
+                            },
+                            "text": {
+                              "type": "string",
+                              "maxLength": 1000000
+                            }
+                          },
+                          "required": [
+                            "name",
+                            "type",
+                            "text"
+                          ],
+                          "description": "A text file written for this message"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "draft": {
+                    "type": "string",
+                    "description": "The message as JSON, with the fields of a JSON request"
+                  },
+                  "file": {
+                    "description": "The files to send, one part each",
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "binary",
+                        "contentEncoding": "binary"
+                      },
+                      {
+                        "maxItems": 10,
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "format": "binary",
+                          "contentEncoding": "binary"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "draft"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agents/{id}": {
+      "get": {
+        "operationId": "readAgent",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The agent's id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The agent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agent"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Agents"
+        ],
+        "summary": "Read an agent"
+      },
+      "patch": {
+        "operationId": "updateAgent",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The agent's id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The changed agent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agent"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Agents"
+        ],
+        "summary": "Update an agent",
+        "description": "Rename an agent or change its icon.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 80
+                  },
+                  "icon": {
+                    "type": "string",
+                    "enum": [
+                      "bot",
+                      "sparkles",
+                      "bug",
+                      "message-square",
+                      "headphones",
+                      "search",
+                      "file-text",
+                      "mail",
+                      "calendar",
+                      "chart-line",
+                      "code",
+                      "git-pull-request",
+                      "database",
+                      "shield",
+                      "megaphone",
+                      "rocket",
+                      "wrench",
+                      "zap"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteAgent",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The agent's id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The agent is gone"
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Agents"
+        ],
+        "summary": "Delete an agent",
+        "description": "Delete an agent with its addresses and messages."
+      }
+    },
+    "/agents/{id}/messages": {
+      "get": {
+        "operationId": "listMessages",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The agent's id",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "channel",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The channel's kind, from listChannels"
+          },
+          {
+            "in": "query",
+            "name": "direction",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "inbound",
+                "outbound"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          },
+          {
+            "in": "query",
+            "name": "counterpart",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 320
+            },
+            "description": "Keep the messages from or to this address or number"
+          },
+          {
+            "in": "query",
+            "name": "before",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "description": "List the messages older than this one, to page back"
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "description": "Find the messages that hold these words, best match first. Only self-hosted Artil Connect servers search for now, and Artil Cloud answers forbidden"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The messages",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Message"
+                  }
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Messages"
+        ],
+        "summary": "List messages",
+        "description": "List the agent's messages, newest first. To page back, pass the last message's id as before."
+      },
+      "post": {
+        "operationId": "sendMessage",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The agent's id",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "description": "A key of your choice, unique to this message. Sending again with the same key returns the message the first request sent instead of sending it twice, so a retry after a timeout is safe.",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "The sent message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Messages"
+        ],
+        "summary": "Send a message",
+        "description": "Answer a message by giving its id as replyTo, start a new one with a channel and recipients in to, or pass one on by giving its id as forward and recipients in to; a forward carries the message's files. Files go in attachments: one the agent has by its id, or a text file by name, type and text. To send files from disk, post multipart form data with the message as JSON in draft and one file per file part. Name the thread of your client you send from in thread, and an answer to the message wakes it. On url, Artil hands the message whole to whoever listens to the agent in to, or to the agent whose message it answers, and keeps no copy, as at the agent's Message URL: the answer describes what it relayed, lists and reads leave it out, and it takes no Idempotency-Key.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "replyTo": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "forward": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "channel": {
+                    "description": "The channel to start a conversation on, by its kind, from listChannels",
+                    "type": "string"
+                  },
+                  "to": {
+                    "minItems": 1,
+                    "maxItems": 10,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 320
+                    }
+                  },
+                  "cc": {
+                    "maxItems": 50,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 320
+                    }
+                  },
+                  "subject": {
+                    "type": "string",
+                    "maxLength": 240
+                  },
+                  "text": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 32000
+                  },
+                  "attachments": {
+                    "maxItems": 10,
+                    "type": "array",
+                    "items": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "format": "uuid",
+                              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                            }
+                          },
+                          "required": [
+                            "id"
+                          ],
+                          "description": "A file from a message the agent received or sent, by the id in its attachments"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 255
+                            },
+                            "type": {
+                              "type": "string",
+                              "pattern": "^[\\w.+\\-]+\\/[\\w.+\\-]+$"
+                            },
+                            "text": {
+                              "type": "string",
+                              "maxLength": 1000000
+                            }
+                          },
+                          "required": [
+                            "name",
+                            "type",
+                            "text"
+                          ],
+                          "description": "A text file written for this message"
+                        }
+                      ]
+                    }
+                  },
+                  "thread": {
+                    "description": "The thread of your client you send from, which an answer to the message wakes",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "pattern": "^[^\\p{Cc}\\p{Cf}]+$"
+                  },
+                  "client": {
+                    "description": "On url, the client you send from, like Codex, which the agent sees beside your name. Without it, Artil names the client your token was made for",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "pattern": "^[^\\p{Cc}\\p{Cf}]+$"
+                  }
+                },
+                "required": [
+                  "text"
+                ]
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "draft": {
+                    "type": "string",
+                    "description": "The message as JSON, with the fields of a JSON request"
+                  },
+                  "file": {
+                    "description": "The files to send, one part each",
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "binary",
+                        "contentEncoding": "binary"
+                      },
+                      {
+                        "maxItems": 10,
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "format": "binary",
+                          "contentEncoding": "binary"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "draft"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agents/{id}/messages/{messageId}": {
+      "get": {
+        "operationId": "readMessage",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The agent's id",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "messageId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Messages"
+        ],
+        "summary": "Read a message",
+        "description": "Read a message the agent received or sent."
+      }
+    },
+    "/agents/{id}/addresses": {
+      "get": {
+        "operationId": "listAddresses",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The agent's id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The addresses",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Address"
+                  }
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Addresses"
+        ],
+        "summary": "List addresses",
+        "description": "List an agent's email addresses, phone numbers, Telegram bots and Slack bots."
+      },
+      "post": {
+        "operationId": "addAddress",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The agent's id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "The new address",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Address"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "The new phone number, which US carriers are still registering. Read it at Location until registering is false; it sends nothing until then.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Address"
+                }
+              }
+            },
+            "headers": {
+              "Location": {
+                "description": "Where to read the address",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Addresses"
+        ],
+        "summary": "Add an address",
+        "description": "Leave out value to get a free address on the channel, or give an email address on the workspace's own domain. A phone number needs a plan that includes one. Give token to connect a Telegram bot, which then sends its messages to Artil, or a Slack app made from the link setUpAddress gives.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "channel": {
+                    "type": "string",
+                    "enum": [
+                      "email",
+                      "sms",
+                      "telegram",
+                      "slack"
+                    ]
+                  },
+                  "value": {
+                    "type": "string",
+                    "format": "email",
+                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                  },
+                  "country": {
+                    "description": "The ISO country of the phone number; the first one the server sells by default",
+                    "type": "string",
+                    "pattern": "^[A-Z]{2}$"
+                  },
+                  "token": {
+                    "description": "What connects an address the workspace already has: the token @BotFather gave a Telegram bot, or a Slack app's bot token and signing secret with a space between",
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "setup": {
+                    "description": "The state a provider's consent page sent the member back with, for an app they installed from the link setUpAddress gave with token",
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "code": {
+                    "description": "The code the provider's consent page sent the member back with, beside setup",
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "channel"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agents/{id}/addresses/{addressId}": {
+      "get": {
+        "operationId": "readAddress",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The agent's id",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "addressId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The address",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Address"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Addresses"
+        ],
+        "summary": "Read an address",
+        "description": "Read one of an agent's addresses, with whether carriers are still registering its phone number."
+      },
+      "patch": {
+        "operationId": "changeAddress",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The agent's id",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "addressId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The changed address",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Address"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Addresses"
+        ],
+        "summary": "Change an address",
+        "description": "Change the email address Artil gave an agent, on a plan that includes it.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "format": "email",
+                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                  }
+                },
+                "required": [
+                  "value"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "removeAddress",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The agent's id",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "addressId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The address is gone"
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Addresses"
+        ],
+        "summary": "Remove an address",
+        "description": "Take an address on the workspace's own domain, a phone number, a Telegram bot or a Slack bot from an agent. The workspace keeps a phone number for its next agent, and a Telegram bot stops sending its messages to Artil."
+      }
+    },
+    "/agents/{id}/addresses/setups": {
+      "post": {
+        "operationId": "setUpAddress",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The agent's id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "The link",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddressSetup"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Addresses"
+        ],
+        "summary": "Set up an address",
+        "description": "Get a link where a member creates the address with the provider. A Telegram bot made through Artil's bot joins the agent once it is made, and the member can wake the agent from it; that link works for an hour. A Slack app made from Artil's manifest sends its messages to Artil, and joins the agent once its bot token and signing secret are added with addAddress.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "channel": {
+                    "type": "string",
+                    "enum": [
+                      "email",
+                      "sms",
+                      "telegram",
+                      "slack"
+                    ]
+                  },
+                  "token": {
+                    "description": "What installs an app the member made: a Slack app's client id, client secret and signing secret, in that order, with spaces between. The link is then the provider's consent page, which sends the member back to the agent's page with setup and code for addAddress.",
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "channel"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agents/{id}/addresses/{addressId}/primary": {
+      "post": {
+        "operationId": "makeAddressPrimary",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The agent's id",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "addressId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The address is primary"
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Addresses"
+        ],
+        "summary": "Make an address primary",
+        "description": "Send new messages on the address's channel from it."
+      }
+    },
+    "/agents/{id}/channels": {
+      "get": {
+        "operationId": "listChannels",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The agent's id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The channels",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Channel"
+                  }
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Channels"
+        ],
+        "summary": "List channels",
+        "description": "List the channels the agent can send and receive on, with the words a client builds its texts about each from, and the most a message on each carries."
+      }
+    },
+    "/agents/{id}/access": {
+      "get": {
+        "operationId": "readAccess",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The agent's id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Each channel's access",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string",
+                    "enum": [
+                      "email",
+                      "sms",
+                      "telegram",
+                      "slack",
+                      "url"
+                    ]
+                  },
+                  "additionalProperties": {
+                    "$ref": "#/components/schemas/Access"
+                  },
+                  "required": [
+                    "email",
+                    "sms",
+                    "telegram",
+                    "slack",
+                    "url"
+                  ]
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Access"
+        ],
+        "summary": "Read access",
+        "description": "Read who can wake an agent on each channel."
+      }
+    },
+    "/agents/{id}/access/{channel}": {
+      "put": {
+        "operationId": "setAccess",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The agent's id",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "channel",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The channel's access",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Access"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Access"
+        ],
+        "summary": "Set access",
+        "description": "Choose who can wake an agent on a channel.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "admit": {
+                    "type": "string",
+                    "enum": [
+                      "anyone",
+                      "team",
+                      "list"
+                    ]
+                  },
+                  "senders": {
+                    "maxItems": 200,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "admit",
+                  "senders"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agents/{id}/events": {
+      "get": {
+        "operationId": "listEvents",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The agent's id",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "after",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The events",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Event"
+                  }
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Events"
+        ],
+        "summary": "List events",
+        "description": "Without after, the latest events come newest first. With after, the events that followed it come oldest first."
+      }
+    },
+    "/agents/{id}/events/stream": {
+      "get": {
+        "operationId": "streamEvents",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The agent's id",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Last-Event-ID",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "after",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            }
+          },
+          {
+            "in": "query",
+            "name": "connection",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The event stream",
+            "content": {
+              "text/event-stream": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Events"
+        ],
+        "summary": "Stream events",
+        "description": "Server-sent events, named by type, with each Event as JSON data. A reconnect resumes after Last-Event-ID. With connection, the stream ends once another client connects, and reopening it then fails with conflict."
+      }
+    },
+    "/agents/{id}/connection": {
+      "get": {
+        "operationId": "readConnection",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The agent's id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The connection",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/Connection"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Connections"
+        ],
+        "summary": "Read an agent's connection",
+        "description": "The client that hears the agent's new messages, or null before any connects."
+      },
+      "put": {
+        "operationId": "connectClient",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The agent's id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The agent's new connection",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Connection"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Connections"
+        ],
+        "summary": "Connect a client",
+        "description": "Make the calling client the one that hears the agent's new messages, in place of any other. Stream the agent's events with the connection's id to hear them. Only the agent's own token can connect it.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "client": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 80,
+                    "pattern": "^[^\\p{Cc}\\p{Cf}]+$"
+                  },
+                  "machine": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "pattern": "^[^\\p{Cc}\\p{Cf}]+$"
+                  }
+                },
+                "required": [
+                  "client"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agents/{id}/listeners": {
+      "get": {
+        "operationId": "listListeners",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The agent's id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Who listens",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Listener"
+                  }
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Connections"
+        ],
+        "summary": "List who listens",
+        "description": "The connected client, while its event stream checks in or its MCP subscription takes them, and the webhooks that hear messages at the agent's Message URL now. Sending to the Message URL fails while the list is empty."
+      }
+    },
+    "/agents/{id}/clients": {
+      "get": {
+        "operationId": "listClients",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The agent's id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The clients",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Client"
+                  }
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Connections"
+        ],
+        "summary": "List clients",
+        "description": "Clients with access to the agent: completed CLI and OAuth sign-ins, and manually created tokens after their first use. Expired and revoked credentials are excluded. This list does not indicate which runtime receives new messages."
+      }
+    },
+    "/agents/{id}/webhooks": {
+      "get": {
+        "operationId": "listWebhooks",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The agent's id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The webhooks",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Webhook"
+                  }
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "List webhooks",
+        "description": "List where an agent's events go and how delivery went."
+      },
+      "post": {
+        "operationId": "addWebhook",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The agent's id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "The webhook and its secret",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhookSetup"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Add a webhook",
+        "description": "Post an agent's events to a URL, signed as Standard Webhooks describes. A Claude scheduled task's fire URL gets each event as the `text` its session starts with. Adding the same URL again returns its webhook with the same secret.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "maxLength": 2000,
+                    "format": "uri"
+                  },
+                  "bearerToken": {
+                    "description": "A token Artil sends as `Authorization: Bearer` with each delivery, for an endpoint that checks one instead of the signature, like a Grok Bot routine or a Claude scheduled task's API trigger. A new one replaces the token of a URL added before.",
+                    "type": "string",
+                    "maxLength": 1000,
+                    "pattern": "^[\\w.~+\\/\\-]+=*$"
+                  }
+                },
+                "required": [
+                  "url"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agents/{id}/webhooks/{webhookId}": {
+      "delete": {
+        "operationId": "removeWebhook",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The agent's id",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "webhookId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Events are no longer posted there"
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Remove a webhook",
+        "description": "Stop posting an agent's events to a URL."
+      }
+    },
+    "/agents/{id}/tokens": {
+      "get": {
+        "operationId": "listTokens",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The agent's id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The tokens",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Token"
+                  }
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Tokens"
+        ],
+        "summary": "List tokens",
+        "description": "List the tokens members made for an agent, never their values. Sign-ins from the CLI and OAuth are not listed."
+      }
+    },
+    "/agents/{id}/tokens/{tokenId}": {
+      "delete": {
+        "operationId": "revokeToken",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The agent's id",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "tokenId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The token no longer works"
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Tokens"
+        ],
+        "summary": "Revoke a token",
+        "description": "Revoke one of an agent's tokens."
+      }
+    },
+    "/team": {
+      "get": {
+        "operationId": "listTeam",
+        "responses": {
+          "200": {
+            "description": "The team",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ListedTeammate"
+                  }
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Team"
+        ],
+        "summary": "List the team",
+        "description": "List the workspace's agents and members with the addresses that reach them, and whether anyone listens to each agent."
+      }
+    },
+    "/me/token": {
+      "delete": {
+        "operationId": "revokeOwnToken",
+        "responses": {
+          "204": {
+            "description": "The token no longer works"
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Me"
+        ],
+        "summary": "Revoke this token",
+        "description": "Revoke the token this request signs in with."
+      }
+    },
+    "/me": {
+      "get": {
+        "operationId": "readMe",
+        "responses": {
+          "200": {
+            "description": "The signed-in member or agent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Me"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "The request failed; the error says why",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Me"
+        ],
+        "summary": "Read who is signed in",
+        "description": "Read the member or agent the token signs in as, and its workspace."
+      }
+    }
+  },
+  "webhooks": {
+    "message.received": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Message received",
+        "description": "A message arrived for the agent account on one of its channels. The event leaves out the content of a message Artil keeps; read it with its id. One it keeps no copy of comes whole.",
+        "security": [],
+        "parameters": [
+          {
+            "name": "webhook-id",
+            "in": "header",
+            "required": true,
+            "description": "The event's id, the same on every retry",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "webhook-timestamp",
+            "in": "header",
+            "required": true,
+            "description": "When Artil signed the delivery, in Unix seconds",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "webhook-signature",
+            "in": "header",
+            "required": true,
+            "description": "v1, followed by the base64 HMAC-SHA256 of the id, timestamp and body under the webhook's secret, as Standard Webhooks describes",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MessageReceivedEvent"
+              }
+            }
+          }
+        },
+        "responses": {
+          "410": {
+            "description": "Artil removes the webhook"
+          },
+          "413": {
+            "description": "Artil skips the event and sends the next one"
+          },
+          "2XX": {
+            "description": "The event arrived; Artil sends the next one"
+          },
+          "default": {
+            "description": "Artil holds the later events back and retries this one with the same webhook-id, waiting longer each time, for up to 3 days"
+          }
+        }
+      }
+    }
+  }
+}
