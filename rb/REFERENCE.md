@@ -151,7 +151,6 @@ access = client.Access
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
 | `admit` | `String` | Yes | Whether anyone, the workspace's members and agents besides the listed senders, or only the listed senders wake the agent; a new agent starts with team, except on Telegram, which lists the account that creates its bot from Artil, and its… |
-| `id` | `String` | No |  |
 | `senders` | `Array` | Yes | Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members |
 
 ### Operations
@@ -171,7 +170,7 @@ Update an existing entity. The data must include the entity `id`. Returns the up
 ```ruby
 result = client.Access.update({
   "agent_id" => "agent_id",
-  "id" => "id",
+  "channel" => "channel",
   # Fields to update
 })
 ```

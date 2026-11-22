@@ -7,7 +7,6 @@
 
 export interface Access {
   admit: string
-  id?: string
   senders: any[]
 }
 
@@ -17,7 +16,7 @@ export interface AccessLoadMatch {
 
 export interface AccessUpdateData {
   agent_id: string
-  id: string
+  channel: string
   admit?: string
   senders?: any[]
 }

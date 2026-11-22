@@ -16,13 +16,9 @@ from __future__ import annotations
 from typing import TypedDict, Any
 
 
-class AccessRequired(TypedDict):
+class Access(TypedDict):
     admit: str
     senders: list
-
-
-class Access(AccessRequired, total=False):
-    id: str
 
 
 class AccessLoadMatch(TypedDict):
@@ -31,7 +27,7 @@ class AccessLoadMatch(TypedDict):
 
 class AccessUpdateDataRequired(TypedDict):
     agent_id: str
-    id: str
+    channel: str
 
 
 class AccessUpdateData(AccessUpdateDataRequired, total=False):

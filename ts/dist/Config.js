@@ -234,11 +234,6 @@ class Config {
                     "short": "Whether anyone, the workspace's members and agents besides the listed senders, or only the listed senders wake the agent; a new agent starts with team, except on Telegram, which lists the account that creates its bot from Artil, and its…"
                 },
                 {
-                    "name": "id",
-                    "title": "Id",
-                    "type": "`$STRING`"
-                },
-                {
                     "name": "senders",
                     "title": "Senders",
                     "type": "`$ARRAY`",
@@ -246,10 +241,6 @@ class Config {
                     "short": "Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members"
                 }
             ],
-            "id": {
-                "field": "id",
-                "name": "id"
-            },
             "name": "access",
             "op": {
                 "load": {
@@ -327,18 +318,18 @@ class Config {
                                     "lit": "access"
                                 },
                                 {
-                                    "var": "id"
+                                    "var": "channel"
                                 }
                             ],
                             "parts": [
                                 "agents",
                                 "{agent_id}",
                                 "access",
-                                "{id}"
+                                "{channel}"
                             ],
                             "rename": {
                                 "param": {
-                                    "channel": "id",
+                                    "channel": "channel",
                                     "id": "agent_id"
                                 }
                             },
@@ -356,7 +347,7 @@ class Config {
                                         "reqd": true
                                     },
                                     {
-                                        "name": "id",
+                                        "name": "channel",
                                         "orig": "channel",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -367,7 +358,7 @@ class Config {
                             "select": {
                                 "exist": [
                                     "agent_id",
-                                    "id"
+                                    "channel"
                                 ]
                             },
                             "response": {
@@ -380,6 +371,9 @@ class Config {
             },
             "relations": {
                 "ancestors": [
+                    [
+                        "$.main.kit.entity.agent"
+                    ],
                     [
                         "$.main.kit.entity.agent"
                     ]

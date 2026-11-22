@@ -55,7 +55,7 @@ const PLAN: any[] = [
         "value": "p1"
       },
       {
-        "name": "id",
+        "name": "channel",
         "wire": "channel",
         "value": "p2"
       }

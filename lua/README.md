@@ -44,15 +44,14 @@ Access is nested under agent, so provide the `agent_id`.
 ```lua
 local access, err = client:Access():load({ agent_id = "example_agent_id" })
 if err then error(err) end
-local rec = access:data_get()
-print(rec["id"])
+for k, val in pairs(access:data_get()) do print(k, val) end
 ```
 
 ### 4. Create, update, and remove
 
 ```lua
 -- Update
-client:Access():update({ agent_id = "example_agent_id", admit = "example_admit" })
+client:Access():update({ agent_id = "example_agent_id", channel = "example_channel" })
 
 ```
 
@@ -274,7 +273,6 @@ Only `direct()` returns a response envelope — a `table` with `ok`,
 | Field | Description |
 | --- | --- |
 | `admit` | Whether anyone, the workspace's members and agents besides the listed senders, or only the listed senders wake the agent; a new agent starts with team, except on Telegram, which lists the account that creates its bot from Artil, and its… |
-| `id` |  |
 | `senders` | Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members |
 
 Operations: Load, Update.
@@ -514,7 +512,6 @@ Create an instance: `local access = client:Access(nil)`
 | Field | Type | Description |
 | --- | --- | --- |
 | `admit` | `string` | Whether anyone, the workspace's members and agents besides the listed senders, or only the listed senders wake the agent; a new agent starts with team, except on Telegram, which lists the account that creates its bot from Artil, and its… |
-| `id` | `string` |  |
 | `senders` | `table` | Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members |
 
 #### Example: Load

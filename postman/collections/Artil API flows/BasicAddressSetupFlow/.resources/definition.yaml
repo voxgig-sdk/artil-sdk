@@ -1,4 +1,4 @@
 $kind: collection
 id: ba867266-bbad-5494-b23e-cb6786dd729d
 description: "The `BasicAddressSetupFlow` flow of **address_setup**."
-order: 4000
+order: 3000

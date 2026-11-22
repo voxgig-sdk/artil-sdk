@@ -1,4 +1,4 @@
 $kind: collection
 id: "41feba20-0c27-5923-9a69-3c33fc682b89"
 description: "The `BasicTokenFlow` flow of **token**."
-order: 12000
+order: 11000

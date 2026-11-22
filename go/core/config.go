@@ -208,21 +208,12 @@ func MakeConfig() map[string]any {
 						"short": "Whether anyone, the workspace's members and agents besides the listed senders, or only the listed senders wake the agent; a new agent starts with team, except on Telegram, which lists the account that creates its bot from Artil, and its…",
 					},
 					map[string]any{
-						"name": "id",
-						"title": "Id",
-						"type": "`$STRING`",
-					},
-					map[string]any{
 						"name": "senders",
 						"title": "Senders",
 						"type": "`$ARRAY`",
 						"req": true,
 						"short": "Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members",
 					},
-				},
-				"id": map[string]any{
-					"field": "id",
-					"name": "id",
 				},
 				"name": "access",
 				"op": map[string]any{
@@ -301,18 +292,18 @@ func MakeConfig() map[string]any {
 										"lit": "access",
 									},
 									map[string]any{
-										"var": "id",
+										"var": "channel",
 									},
 								},
 								"parts": []any{
 									"agents",
 									"{agent_id}",
 									"access",
-									"{id}",
+									"{channel}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
-										"channel": "id",
+										"channel": "channel",
 										"id": "agent_id",
 									},
 								},
@@ -330,7 +321,7 @@ func MakeConfig() map[string]any {
 											"reqd": true,
 										},
 										map[string]any{
-											"name": "id",
+											"name": "channel",
 											"orig": "channel",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -341,7 +332,7 @@ func MakeConfig() map[string]any {
 								"select": map[string]any{
 									"exist": []any{
 										"agent_id",
-										"id",
+										"channel",
 									},
 								},
 								"response": map[string]any{
@@ -354,6 +345,9 @@ func MakeConfig() map[string]any {
 				},
 				"relations": map[string]any{
 					"ancestors": []any{
+						[]any{
+							"$.main.kit.entity.agent",
+						},
 						[]any{
 							"$.main.kit.entity.agent",
 						},

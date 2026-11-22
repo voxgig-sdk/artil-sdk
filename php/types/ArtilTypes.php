@@ -16,7 +16,6 @@ declare(strict_types=1);
 class Access
 {
     public string $admit;
-    public ?string $id = null;
     public array $senders;
 }
 
@@ -30,7 +29,7 @@ class AccessLoadMatch
 class AccessUpdateData
 {
     public string $agent_id;
-    public string $id;
+    public string $channel;
     public ?string $admit = null;
     public ?array $senders = null;
 }

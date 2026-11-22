@@ -8,7 +8,6 @@
 
 ---@class Access
 ---@field admit string
----@field id? string
 ---@field senders table
 
 ---@class AccessLoadMatch
@@ -16,7 +15,7 @@
 
 ---@class AccessUpdateData
 ---@field agent_id string
----@field id string
+---@field channel string
 ---@field admit? string
 ---@field senders? table
 

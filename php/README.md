@@ -56,7 +56,7 @@ try {
 
 ```php
 // Update
-$client->Access()->update(["agent_id" => "example_agent_id", "admit" => "example_admit"]);
+$client->Access()->update(["agent_id" => "example_agent_id", "channel" => "example_channel"]);
 
 ```
 
@@ -286,7 +286,6 @@ On error, `ok` is `false` and `$err` contains the error value.
 | Field | Description |
 | --- | --- |
 | `admit` | Whether anyone, the workspace's members and agents besides the listed senders, or only the listed senders wake the agent; a new agent starts with team, except on Telegram, which lists the account that creates its bot from Artil, and its… |
-| `id` |  |
 | `senders` | Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members |
 
 Operations: Load, Update.
@@ -526,7 +525,6 @@ Create an instance: `$access = $client->Access();`
 | Field | Type | Description |
 | --- | --- | --- |
 | `admit` | `string` | Whether anyone, the workspace's members and agents besides the listed senders, or only the listed senders wake the agent; a new agent starts with team, except on Telegram, which lists the account that creates its bot from Artil, and its… |
-| `id` | `string` |  |
 | `senders` | `array` | Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members |
 
 #### Example: Load

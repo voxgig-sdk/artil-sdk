@@ -6,7 +6,6 @@ variables:
   strict: "true"
   getonly: "false"
   agent_id: ""
-  access_id: ""
 auth:
   - id: "14852f1c-b021-549c-815e-7d6bebf18f52"
     type: bearer

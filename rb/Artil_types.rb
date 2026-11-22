@@ -13,14 +13,10 @@
 # @!attribute [rw] admit
 #   @return [String]
 #
-# @!attribute [rw] id
-#   @return [String, nil]
-#
 # @!attribute [rw] senders
 #   @return [Array]
 Access = Struct.new(
   :admit,
-  :id,
   :senders,
   keyword_init: true
 )
@@ -39,7 +35,7 @@ AccessLoadMatch = Struct.new(
 # @!attribute [rw] agent_id
 #   @return [String]
 #
-# @!attribute [rw] id
+# @!attribute [rw] channel
 #   @return [String]
 #
 # @!attribute [rw] admit
@@ -49,7 +45,7 @@ AccessLoadMatch = Struct.new(
 #   @return [Array, nil]
 AccessUpdateData = Struct.new(
   :agent_id,
-  :id,
+  :channel,
   :admit,
   :senders,
   keyword_init: true

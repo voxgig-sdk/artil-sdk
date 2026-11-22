@@ -166,23 +166,13 @@ declare class Config {
     };
     entity: {
         access: {
-            fields: ({
+            fields: {
                 name: string;
                 title: string;
                 type: string;
                 req: boolean;
                 short: string;
-            } | {
-                name: string;
-                title: string;
-                type: string;
-                req?: undefined;
-                short?: undefined;
-            })[];
-            id: {
-                field: string;
-                name: string;
-            };
+            }[];
             name: string;
             op: {
                 load: {

@@ -3,7 +3,7 @@ id: "3b60b6dd-4883-535f-a9c8-31d766d6365a"
 description: |-
   The `update` operation of **access**.
 
-  SDK: `client.Access().update({ agent_id: "example", id: "example", admit: "example" })`
+  SDK: `client.Access().update({ agent_id: "example", channel: "example", admit: "example" })`
 url: "{{base}}/agents/:id/access/:channel"
 method: PUT
 headers:

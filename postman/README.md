@@ -17,8 +17,7 @@ from it with the [Postman CLI](https://learning.postman.com/docs/postman-cli/pos
 postman collection run "postman/collections/Artil API flows" \
   --environment postman/environments/artil.environment.yaml \
   --env-var apikey=... \
-  --env-var agent_id=... \
-  --env-var access_id=...
+  --env-var agent_id=...
 ```
 
 A request addresses a record through its entity's variable, which a list or a

@@ -246,7 +246,7 @@ The API exposes 15 entities:
 
 | Entity | Description | API path |
 | --- | --- | --- |
-| **Access** | Who can wake an agent on each channel: read the rules for every channel, or set the rule for one (its `id` is the channel: email, sms, telegram, slack or url). | `/agents/{id}/access` |
+| **Access** | Who can wake an agent on each channel: read the rules for every channel, or set the rule for one `channel` (email, sms, telegram, slack or url). | `/agents/{id}/access` |
 | **Address** | An agent's email address, phone number, Telegram bot or Slack bot: list, add, read, change or remove one, or make it the one its channel sends from (`primary`). | `/agents/{id}/addresses` |
 | **AddressSetup** | A link where a workspace member creates a Telegram bot or a Slack app for an agent with the provider. | `/agents/{id}/addresses/setups` |
 | **Agent** | An agent account in the workspace: list, create, read, rename or change the icon of one, or delete it with its addresses and messages. | `/agents` |

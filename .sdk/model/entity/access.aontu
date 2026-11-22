@@ -12,13 +12,6 @@ main: kit: entity: access: {
       sh: "Whether anyone, the workspace's members and agents besides the listed senders, or only the listed senders wake the agent; a new agent starts with team, except on Telegram, which lists the account that creates its bot from Artil, and its…"
       t: "`$STRING`"
     }
-    id: {
-      h: "Id"
-      n: "id"
-      r: false
-      syn: true
-      t: "`$STRING`"
-    }
     senders: {
       h: "Senders"
       n: "senders"
@@ -26,11 +19,6 @@ main: kit: entity: access: {
       sh: "Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members"
       t: "`$ARRAY`"
     }
-  }
-
-  id: {
-    field: "id"
-    name: "id"
   }
 
   name: "access"
@@ -113,7 +101,7 @@ main: kit: entity: access: {
               }
               {
                 k: "param"
-                n: "id"
+                n: "channel"
                 or: "channel"
                 r: true
                 t: "`$STRING`"
@@ -125,12 +113,12 @@ main: kit: entity: access: {
           q: {
             exist: [
               "agent_id"
-              "id"
+              "channel"
             ]
           }
           r: {
             param: {
-              channel: "id"
+              channel: "channel"
               id: "agent_id"
             }
           }
@@ -149,7 +137,7 @@ main: kit: entity: access: {
               lit: "access"
             }
             {
-              var: "id"
+              var: "channel"
             }
           ]
           t: {
@@ -163,6 +151,7 @@ main: kit: entity: access: {
 
 
   relations: ancestors: [
+    [path("$.main.kit.entity.agent")]
     [path("$.main.kit.entity.agent")]
   ]
 

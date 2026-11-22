@@ -14,7 +14,7 @@ An entity groups related API operations. An operation can have several routes wi
 
 ### Access
 
-Who can wake an agent on each channel: read the rules for every channel, or set the rule for one (its `id` is the channel: email, sms, telegram, slack or url).
+Who can wake an agent on each channel: read the rules for every channel, or set the rule for one `channel` (email, sms, telegram, slack or url).
 
 Results: Each channel&#39;s access; The channel&#39;s access.
 

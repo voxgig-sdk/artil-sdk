@@ -24,7 +24,7 @@ type AccessLoadMatch struct {
 // AccessUpdateData is the typed request payload for Access.UpdateTyped.
 type AccessUpdateData struct {
 	AgentId string `json:"agent_id"`
-	Id string `json:"id"`
+	Channel string `json:"channel"`
 	Admit *string `json:"admit,omitempty"`
 	Senders *[]any `json:"senders,omitempty"`
 }

@@ -37,7 +37,7 @@ describe("AccessEntity", function()
     local setup = access_basic_setup(nil)
     -- Per-op sdk-test-control.json skip.
     local _live = setup.live or false
-    for _, _op in ipairs({"update", "load"}) do
+    for _, _op in ipairs({}) do
       local _should_skip, _reason = runner.is_control_skipped("entityOp", "access." .. _op, _live and "live" or "unit")
       if _should_skip then
         pending(_reason or "skipped via sdk-test-control.json")
@@ -46,48 +46,15 @@ describe("AccessEntity", function()
     end
     if setup.live and os.getenv("VOXGIG_GETONLY_GUARD") == "TRUE" then
       print("LIVE STEP {\"id\":\"access.update.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs PUT /agents/{id}/access/{channel}\"}")
-    if setup.live then
-      runner.live_miss(pending, LIVE_STRICT, "Live entity test blocked: " .. "the flow loads a access record it has no list to find")
-    end
-    local client = setup.client
-
-    -- Bootstrap entity data from existing test data.
-    local access_ref01_data_raw = vs.items(helpers.to_map(
-      vs.getpath(setup.data, "existing.access")))
-    local access_ref01_data = nil
-    if #access_ref01_data_raw > 0 then
-      access_ref01_data = helpers.to_map(access_ref01_data_raw[1][2])
-    end
-
-    if setup.live then
-      runner.live_pace()
-    end
-    -- LOAD
-    local access_ref01_ent = client:Access(nil)
-    local access_ref01_match_dt0 = {
-      id = access_ref01_data["id"],
-    }
-    local access_ref01_data_dt0_loaded, err = access_ref01_ent:load(access_ref01_match_dt0, nil)
-    assert.is_nil(err)
-    local access_ref01_data_dt0_load_result = helpers.to_map(type(access_ref01_data_dt0_loaded) == 'table' and access_ref01_data_dt0_loaded.data_get and access_ref01_data_dt0_loaded:data_get() or access_ref01_data_dt0_loaded)
-    assert.is_not_nil(access_ref01_data_dt0_load_result)
-    if not setup.live then
-      assert.is_true(runner.live_same_id(access_ref01_data_dt0_load_result["id"], access_ref01_data["id"]))
-    end
-
+      pending("Live coverage incomplete: access.update.0 excluded (GET-only live run: needs PUT /agents/{id}/access/{channel})")
       return
     end
 
     if setup.live then
-      for _, _live_key in ipairs({"agent01"}) do
-        if setup.synthetic_only or setup.idmap[_live_key] == nil then
-          runner.live_miss(pending, LIVE_STRICT, "Live entity test blocked: needs " .. _live_key .. " via ARTIL_TEST_ACCESS_ENTID")
-        end
-      end
+      pending("Live coverage incomplete: the flow has no step to run")
+      return
     end
-    if setup.live then
-      runner.live_miss(pending, LIVE_STRICT, "Live entity test blocked: " .. "the flow updates a access record it did not create")
-    end
+
     local client = setup.client
 
     -- Bootstrap entity data from existing test data.
@@ -96,44 +63,6 @@ describe("AccessEntity", function()
     local access_ref01_data = nil
     if #access_ref01_data_raw > 0 then
       access_ref01_data = helpers.to_map(access_ref01_data_raw[1][2])
-    end
-
-    if setup.live then
-      runner.live_pace()
-    end
-    -- UPDATE
-    local access_ref01_ent = client:Access(nil)
-    local access_ref01_data_up0_up = {
-      id = access_ref01_data["id"],
-      ["agent_id"] = setup.idmap["agent_id"],
-    }
-
-    local access_ref01_markdef_up0_name = "admit"
-    local access_ref01_markdef_up0_value = "Mark01-access_ref01_" .. tostring(setup.now)
-    access_ref01_data_up0_up[access_ref01_markdef_up0_name] = access_ref01_markdef_up0_value
-
-    local access_ref01_resdata_up0_result, err = access_ref01_ent:update(access_ref01_data_up0_up, nil)
-    assert.is_nil(err)
-    local access_ref01_resdata_up0 = helpers.to_map(type(access_ref01_resdata_up0_result) == 'table' and access_ref01_resdata_up0_result.data_get and access_ref01_resdata_up0_result:data_get() or access_ref01_resdata_up0_result)
-    assert.is_not_nil(access_ref01_resdata_up0)
-    if not setup.live then
-      assert.is_true(runner.live_same_id(access_ref01_resdata_up0["id"], access_ref01_data_up0_up["id"]))
-    end
-    assert.are.equal(access_ref01_resdata_up0[access_ref01_markdef_up0_name], access_ref01_markdef_up0_value)
-
-    if setup.live then
-      runner.live_pace()
-    end
-    -- LOAD
-    local access_ref01_match_dt0 = {
-      id = access_ref01_data["id"],
-    }
-    local access_ref01_data_dt0_loaded, err = access_ref01_ent:load(access_ref01_match_dt0, nil)
-    assert.is_nil(err)
-    local access_ref01_data_dt0_load_result = helpers.to_map(type(access_ref01_data_dt0_loaded) == 'table' and access_ref01_data_dt0_loaded.data_get and access_ref01_data_dt0_loaded:data_get() or access_ref01_data_dt0_loaded)
-    assert.is_not_nil(access_ref01_data_dt0_load_result)
-    if not setup.live then
-      assert.is_true(runner.live_same_id(access_ref01_data_dt0_load_result["id"], access_ref01_data["id"]))
     end
 
   end)
@@ -184,9 +113,6 @@ function access_basic_setup(extra)
     env["ARTIL_TEST_ACCESS_ENTID"])
   if idmap_resolved == nil then
     idmap_resolved = helpers.to_map(idmap)
-  end
-  if idmap_resolved["agent_id"] == nil then
-    idmap_resolved["agent_id"] = idmap_resolved["agent01"]
   end
 
   if env["ARTIL_TEST_LIVE"] == "TRUE" then

@@ -80,7 +80,7 @@
       "Where to reach them: the agent&#39;s primary address on each channel it has one on, or the member&#39;s email address and phone number",
       "Whether anyone, the workspace&#39;s members and agents besides the listed senders, or only the listed senders wake the agent; a new agent starts with team, except on Telegram, which lists the account that creates its bot from Artil, and its Message URL is never open to anyone",
       "Whether new messages on its channel go out from it",
-      "Who can wake an agent on each channel: read the rules for every channel, or set the rule for one (its `id` is the channel: email, sms, telegram, slack or url).",
+      "Who can wake an agent on each channel: read the rules for every channel, or set the rule for one `channel` (email, sms, telegram, slack or url).",
       "Who hears an agent&#39;s new messages now: its connected client and its webhooks.",
       "Who listens",
       "Who the sender of a received message is to the agent: `team` for a member or agent of the workspace, `listed` for a sender on the channel&#39;s list, and `anyone` for everyone else, including senders who could not be verified",

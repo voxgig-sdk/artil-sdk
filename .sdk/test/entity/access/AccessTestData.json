@@ -2,29 +2,32 @@
   "existing": {
     "access": {
       "ACCESS00": {
-        "admit": "s1e",
-        "id": "ACCESS00",
+        "admit": "s14",
         "senders": [],
-        "agent_id": "AGENT01"
+        "agent_id": "AGENT01",
+        "channel": "CHANNEL01",
+        "id": "ACCESS00"
       },
       "ACCESS01": {
-        "admit": "s3c",
-        "id": "ACCESS01",
+        "admit": "s28",
         "senders": [],
-        "agent_id": "AGENT01"
+        "agent_id": "AGENT01",
+        "channel": "CHANNEL01",
+        "id": "ACCESS01"
       },
       "ACCESS02": {
-        "admit": "s5a",
-        "id": "ACCESS02",
+        "admit": "s3c",
         "senders": [],
-        "agent_id": "AGENT01"
+        "agent_id": "AGENT01",
+        "channel": "CHANNEL01",
+        "id": "ACCESS02"
       }
     }
   },
   "new": {
     "access": {
       "access_ref01": {
-        "admit": "s78",
+        "admit": "s50",
         "senders": []
       }
     }
