@@ -1,0 +1,70 @@
+{
+  "existing": {
+    "agent": {
+      "AGENT00": {
+        "createdAt": "s28",
+        "icon": "s29",
+        "id": "AGENT00",
+        "name": "s2b"
+      },
+      "AGENT01": {
+        "createdAt": "s50",
+        "icon": "s51",
+        "id": "AGENT01",
+        "name": "s53"
+      },
+      "AGENT02": {
+        "createdAt": "s78",
+        "icon": "s79",
+        "id": "AGENT02",
+        "name": "s7b"
+      }
+    }
+  },
+  "new": {
+    "agent": {
+      "agent_ref01": {
+        "createdAt": "sa0",
+        "icon": "sa1",
+        "name": "sa3"
+      }
+    }
+  },
+  "requests": {
+    "POST /agents": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /agents": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /agents/{id}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /agents/{id}/access": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /agents/{id}/connection": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "DELETE /agents/{id}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "PATCH /agents/{id}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

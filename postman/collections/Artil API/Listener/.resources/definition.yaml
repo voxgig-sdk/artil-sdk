@@ -1,0 +1,8 @@
+$kind: collection
+id: "62201f5a-60d9-5ea6-bd67-661b38a35585"
+description: |-
+  The **listener** entity, which belongs to a agent. Its requests address one record by `{{listener_id}}`, which a list or a create remembers.
+
+  | field | type | required | |
+  |---|---|---|---|
+order: 10000

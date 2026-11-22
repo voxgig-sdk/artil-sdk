@@ -1,0 +1,58 @@
+# Guide
+
+@"@voxgig/apidef/model/guide.aontu"
+
+@"./base-guide.aontu"
+
+
+
+
+
+# ARTIL'S OWN RESOURCES. The definition names a schema for every answer, so
+# the heuristic finds most resources itself. A resource under an agent takes
+# the agent's id as `agent_id`; the record's own id is `id` (the definition
+# calls every agent `{id}` in its paths). The corrections below:
+#
+# - An agent's access rules and its connection are resources of their own,
+#   read and written at their own paths, not actions on the agent.
+# - `/me` reads the calling token's member or agent (the heuristic named it
+#   `men`); revoking the calling token is a removal of its own, so the call
+#   needs no `$action`.
+# - `/team` lists teammates: the workspace's agents and members.
+# - `GET /agents/{id}/events/stream` is left out: it holds a server-sent event
+#   stream open, which this generation does not read. `GET /agents/{id}/events`
+#   with `after` returns the same events.
+#
+# Answers are plain records and plain arrays: no envelope, no page metadata.
+# Lists page by a record id: `before` for messages, `after` for events.
+
+guide: entity: agent: path: "/agents/{id}/access": active: false
+guide: entity: agent: path: "/agents/{id}/connection": active: false
+
+guide: entity: access: path: "/agents/{id}/access": {
+  rename: param: id: agent_id
+  op: load: method: GET
+}
+
+guide: entity: connection: path: "/agents/{id}/connection": {
+  rename: param: id: agent_id
+  op: load: method: GET
+}
+
+guide: entity: event: path: "/agents/{id}/events/stream": active: false
+
+guide: entity: men: active: false
+
+guide: entity: me: path: "/me": {
+  op: load: method: GET
+}
+
+guide: entity: me_token: path: "/me/token": {
+  op: remove: method: DELETE
+}
+
+guide: entity: listed_teammate: active: false
+
+guide: entity: teammate: path: "/team": {
+  op: list: method: GET
+}

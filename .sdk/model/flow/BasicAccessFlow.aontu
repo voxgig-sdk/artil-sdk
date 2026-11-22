@@ -1,0 +1,33 @@
+# BasicAccessFlow
+
+main: kit: flow: BasicAccessFlow:
+{
+  entity: "access",
+  kind: "basic",
+  name: "BasicAccessFlow",
+  step: [
+    {
+      d: {
+        agent_id: "agent01"
+      }
+
+      i: {
+        ref: "access_ref01",
+        srcdatavar: "access_ref01_data",
+        suffix: "_up0",
+        textfield: "admit"
+      }
+
+      o: "update",
+      s: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-access_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicAccessFlow"
+}

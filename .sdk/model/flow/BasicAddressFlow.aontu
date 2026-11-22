@@ -1,0 +1,118 @@
+# BasicAddressFlow
+
+main: kit: flow: BasicAddressFlow:
+{
+  entity: "address",
+  kind: "basic",
+  name: "BasicAddressFlow",
+  step: [
+    {
+      i: {
+        ref: "address_ref01"
+      }
+
+      m: {
+        agent_id: "agent01"
+      }
+
+      o: "create"
+    }
+
+    {
+      m: {
+        agent_id: "agent01"
+      }
+
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "address_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      d: {
+        agent_id: "agent01"
+      }
+
+      i: {
+        ref: "address_ref01",
+        srcdatavar: "address_ref01_data",
+        suffix: "_up0",
+        textfield: "channel"
+      }
+
+      o: "update",
+      s: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-address_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "address_ref01",
+        srcdatavar: "address_ref01_data",
+        suffix: "_dt0"
+      }
+
+      m: {
+        agent_id: "agent01",
+        id: "address01"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-address_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "address_ref01",
+        suffix: "_rm0"
+      }
+
+      m: {
+        agent_id: "agent01",
+        id: "address01"
+      }
+
+      o: "remove"
+    }
+
+    {
+      i: {
+        suffix: "_rt0"
+      }
+
+      m: {
+        agent_id: "agent01"
+      }
+
+      o: "list",
+      v: [
+        {
+          apply: "ItemNotExists",
+          def: {
+            ref: "address_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicAddressFlow"
+}

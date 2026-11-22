@@ -1,0 +1,44 @@
+{
+  "existing": {
+    "channel": {
+      "CHANNEL00": {
+        "kind": "s28",
+        "labels": {},
+        "limits": {},
+        "name": "s2b",
+        "agent_id": "AGENT01"
+      },
+      "CHANNEL01": {
+        "kind": "s50",
+        "labels": {},
+        "limits": {},
+        "name": "s53",
+        "agent_id": "AGENT01"
+      },
+      "CHANNEL02": {
+        "kind": "s78",
+        "labels": {},
+        "limits": {},
+        "name": "s7b",
+        "agent_id": "AGENT01"
+      }
+    }
+  },
+  "new": {
+    "channel": {
+      "channel_ref01": {
+        "kind": "sa0",
+        "labels": {},
+        "limits": {},
+        "name": "sa3"
+      }
+    }
+  },
+  "requests": {
+    "GET /agents/{id}/channels": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

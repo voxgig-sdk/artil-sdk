@@ -1,0 +1,115 @@
+# Entity: access
+
+main: kit: entity: access: {
+
+  alias: field: {}
+
+  fields: {
+    admit: {
+      h: "Admit"
+      n: "admit"
+      r: true
+      sh: "Whether anyone, the workspace's members and agents besides the listed senders, or only the listed senders wake the agent; a new agent starts with team, except on Telegram, which lists the account that creates its bot from Artil, and its…"
+      t: "`$STRING`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: false
+      syn: true
+      t: "`$STRING`"
+    }
+    senders: {
+      h: "Senders"
+      n: "senders"
+      r: true
+      sh: "Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members"
+      t: "`$ARRAY`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "access"
+  op: {
+    update: {
+      name: "update"
+      points: [
+        {
+          bf: [
+            "admit"
+            "senders"
+          ]
+          co: {
+            id: "PUT /agents/{id}/access/{channel}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "agent_id"
+                or: "id"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "id"
+                or: "channel"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "PUT"
+          o: "/agents/{id}/access/{channel}"
+          q: {
+            exist: [
+              "agent_id"
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              channel: "id"
+              id: "agent_id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "agents"
+            }
+            {
+              var: "agent_id"
+            }
+            {
+              lit: "access"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+  relations: ancestors: [
+    [path("$.main.kit.entity.agent")]
+  ]
+
+}

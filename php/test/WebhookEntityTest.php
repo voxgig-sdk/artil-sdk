@@ -1,0 +1,232 @@
+<?php
+declare(strict_types=1);
+
+// Webhook entity test
+
+require_once __DIR__ . '/../artil_sdk.php';
+require_once __DIR__ . '/Runner.php';
+
+use PHPUnit\Framework\TestCase;
+use Voxgig\Struct\Struct as Vs;
+
+class WebhookEntityTest extends TestCase
+{
+    // main.kit.test.live.strict is true (the default is true): a live
+    // request that fails, or a live test missing an input it needs,
+    // fails the test.
+    // An account with no record for a test to read skips it either way.
+    private const LIVE_STRICT = true;
+
+    public function test_create_instance(): void
+    {
+        $testsdk = ArtilSDK::test(null, null);
+        $ent = $testsdk->Webhook(null);
+        $this->assertNotNull($ent);
+    }
+
+    public function test_validate(): void
+    {
+        $cfg = ArtilConfig::shared_config();
+        if (!isset($cfg["feature"]["validate"])) {
+            $this->markTestSkipped('feature not present in this SDK: validate');
+        }
+        $client = ArtilSDK::test(null, ["feature" => ["validate" => ["active" => true]]]);
+        $err = null;
+        try {
+            $client->Webhook(null)->list(["agent_id" => 1], null);
+        } catch (\Throwable $e) {
+            $err = $e;
+        }
+        $this->assertSame('validate_failed', $err->sdk_code ?? null);
+    }
+
+    public function test_basic_flow(): void
+    {
+        $setup = webhook_basic_setup(null);
+        // Per-op sdk-test-control.json skip.
+        $_live = !empty($setup["live"]);
+        foreach (["create", "list", "remove"] as $_op) {
+            [$_shouldSkip, $_reason] = Runner::is_control_skipped("entityOp", "webhook." . $_op, $_live ? "live" : "unit");
+            if ($_shouldSkip) {
+                $this->markTestSkipped($_reason ?? "skipped via sdk-test-control.json");
+                return;
+            }
+        }
+        if (!empty($setup["live"]) && getenv('VOXGIG_GETONLY_GUARD') === "TRUE") {
+            fwrite(STDOUT, 'LIVE STEP {"id":"webhook.create.0","state":"excluded","attempted":false,"reason":"GET-only live run: needs POST /agents/{id}/webhooks"}' . "\n");
+            fwrite(STDOUT, 'LIVE STEP {"id":"webhook.remove.2","state":"excluded","attempted":false,"reason":"GET-only live run: needs DELETE /agents/{id}/webhooks/{webhookId}"}' . "\n");
+            fwrite(STDOUT, 'LIVE STEP {"id":"webhook.list.3","state":"excluded","attempted":false,"reason":"GET-only live run: checks a removal this run does not make"}' . "\n");
+        if (!empty($setup["live"])) {
+            foreach (["agent01"] as $_liveKey) {
+                if (!empty($setup["synthetic_only"]) || null === ($setup["idmap"][$_liveKey] ?? null)) {
+                    Runner::live_miss(self::LIVE_STRICT, "Live entity test blocked: needs " . $_liveKey . " via ARTIL_TEST_WEBHOOK_ENTID");
+                }
+            }
+        }
+        $client = $setup["client"];
+
+        // Bootstrap entity data from existing test data.
+        $webhook_ref01_data_raw = Vs::items(Helpers::to_map(
+            Vs::getpath($setup["data"], "existing.webhook")));
+        $webhook_ref01_data = null;
+        if (count($webhook_ref01_data_raw) > 0) {
+            $webhook_ref01_data = Helpers::to_map($webhook_ref01_data_raw[0][1]);
+        }
+
+        if (!empty($setup["live"])) {
+            Runner::live_pace();
+        }
+        // LIST
+        $webhook_ref01_ent = $client->Webhook(null);
+        $webhook_ref01_match = [
+            "agent_id" => $setup["idmap"]["agent01"],
+        ];
+
+        $webhook_ref01_list_result = $webhook_ref01_ent->list($webhook_ref01_match, null);
+        $this->assertIsArray($webhook_ref01_list_result);
+
+            return;
+        }
+
+        if (!empty($setup["live"])) {
+            foreach (["agent01"] as $_liveKey) {
+                if (!empty($setup["synthetic_only"]) || null === ($setup["idmap"][$_liveKey] ?? null)) {
+                    Runner::live_miss(self::LIVE_STRICT, "Live entity test blocked: needs " . $_liveKey . " via ARTIL_TEST_WEBHOOK_ENTID");
+                }
+            }
+        }
+        $client = $setup["client"];
+
+        if (!empty($setup["live"])) {
+            Runner::live_pace();
+        }
+        // CREATE
+        $webhook_ref01_ent = $client->Webhook(null);
+        $webhook_ref01_data = Helpers::to_map(Vs::getprop(
+            Vs::getpath($setup["data"], "new.webhook"), "webhook_ref01"));
+        $webhook_ref01_data["agent_id"] = $setup["idmap"]["agent01"];
+
+        $webhook_ref01_data_result = $webhook_ref01_ent->create($webhook_ref01_data, null);
+        $webhook_ref01_data = Helpers::to_map(is_object($webhook_ref01_data_result) && method_exists($webhook_ref01_data_result, 'data_get') ? $webhook_ref01_data_result->data_get() : $webhook_ref01_data_result);
+        $this->assertNotNull($webhook_ref01_data);
+        $this->assertNotNull($webhook_ref01_data["id"]);
+
+        if (!empty($setup["live"])) {
+            Runner::live_pace();
+        }
+        // LIST
+        $webhook_ref01_match = [
+            "agent_id" => $setup["idmap"]["agent01"],
+        ];
+
+        $webhook_ref01_list_result = $webhook_ref01_ent->list($webhook_ref01_match, null);
+        $this->assertIsArray($webhook_ref01_list_result);
+
+        $found_item = sdk_select(
+            Runner::entity_list_to_data($webhook_ref01_list_result),
+            ["id" => $webhook_ref01_data["id"]]);
+        $this->assertNotEmpty($found_item);
+
+        if (!empty($setup["live"])) {
+            Runner::live_pace();
+        }
+        // REMOVE
+        $webhook_ref01_match_rm0 = [
+            "id" => $webhook_ref01_data["id"],
+        ];
+        $webhook_ref01_match_rm0["agent_id"] = $setup["idmap"]["agent_id"] ?? $setup["idmap"]["agent01"] ?? null;
+        $webhook_ref01_ent->remove($webhook_ref01_match_rm0, null);
+
+        if (!empty($setup["live"])) {
+            Runner::live_pace();
+        }
+        // LIST
+        $webhook_ref01_match_rt0 = [
+            "agent_id" => $setup["idmap"]["agent01"],
+        ];
+
+        $webhook_ref01_list_rt0_result = $webhook_ref01_ent->list($webhook_ref01_match_rt0, null);
+        $this->assertIsArray($webhook_ref01_list_rt0_result);
+
+        $not_found_item = sdk_select(
+            Runner::entity_list_to_data($webhook_ref01_list_rt0_result),
+            ["id" => $webhook_ref01_data["id"]]);
+        $this->assertEmpty($not_found_item);
+
+    }
+}
+
+function webhook_basic_setup($extra)
+{
+    Runner::load_env_local();
+
+    $entity_data_file = __DIR__ . '/../../.sdk/test/entity/webhook/WebhookTestData.json';
+    $entity_data_source = file_get_contents($entity_data_file);
+    $entity_data = json_decode($entity_data_source, true);
+
+    $options = [];
+    $options["entity"] = $entity_data["existing"];
+
+    $client = ArtilSDK::test($options, $extra);
+
+    // Generate idmap.
+    $idmap = [];
+    foreach (["webhook01", "webhook02", "webhook03", "agent01", "agent02", "agent03"] as $k) {
+        $idmap[$k] = strtoupper($k);
+    }
+
+    // Whether *_ENTID supplied the idmap, read before env_override consumes
+    // it: without it, the ids a live flow binds are the fixture's synthetic ones.
+    $entid_env_raw = getenv("ARTIL_TEST_WEBHOOK_ENTID");
+    $idmap_overridden = $entid_env_raw !== false && str_starts_with(trim($entid_env_raw), "{");
+
+    $env = Runner::env_override([
+        "ARTIL_TEST_WEBHOOK_ENTID" => $idmap,
+        "ARTIL_TEST_LIVE" => "FALSE",
+        "ARTIL_TEST_EXPLAIN" => "FALSE",
+        "ARTIL_APIKEY" => "",
+    ]);
+
+    $idmap_resolved = Helpers::to_map(
+        $env["ARTIL_TEST_WEBHOOK_ENTID"]);
+    if ($idmap_resolved === null) {
+        $idmap_resolved = Helpers::to_map($idmap);
+    }
+
+    if ($env["ARTIL_TEST_LIVE"] === "TRUE") {
+        $merged_opts = Vs::merge([
+            // FIRST, so the generated fields below win: sdk-test-control.json's
+            // test.client.options adds to the live client, it does not redirect it.
+            Runner::live_client_options(),
+            [
+                "apikey" => $env["ARTIL_APIKEY"],
+            ],
+            // ismap, not a plain "?? []" default: an empty PHP array is a
+            // LIST, and a non-map later entry REPLACES the accumulated map in
+            // merge - so the no-extras call discarded live_client_options()
+            // and the apikey/server map above it.
+            Vs::ismap($extra) ? $extra : new \stdClass(),
+        ]);
+        // "?? []" because merge legitimately answers with a stdClass when every
+        // contributing entry is an EMPTY map - an SDK with no apikey and no
+        // server variables generates an empty middle entry, so that is the
+        // common case, not the edge one. to_map returns null for a non-array by
+        // design, and the constructor takes a non-nullable array, so without the
+        // fallback every such SDK died on "must be of type array, null given"
+        // the moment live mode was switched on. Offline mode never reaches this
+        // branch, which is why the offline suite stayed green.
+        $client = new ArtilSDK(Helpers::to_map($merged_opts) ?? []);
+    }
+
+    $live = $env["ARTIL_TEST_LIVE"] === "TRUE";
+    return [
+        "client" => $client,
+        "data" => $entity_data,
+        "idmap" => $idmap_resolved,
+        "env" => $env,
+        "explain" => $env["ARTIL_TEST_EXPLAIN"] === "TRUE",
+        "live" => $live,
+        "synthetic_only" => $live && !$idmap_overridden,
+        "now" => (int)(microtime(true) * 1000),
+    ];
+}

@@ -1,0 +1,18 @@
+$kind: collection
+id: fbebc470-6fc6-50db-9ff4-86ba9fb4893e
+description: |-
+  The **listed_teammate** entity. Its requests address one record by `{{listed_teammate_id}}`, which a list or a create remembers.
+
+  | field | type | required | |
+  |---|---|---|---|
+  | `addresses` | array | yes |  |
+  | `email` | string | yes |  |
+  | `icon` | any | yes |  |
+  | `id` | string | yes |  |
+  | `imageUrl` | string | yes |  |
+  | `kind` | string | yes |  |
+  | `listening` | boolean | yes |  |
+  | `name` | string | yes |  |
+  | `phone` | string | yes |  |
+  | `role` | any | yes |  |
+order: 9000

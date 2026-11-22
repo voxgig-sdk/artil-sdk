@@ -1,0 +1,48 @@
+{
+  "existing": {
+    "token": {
+      "TOKEN00": {
+        "createdAt": "s28",
+        "id": "TOKEN00",
+        "lastUsedAt": "s2a",
+        "name": "s2b",
+        "agent_id": "AGENT01"
+      },
+      "TOKEN01": {
+        "createdAt": "s50",
+        "id": "TOKEN01",
+        "lastUsedAt": "s52",
+        "name": "s53",
+        "agent_id": "AGENT01"
+      },
+      "TOKEN02": {
+        "createdAt": "s78",
+        "id": "TOKEN02",
+        "lastUsedAt": "s7a",
+        "name": "s7b",
+        "agent_id": "AGENT01"
+      }
+    }
+  },
+  "new": {
+    "token": {
+      "token_ref01": {
+        "createdAt": "sa0",
+        "lastUsedAt": "sa2",
+        "name": "sa3"
+      }
+    }
+  },
+  "requests": {
+    "GET /agents/{id}/tokens": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "DELETE /agents/{id}/tokens/{tokenId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

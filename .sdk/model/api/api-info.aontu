@@ -1,0 +1,40 @@
+# API Information
+
+
+main: {
+  kit: {
+    info: {
+      description: `Give AI agents their own email inbox, SMS number, Telegram bot and Slack app.
+
+Artil adds to the API without notice: new endpoints, fields, values and error codes, which clients skip when they do not know them. Fields this reference lists stay. An endpoint is marked deprecated here before it is removed, and while deprecated it answers with a Deprecation header, plus a Sunset header once its removal date is set.`
+      security: {
+        alternatives: [
+          [
+            {
+              in: "header"
+              name: "Authorization"
+              prefix: "Bearer"
+              scheme: "oauth"
+              type: "oauth2"
+            }
+          ]
+        ]
+        in: "header"
+        name: "Authorization"
+        prefix: "Bearer"
+        scheme: "token"
+        type: "http"
+      }
+      servers: [
+        {
+          url: "https://app.artil.ai/api"
+        }
+      ]
+      summary: "Give AI agents their own email inbox, SMS number, Telegram bot and Slack app."
+      title: "Artil API"
+      version: "1.0.0"
+      website: "https://app.artil.ai"
+    }
+  }
+}
+

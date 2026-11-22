@@ -1,0 +1,23 @@
+$kind: http-request
+id: "6f007ff3-f5d3-53cb-8a69-62e41029f6b6"
+description: |-
+  The `update` operation of **agent**.
+
+  SDK: `client.Agent().update({ id: "example", icon: "example" })`
+url: "{{base}}/agents/:id"
+method: PATCH
+headers:
+  Accept: application/json
+  Content-Type: application/json
+pathVariables:
+  - key: id
+    value: "{{agent_id}}"
+    description: The agent this request addresses.
+body:
+  type: json
+  content: |-
+    {
+      "name": "example",
+      "icon": "bot"
+    }
+order: 4000

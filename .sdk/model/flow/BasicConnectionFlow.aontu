@@ -1,0 +1,29 @@
+# BasicConnectionFlow
+
+main: kit: flow: BasicConnectionFlow:
+{
+  entity: "connection",
+  kind: "basic",
+  name: "BasicConnectionFlow",
+  step: [
+    {
+      i: {
+        ref: "connection_ref01",
+        srcdatavar: "connection_ref01_data",
+        suffix: "_up0",
+        textfield: "client"
+      }
+
+      o: "update",
+      s: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-connection_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicConnectionFlow"
+}

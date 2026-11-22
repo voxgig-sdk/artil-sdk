@@ -1,0 +1,101 @@
+# Entity: channel
+
+main: kit: entity: channel: {
+
+  alias: field: {}
+
+  fields: {
+    kind: {
+      h: "Kind"
+      n: "kind"
+      r: true
+      sh: "The channel's kind, which messages and events name"
+      t: "`$STRING`"
+    }
+    labels: {
+      h: "Labels"
+      n: "labels"
+      r: true
+      sh: "Words a client builds its texts about the channel from"
+      t: "`$OBJECT`"
+    }
+    limits: {
+      h: "Limits"
+      n: "limits"
+      r: true
+      sh: "The most a message on the channel carries"
+      t: "`$OBJECT`"
+    }
+    name: {
+      h: "Name"
+      n: "name"
+      r: true
+      sh: "What people and agents call the channel, like Telegram"
+      t: "`$STRING`"
+    }
+  }
+
+  name: "channel"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /agents/{id}/channels"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "agent_id"
+                or: "id"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/agents/{id}/channels"
+          q: {
+            exist: [
+              "agent_id"
+            ]
+          }
+          r: {
+            param: {
+              id: "agent_id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "agents"
+            }
+            {
+              var: "agent_id"
+            }
+            {
+              lit: "channels"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+  relations: ancestors: [
+    [path("$.main.kit.entity.agent")]
+  ]
+
+}

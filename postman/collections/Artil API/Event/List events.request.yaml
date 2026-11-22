@@ -1,0 +1,29 @@
+$kind: http-request
+id: "333f37eb-e7db-5bd4-a5eb-ee23184d9c6a"
+description: |-
+  The `list` operation of **event**.
+
+  SDK: `client.Event().list({ agent_id: "example" })`
+url: "{{base}}/agents/:id/events"
+method: GET
+headers:
+  Accept: application/json
+queryParams:
+  - key: after
+    value: ""
+    disabled: true
+pathVariables:
+  - key: id
+    value: "{{agent_id}}"
+    description: The agent this event belongs to.
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = (() => { try { return pm.response.json() } catch (e) { return null } })()
+      const at = (rec, path) => path.split(".").reduce((n, k) => null == n ? n : n[k], rec)
+      const rec = (body || [])[0]
+      if (pm.response.code < 300 && null != rec) {
+        if (null != at(rec, "id") && !pm.collectionVariables.get("event_id")) pm.collectionVariables.set("event_id", String(at(rec, "id")))
+      }
+    language: text/javascript
+order: 1000

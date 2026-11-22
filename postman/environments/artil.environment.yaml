@@ -1,0 +1,8 @@
+name: artil
+values:
+  - key: base
+    value: https://app.artil.ai/api
+    enabled: true
+  - key: apikey
+    value: ""
+    enabled: true

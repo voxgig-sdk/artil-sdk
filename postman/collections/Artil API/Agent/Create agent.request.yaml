@@ -1,0 +1,29 @@
+$kind: http-request
+id: d16f4c86-fd8b-57ee-a606-2e49312fb100
+description: |-
+  The `create` operation of **agent**.
+
+  SDK: `client.Agent().create({ name: "example" })`
+url: "{{base}}/agents"
+method: POST
+headers:
+  Accept: application/json
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "example",
+      "icon": "bot"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = (() => { try { return pm.response.json() } catch (e) { return null } })()
+      const at = (rec, path) => path.split(".").reduce((n, k) => null == n ? n : n[k], rec)
+      const rec = body
+      if (pm.response.code < 300 && null != rec) {
+        if (null != at(rec, "id")) pm.collectionVariables.set("agent_id", String(at(rec, "id")))
+      }
+    language: text/javascript
+order: 3000

@@ -1,0 +1,43 @@
+{
+  "existing": {
+    "connection": {
+      "CONNECTION00": {
+        "client": "s28",
+        "id": "CONNECTION00",
+        "machine": "s2a",
+        "tokenId": "s2b",
+        "agent_id": "AGENT01"
+      },
+      "CONNECTION01": {
+        "client": "s50",
+        "id": "CONNECTION01",
+        "machine": "s52",
+        "tokenId": "s53",
+        "agent_id": "AGENT01"
+      },
+      "CONNECTION02": {
+        "client": "s78",
+        "id": "CONNECTION02",
+        "machine": "s7a",
+        "tokenId": "s7b",
+        "agent_id": "AGENT01"
+      }
+    }
+  },
+  "new": {
+    "connection": {
+      "connection_ref01": {
+        "client": "sa0",
+        "machine": "sa2",
+        "tokenId": "sa3"
+      }
+    }
+  },
+  "requests": {
+    "PUT /agents/{id}/connection": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+$kind: collection
+id: "201b131e-e4e9-534f-872b-2e025abac888"
+description: |-
+  The **client** entity, which belongs to a agent. Its requests address one record by `{{client_id}}`, which a list or a create remembers.
+
+  | field | type | required | |
+  |---|---|---|---|
+  | `createdAt` | string | yes |  |
+  | `id` | string | yes |  |
+  | `lastUsedAt` | any | yes |  |
+  | `name` | string | yes |  |
+order: 6000

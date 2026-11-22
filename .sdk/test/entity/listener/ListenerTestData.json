@@ -1,0 +1,27 @@
+{
+  "existing": {
+    "listener": {
+      "LISTENER00": {
+        "agent_id": "AGENT01"
+      },
+      "LISTENER01": {
+        "agent_id": "AGENT01"
+      },
+      "LISTENER02": {
+        "agent_id": "AGENT01"
+      }
+    }
+  },
+  "new": {
+    "listener": {
+      "listener_ref01": {}
+    }
+  },
+  "requests": {
+    "GET /agents/{id}/listeners": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "existing": {
+    "access": {
+      "ACCESS00": {
+        "admit": "s1e",
+        "id": "ACCESS00",
+        "senders": [],
+        "agent_id": "AGENT01"
+      },
+      "ACCESS01": {
+        "admit": "s3c",
+        "id": "ACCESS01",
+        "senders": [],
+        "agent_id": "AGENT01"
+      },
+      "ACCESS02": {
+        "admit": "s5a",
+        "id": "ACCESS02",
+        "senders": [],
+        "agent_id": "AGENT01"
+      }
+    }
+  },
+  "new": {
+    "access": {
+      "access_ref01": {
+        "admit": "s78",
+        "senders": []
+      }
+    }
+  },
+  "requests": {
+    "PUT /agents/{id}/access/{channel}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

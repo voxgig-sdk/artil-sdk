@@ -1,0 +1,125 @@
+{
+  "existing": {
+    "message": {
+      "MESSAGE00": {
+        "addressId": "sdc",
+        "admission": "sdd",
+        "attachments": [],
+        "author": "sdf",
+        "authorName": "se0",
+        "cc": [],
+        "channel": "se2",
+        "client": "se3",
+        "counterpart": "se4",
+        "counterpartName": "se5",
+        "createdAt": "se6",
+        "direction": "se7",
+        "error": "se8",
+        "forward": "se9",
+        "id": "MESSAGE00",
+        "refusal": "seb",
+        "replyTo": "sec",
+        "status": "sed",
+        "subject": "see",
+        "text": "sef",
+        "thread": "sf0",
+        "to": [],
+        "agent_id": "AGENT01"
+      },
+      "MESSAGE01": {
+        "addressId": "s1b8",
+        "admission": "s1b9",
+        "attachments": [],
+        "author": "s1bb",
+        "authorName": "s1bc",
+        "cc": [],
+        "channel": "s1be",
+        "client": "s1bf",
+        "counterpart": "s1c0",
+        "counterpartName": "s1c1",
+        "createdAt": "s1c2",
+        "direction": "s1c3",
+        "error": "s1c4",
+        "forward": "s1c5",
+        "id": "MESSAGE01",
+        "refusal": "s1c7",
+        "replyTo": "s1c8",
+        "status": "s1c9",
+        "subject": "s1ca",
+        "text": "s1cb",
+        "thread": "s1cc",
+        "to": [],
+        "agent_id": "AGENT01"
+      },
+      "MESSAGE02": {
+        "addressId": "s294",
+        "admission": "s295",
+        "attachments": [],
+        "author": "s297",
+        "authorName": "s298",
+        "cc": [],
+        "channel": "s29a",
+        "client": "s29b",
+        "counterpart": "s29c",
+        "counterpartName": "s29d",
+        "createdAt": "s29e",
+        "direction": "s29f",
+        "error": "s2a0",
+        "forward": "s2a1",
+        "id": "MESSAGE02",
+        "refusal": "s2a3",
+        "replyTo": "s2a4",
+        "status": "s2a5",
+        "subject": "s2a6",
+        "text": "s2a7",
+        "thread": "s2a8",
+        "to": [],
+        "agent_id": "AGENT01"
+      }
+    }
+  },
+  "new": {
+    "message": {
+      "message_ref01": {
+        "addressId": "s370",
+        "admission": "s371",
+        "attachments": [],
+        "author": "s373",
+        "authorName": "s374",
+        "cc": [],
+        "channel": "s376",
+        "client": "s377",
+        "counterpart": "s378",
+        "counterpartName": "s379",
+        "createdAt": "s37a",
+        "direction": "s37b",
+        "error": "s37c",
+        "forward": "s37d",
+        "refusal": "s37f",
+        "replyTo": "s380",
+        "status": "s381",
+        "subject": "s382",
+        "text": "s383",
+        "thread": "s384",
+        "to": []
+      }
+    }
+  },
+  "requests": {
+    "POST /agents/{id}/messages": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /agents/{id}/messages": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /agents/{id}/messages/{messageId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

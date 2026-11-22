@@ -1,0 +1,12 @@
+$kind: collection
+id: d2807291-5a3e-5d3d-83f3-0fae97d1ecb5
+description: |-
+  The **token** entity, which belongs to a agent. Its requests address one record by `{{token_id}}`, which a list or a create remembers.
+
+  | field | type | required | |
+  |---|---|---|---|
+  | `createdAt` | string | yes |  |
+  | `id` | string | yes |  |
+  | `lastUsedAt` | any | yes |  |
+  | `name` | string | yes |  |
+order: 13000

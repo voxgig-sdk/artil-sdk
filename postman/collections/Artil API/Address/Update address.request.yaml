@@ -1,0 +1,25 @@
+$kind: http-request
+id: "104f950b-c8e7-59e1-bf14-c5087d8b67ae"
+description: |-
+  The `update` operation of **address**.
+
+  SDK: `client.Address().update({ agent_id: "example", id: "example", value: "example" })`
+url: "{{base}}/agents/:id/addresses/:addressId"
+method: PATCH
+headers:
+  Accept: application/json
+  Content-Type: application/json
+pathVariables:
+  - key: id
+    value: "{{agent_id}}"
+    description: The agent this address belongs to.
+  - key: addressId
+    value: "{{address_id}}"
+    description: The address this request addresses.
+body:
+  type: json
+  content: |-
+    {
+      "value": "user@example.com"
+    }
+order: 4000

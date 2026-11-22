@@ -1,0 +1,121 @@
+# Entity: connection
+
+main: kit: entity: connection: {
+
+  alias: field: {}
+
+  fields: {
+    client: {
+      h: "Client"
+      n: "client"
+      r: true
+      t: "`$STRING`"
+    }
+    id: {
+      fo: "uuid"
+      h: "Id"
+      n: "id"
+      r: true
+      t: "`$STRING`"
+    }
+    machine: {
+      h: "Machine"
+      n: "machine"
+      op: {
+        update: {
+          req: false
+          type: "`$STRING`"
+        }
+      }
+      r: true
+      t: [
+        "`$ONE`"
+        [
+          "`$STRING`"
+          "`$NULL`"
+        ]
+      ]
+    }
+    tokenId: {
+      fo: "uuid"
+      h: "Token Id"
+      n: "tokenId"
+      r: true
+      sh: "The agent's token the client connected with"
+      t: "`$STRING`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "connection"
+  op: {
+    update: {
+      name: "update"
+      points: [
+        {
+          bf: [
+            "client"
+            "machine"
+          ]
+          co: {
+            id: "PUT /agents/{id}/connection"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "agent_id"
+                or: "id"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "PUT"
+          o: "/agents/{id}/connection"
+          q: {
+            exist: [
+              "agent_id"
+            ]
+          }
+          r: {
+            param: {
+              id: "agent_id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "agents"
+            }
+            {
+              var: "agent_id"
+            }
+            {
+              lit: "connection"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+  relations: ancestors: [
+    [path("$.main.kit.entity.agent")]
+  ]
+
+}

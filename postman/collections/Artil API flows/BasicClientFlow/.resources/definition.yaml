@@ -1,0 +1,4 @@
+$kind: collection
+id: db99be27-1f90-53a7-a217-0d75f8c60503
+description: "The `BasicClientFlow` flow of **client**."
+order: 6000

@@ -1,0 +1,22 @@
+# BasicListedTeammateFlow
+
+main: kit: flow: BasicListedTeammateFlow:
+{
+  entity: "listed_teammate",
+  kind: "basic",
+  name: "BasicListedTeammateFlow",
+  step: [
+    {
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "listed_teammate_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicListedTeammateFlow"
+}

@@ -1,0 +1,165 @@
+# Generated from the API definition and overwritten on every build: do not
+# edit this file. Put customizations in the guide entry file, which includes
+# this one and overrides its defaults:
+#   guide.aontu
+
+guide: {
+  metrics: count: entity: 14
+  metrics: count: path: 24
+  metrics: count: method: 33
+
+  entity: access: {
+    path: "/agents/{id}/access/{channel}": {
+      rename: param: "channel": *"id"
+      rename: param: "id": *"agent_id"
+      op: update: method: *PUT
+    }
+  }
+
+  entity: address: {
+    path: "/agents/{id}/addresses": {
+      rename: param: "id": *"agent_id"
+      op: create: method: *POST
+      op: list: method: *GET
+    }
+    path: "/agents/{id}/addresses/{addressId}": {
+      rename: param: "addressId": *"id"
+      rename: param: "id": *"agent_id"
+      op: load: method: *GET
+      op: patch: method: *PATCH
+      op: remove: method: *DELETE
+    }
+    path: "/agents/{id}/addresses/{addressId}/primary": {
+      action: "primary": {}
+      rename: param: "addressId": *"id"
+      rename: param: "id": *"agent_id"
+      op: create: method: *POST
+    }
+  }
+
+  entity: address_setup: {
+    path: "/agents/{id}/addresses/setups": {
+      rename: param: "id": *"agent_id"
+      op: create: method: *POST
+    }
+  }
+
+  entity: agent: {
+    path: "/agents": {
+      op: create: method: *POST
+      op: list: method: *GET
+    }
+    path: "/agents/{id}": {
+      op: load: method: *GET
+      op: patch: method: *PATCH
+      op: remove: method: *DELETE
+    }
+    path: "/agents/{id}/access": {
+      action: "access": {}
+      op: load: method: *GET
+    }
+    path: "/agents/{id}/connection": {
+      action: "connection": {}
+      op: load: method: *GET
+    }
+  }
+
+  entity: channel: {
+    path: "/agents/{id}/channels": {
+      rename: param: "id": *"agent_id"
+      op: list: method: *GET
+    }
+  }
+
+  entity: client: {
+    path: "/agents/{id}/clients": {
+      rename: param: "id": *"agent_id"
+      op: list: method: *GET
+    }
+  }
+
+  entity: connection: {
+    path: "/agents/{id}/connection": {
+      rename: param: "id": *"agent_id"
+      op: update: method: *PUT
+    }
+  }
+
+  entity: event: {
+    path: "/agents/{id}/events": {
+      rename: param: "id": *"agent_id"
+      op: list: method: *GET
+    }
+    path: "/agents/{id}/events/stream": {
+      action: "stream": {}
+      rename: param: "id": *"agent_id"
+      op: load: method: *GET
+    }
+    path: "/agents/{id}/url": {
+      rename: param: "id": *"agent_id"
+      op: create: method: *POST
+    }
+  }
+
+  entity: listed_teammate: {
+    path: "/team": {
+      op: list: method: *GET
+    }
+  }
+
+  entity: listener: {
+    path: "/agents/{id}/listeners": {
+      rename: param: "id": *"agent_id"
+      op: list: method: *GET
+    }
+  }
+
+  entity: men: {
+    path: "/me": {
+      op: load: method: *GET
+    }
+    path: "/me/token": {
+      action: "token": {}
+      op: remove: method: *DELETE
+    }
+  }
+
+  entity: message: {
+    path: "/agents/{id}/messages": {
+      rename: param: "id": *"agent_id"
+      op: create: method: *POST
+      op: list: method: *GET
+    }
+    path: "/agents/{id}/messages/{messageId}": {
+      rename: param: "id": *"agent_id"
+      rename: param: "messageId": *"id"
+      op: load: method: *GET
+    }
+  }
+
+  entity: token: {
+    path: "/agents/{id}/tokens": {
+      rename: param: "id": *"agent_id"
+      op: list: method: *GET
+    }
+    path: "/agents/{id}/tokens/{tokenId}": {
+      rename: param: "id": *"agent_id"
+      rename: param: "tokenId": *"id"
+      op: remove: method: *DELETE
+    }
+  }
+
+  entity: webhook: {
+    path: "/agents/{id}/webhooks": {
+      rename: param: "id": *"agent_id"
+      op: create: method: *POST
+      op: list: method: *GET
+    }
+    path: "/agents/{id}/webhooks/{webhookId}": {
+      rename: param: "id": *"agent_id"
+      rename: param: "webhookId": *"id"
+      op: remove: method: *DELETE
+    }
+  }
+
+}

@@ -1,0 +1,11 @@
+$kind: http-request
+id: "0314f013-2c9f-5287-b3b8-7c847ae029f7"
+description: |-
+  The `token` action of **men**, a route of its `remove` operation.
+
+  SDK: `client.Men().remove({ $action: "token" })`
+url: "{{base}}/me/token"
+method: DELETE
+headers:
+  Accept: application/json
+order: 2000

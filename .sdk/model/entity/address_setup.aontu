@@ -1,0 +1,93 @@
+# Entity: address_setup
+
+main: kit: entity: address_setup: {
+
+  alias: field: {}
+
+  fields: {
+    channel: {
+      h: "Channel"
+      n: "channel"
+      r: true
+      t: "`$STRING`"
+    }
+    token: {
+      h: "Token"
+      n: "token"
+      r: false
+      sh: "What installs an app the member made: a Slack app's client id, client secret and signing secret, in that order, with spaces between."
+      t: "`$STRING`"
+    }
+  }
+
+  name: "address_setup"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          bf: [
+            "channel"
+            "token"
+          ]
+          co: {
+            id: "POST /agents/{id}/addresses/setups"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "agent_id"
+                or: "id"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "POST"
+          o: "/agents/{id}/addresses/setups"
+          q: {
+            exist: [
+              "agent_id"
+            ]
+          }
+          r: {
+            param: {
+              id: "agent_id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "agents"
+            }
+            {
+              var: "agent_id"
+            }
+            {
+              lit: "addresses"
+            }
+            {
+              lit: "setups"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+  relations: ancestors: [
+    [path("$.main.kit.entity.agent")]
+  ]
+
+}

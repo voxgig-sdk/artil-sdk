@@ -1,0 +1,72 @@
+<?php
+declare(strict_types=1);
+
+// Artil SDK utility registration
+
+require_once __DIR__ . '/../core/UtilityType.php';
+require_once __DIR__ . '/Clean.php';
+require_once __DIR__ . '/Done.php';
+require_once __DIR__ . '/MakeError.php';
+require_once __DIR__ . '/FeatureAdd.php';
+require_once __DIR__ . '/FeatureHook.php';
+require_once __DIR__ . '/FeatureInit.php';
+require_once __DIR__ . '/Fetcher.php';
+require_once __DIR__ . '/MakeFetchDef.php';
+require_once __DIR__ . '/MakeContext.php';
+require_once __DIR__ . '/MakeOptions.php';
+require_once __DIR__ . '/MakeRequest.php';
+require_once __DIR__ . '/MakeResponse.php';
+require_once __DIR__ . '/MakeResult.php';
+require_once __DIR__ . '/MakePoint.php';
+require_once __DIR__ . '/MakeSpec.php';
+require_once __DIR__ . '/MakeUrl.php';
+require_once __DIR__ . '/Param.php';
+require_once __DIR__ . '/PrepareAuth.php';
+require_once __DIR__ . '/PrepareBody.php';
+require_once __DIR__ . '/Graphql.php';
+require_once __DIR__ . '/PrepareHeaders.php';
+require_once __DIR__ . '/PrepareMethod.php';
+require_once __DIR__ . '/PrepareParams.php';
+require_once __DIR__ . '/PreparePath.php';
+require_once __DIR__ . '/PrepareQuery.php';
+require_once __DIR__ . '/ResultBasic.php';
+require_once __DIR__ . '/ResultBody.php';
+require_once __DIR__ . '/ResultHeaders.php';
+require_once __DIR__ . '/TransformRequest.php';
+require_once __DIR__ . '/TransformResponse.php';
+
+ArtilUtility::setRegistrar(function (ArtilUtility $u): void {
+    $u->clean = [ArtilClean::class, 'call'];
+    $u->clean_add = [ArtilClean::class, 'add'];
+    $u->clean_explain = [ArtilDone::class, 'clean_explain'];
+    $u->done = [ArtilDone::class, 'call'];
+    $u->make_error = [ArtilMakeError::class, 'call'];
+    $u->feature_add = [ArtilFeatureAdd::class, 'call'];
+    $u->feature_hook = [ArtilFeatureHook::class, 'call'];
+    $u->feature_init = [ArtilFeatureInit::class, 'call'];
+    $u->fetcher = [ArtilFetcher::class, 'call'];
+    $u->make_fetch_def = [ArtilMakeFetchDef::class, 'call'];
+    $u->make_context = [ArtilMakeContext::class, 'call'];
+    $u->make_options = [ArtilMakeOptions::class, 'call'];
+    $u->make_request = [ArtilMakeRequest::class, 'call'];
+    $u->make_response = [ArtilMakeResponse::class, 'call'];
+    $u->make_result = [ArtilMakeResult::class, 'call'];
+    $u->make_point = [ArtilMakePoint::class, 'call'];
+    $u->make_spec = [ArtilMakeSpec::class, 'call'];
+    $u->make_url = [ArtilMakeUrl::class, 'call'];
+    $u->param = [ArtilParam::class, 'call'];
+    $u->prepare_auth = [ArtilPrepareAuth::class, 'call'];
+    $u->prepare_body = [ArtilPrepareBody::class, 'call'];
+    $u->prepare_headers = [ArtilPrepareHeaders::class, 'call'];
+    $u->prepare_method = [ArtilPrepareMethod::class, 'call'];
+    $u->prepare_params = [ArtilPrepareParams::class, 'call'];
+    $u->prepare_path = [ArtilPreparePath::class, 'call'];
+    $u->prepare_query = [ArtilPrepareQuery::class, 'call'];
+    $u->graphql_body = [ArtilGraphql::class, 'body'];
+    $u->graphql_errors = [ArtilGraphql::class, 'errors'];
+    $u->result_basic = [ArtilResultBasic::class, 'call'];
+    $u->result_body = [ArtilResultBody::class, 'call'];
+    $u->result_headers = [ArtilResultHeaders::class, 'call'];
+    $u->transform_request = [ArtilTransformRequest::class, 'call'];
+    $u->transform_response = [ArtilTransformResponse::class, 'call'];
+});

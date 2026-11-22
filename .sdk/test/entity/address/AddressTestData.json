@@ -1,0 +1,100 @@
+{
+  "existing": {
+    "address": {
+      "ADDRESS00": {
+        "channel": "s78",
+        "code": "s79",
+        "country": "s7a",
+        "createdAt": "s7b",
+        "domainId": "s7c",
+        "id": "ADDRESS00",
+        "name": "s7e",
+        "primary": false,
+        "registering": true,
+        "setup": "s81",
+        "token": "s82",
+        "value": "s83",
+        "agent_id": "AGENT01"
+      },
+      "ADDRESS01": {
+        "channel": "sf0",
+        "code": "sf1",
+        "country": "sf2",
+        "createdAt": "sf3",
+        "domainId": "sf4",
+        "id": "ADDRESS01",
+        "name": "sf6",
+        "primary": false,
+        "registering": true,
+        "setup": "sf9",
+        "token": "sfa",
+        "value": "sfb",
+        "agent_id": "AGENT01"
+      },
+      "ADDRESS02": {
+        "channel": "s168",
+        "code": "s169",
+        "country": "s16a",
+        "createdAt": "s16b",
+        "domainId": "s16c",
+        "id": "ADDRESS02",
+        "name": "s16e",
+        "primary": false,
+        "registering": true,
+        "setup": "s171",
+        "token": "s172",
+        "value": "s173",
+        "agent_id": "AGENT01"
+      }
+    }
+  },
+  "new": {
+    "address": {
+      "address_ref01": {
+        "channel": "s1e0",
+        "code": "s1e1",
+        "country": "s1e2",
+        "createdAt": "s1e3",
+        "domainId": "s1e4",
+        "name": "s1e6",
+        "primary": false,
+        "registering": true,
+        "setup": "s1e9",
+        "token": "s1ea",
+        "value": "s1eb"
+      }
+    }
+  },
+  "requests": {
+    "POST /agents/{id}/addresses/{addressId}/primary": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "POST /agents/{id}/addresses": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /agents/{id}/addresses": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /agents/{id}/addresses/{addressId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "DELETE /agents/{id}/addresses/{addressId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "PATCH /agents/{id}/addresses/{addressId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

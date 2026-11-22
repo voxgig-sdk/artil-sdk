@@ -1,0 +1,25 @@
+$kind: http-request
+id: "5d46a031-7b3e-5394-9410-35d7a8329a78"
+description: |-
+  The `list` operation of **token**.
+
+  SDK: `client.Token().list({ agent_id: "example" })`
+url: "{{base}}/agents/:id/tokens"
+method: GET
+headers:
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "{{agent_id}}"
+    description: The agent this token belongs to.
+scripts:
+  - type: afterResponse
+    code: |-
+      const body = (() => { try { return pm.response.json() } catch (e) { return null } })()
+      const at = (rec, path) => path.split(".").reduce((n, k) => null == n ? n : n[k], rec)
+      const rec = (body || [])[0]
+      if (pm.response.code < 300 && null != rec) {
+        if (null != at(rec, "id") && !pm.collectionVariables.get("token_id")) pm.collectionVariables.set("token_id", String(at(rec, "id")))
+      }
+    language: text/javascript
+order: 1000

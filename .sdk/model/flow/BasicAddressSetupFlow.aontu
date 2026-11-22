@@ -1,0 +1,22 @@
+# BasicAddressSetupFlow
+
+main: kit: flow: BasicAddressSetupFlow:
+{
+  entity: "address_setup",
+  kind: "basic",
+  name: "BasicAddressSetupFlow",
+  step: [
+    {
+      i: {
+        ref: "address_setup_ref01"
+      }
+
+      m: {
+        agent_id: "agent01"
+      }
+
+      o: "create"
+    }
+  ],
+  "key$": "BasicAddressSetupFlow"
+}

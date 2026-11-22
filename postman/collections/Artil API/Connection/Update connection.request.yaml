@@ -1,0 +1,23 @@
+$kind: http-request
+id: "4191b814-a239-577d-b526-4d8ba9ccbdd7"
+description: |-
+  The `update` operation of **connection**.
+
+  SDK: `client.Connection().update({ agent_id: "example", client: "example" })`
+url: "{{base}}/agents/:id/connection"
+method: PUT
+headers:
+  Accept: application/json
+  Content-Type: application/json
+pathVariables:
+  - key: id
+    value: "{{agent_id}}"
+    description: The agent this connection belongs to.
+body:
+  type: json
+  content: |-
+    {
+      "client": "example",
+      "machine": "example"
+    }
+order: 1000

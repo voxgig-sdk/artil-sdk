@@ -1,0 +1,30 @@
+$kind: collection
+id: aa4b50fd-4567-535a-8a31-80a809d3cba8
+description: |-
+  The **message** entity, which belongs to a agent. Its requests address one record by `{{message_id}}`, which a list or a create remembers.
+
+  | field | type | required | |
+  |---|---|---|---|
+  | `addressId` | string | yes |  |
+  | `admission` | any | yes |  |
+  | `attachments` | array | yes |  |
+  | `author` | string | yes |  |
+  | `authorName` | string | yes |  |
+  | `cc` | array | yes |  |
+  | `channel` | string | yes |  |
+  | `client` | string |  |  |
+  | `counterpart` | string | yes |  |
+  | `counterpartName` | string | yes |  |
+  | `createdAt` | string | yes |  |
+  | `direction` | string | yes |  |
+  | `error` | string | yes |  |
+  | `forward` | string |  |  |
+  | `id` | string | yes |  |
+  | `refusal` | any | yes |  |
+  | `replyTo` | string |  |  |
+  | `status` | string | yes |  |
+  | `subject` | string | yes |  |
+  | `text` | string | yes |  |
+  | `thread` | any | yes |  |
+  | `to` | array | yes |  |
+order: 12000

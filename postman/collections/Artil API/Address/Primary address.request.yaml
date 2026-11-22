@@ -1,0 +1,18 @@
+$kind: http-request
+id: "9c4f7d8a-f766-5c76-bccb-abb1d7dfe0b1"
+description: |-
+  The `primary` action of **address**, a route of its `create` operation.
+
+  SDK: `client.Address().create({ "agent_id": "agent_id", "id": "ID", $action: "primary" })`
+url: "{{base}}/agents/:id/addresses/:addressId/primary"
+method: POST
+headers:
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "{{agent_id}}"
+    description: The agent this address belongs to.
+  - key: addressId
+    value: "{{address_id}}"
+    description: The address this request addresses.
+order: 5000

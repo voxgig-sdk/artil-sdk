@@ -1,0 +1,81 @@
+{
+  "existing": {
+    "event": {
+      "EVENT00": {
+        "attachments": [],
+        "channel": "s6f",
+        "client": "s70",
+        "createdAt": "s71",
+        "id": "EVENT00",
+        "messageId": "s73",
+        "sender": {},
+        "text": "s75",
+        "thread": "s76",
+        "toThread": "s77",
+        "type": "s78",
+        "agent_id": "AGENT01"
+      },
+      "EVENT01": {
+        "attachments": [],
+        "channel": "sdd",
+        "client": "sde",
+        "createdAt": "sdf",
+        "id": "EVENT01",
+        "messageId": "se1",
+        "sender": {},
+        "text": "se3",
+        "thread": "se4",
+        "toThread": "se5",
+        "type": "se6",
+        "agent_id": "AGENT01"
+      },
+      "EVENT02": {
+        "attachments": [],
+        "channel": "s14b",
+        "client": "s14c",
+        "createdAt": "s14d",
+        "id": "EVENT02",
+        "messageId": "s14f",
+        "sender": {},
+        "text": "s151",
+        "thread": "s152",
+        "toThread": "s153",
+        "type": "s154",
+        "agent_id": "AGENT01"
+      }
+    }
+  },
+  "new": {
+    "event": {
+      "event_ref01": {
+        "attachments": [],
+        "channel": "s1b9",
+        "client": "s1ba",
+        "createdAt": "s1bb",
+        "messageId": "s1bd",
+        "sender": {},
+        "text": "s1bf",
+        "thread": "s1c0",
+        "toThread": "s1c1",
+        "type": "s1c2"
+      }
+    }
+  },
+  "requests": {
+    "POST /agents/{id}/url": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /agents/{id}/events": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /agents/{id}/events/stream": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

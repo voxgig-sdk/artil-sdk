@@ -1,0 +1,43 @@
+{
+  "existing": {
+    "client": {
+      "CLIENT00": {
+        "createdAt": "s28",
+        "id": "CLIENT00",
+        "lastUsedAt": "s2a",
+        "name": "s2b",
+        "agent_id": "AGENT01"
+      },
+      "CLIENT01": {
+        "createdAt": "s50",
+        "id": "CLIENT01",
+        "lastUsedAt": "s52",
+        "name": "s53",
+        "agent_id": "AGENT01"
+      },
+      "CLIENT02": {
+        "createdAt": "s78",
+        "id": "CLIENT02",
+        "lastUsedAt": "s7a",
+        "name": "s7b",
+        "agent_id": "AGENT01"
+      }
+    }
+  },
+  "new": {
+    "client": {
+      "client_ref01": {
+        "createdAt": "sa0",
+        "lastUsedAt": "sa2",
+        "name": "sa3"
+      }
+    }
+  },
+  "requests": {
+    "GET /agents/{id}/clients": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

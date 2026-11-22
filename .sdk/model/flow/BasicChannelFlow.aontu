@@ -1,0 +1,26 @@
+# BasicChannelFlow
+
+main: kit: flow: BasicChannelFlow:
+{
+  entity: "channel",
+  kind: "basic",
+  name: "BasicChannelFlow",
+  step: [
+    {
+      m: {
+        agent_id: "agent01"
+      }
+
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "channel_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicChannelFlow"
+}

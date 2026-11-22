@@ -1,0 +1,18 @@
+$kind: http-request
+id: e9f453b2-19ca-5e99-9a39-0cc32c5273e7
+description: |-
+  The `load` operation of **address**.
+
+  SDK: `client.Address().load({ agent_id: "example", id: "example_id" })`
+url: "{{base}}/agents/:id/addresses/:addressId"
+method: GET
+headers:
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "{{agent_id}}"
+    description: The agent this address belongs to.
+  - key: addressId
+    value: "{{address_id}}"
+    description: The address this request addresses.
+order: 2000

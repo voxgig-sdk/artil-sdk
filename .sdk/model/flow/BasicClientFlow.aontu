@@ -1,0 +1,26 @@
+# BasicClientFlow
+
+main: kit: flow: BasicClientFlow:
+{
+  entity: "client",
+  kind: "basic",
+  name: "BasicClientFlow",
+  step: [
+    {
+      m: {
+        agent_id: "agent01"
+      }
+
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "client_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicClientFlow"
+}

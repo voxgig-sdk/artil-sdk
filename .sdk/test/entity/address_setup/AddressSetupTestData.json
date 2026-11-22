@@ -1,0 +1,39 @@
+{
+  "existing": {
+    "address_setup": {
+      "ADDRESS_SETUP00": {
+        "channel": "s14",
+        "token": "s15",
+        "agent_id": "AGENT01",
+        "id": "ADDRESS_SETUP00"
+      },
+      "ADDRESS_SETUP01": {
+        "channel": "s28",
+        "token": "s29",
+        "agent_id": "AGENT01",
+        "id": "ADDRESS_SETUP01"
+      },
+      "ADDRESS_SETUP02": {
+        "channel": "s3c",
+        "token": "s3d",
+        "agent_id": "AGENT01",
+        "id": "ADDRESS_SETUP02"
+      }
+    }
+  },
+  "new": {
+    "address_setup": {
+      "address_setup_ref01": {
+        "channel": "s50",
+        "token": "s51"
+      }
+    }
+  },
+  "requests": {
+    "POST /agents/{id}/addresses/setups": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

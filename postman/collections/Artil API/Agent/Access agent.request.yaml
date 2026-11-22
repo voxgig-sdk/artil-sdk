@@ -1,0 +1,15 @@
+$kind: http-request
+id: "668c9696-40ec-5152-9bd6-86e91c37babf"
+description: |-
+  The `access` action of **agent**, a route of its `load` operation.
+
+  SDK: `client.Agent().load({ "id": "ID", $action: "access" })`
+url: "{{base}}/agents/:id/access"
+method: GET
+headers:
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "{{agent_id}}"
+    description: The agent this request addresses.
+order: 5000

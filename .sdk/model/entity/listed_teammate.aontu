@@ -1,0 +1,146 @@
+# Entity: listed_teammate
+
+main: kit: entity: listed_teammate: {
+
+  alias: field: {}
+
+  fields: {
+    addresses: {
+      h: "Addresses"
+      n: "addresses"
+      r: true
+      sh: "Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number"
+      t: "`$ARRAY`"
+    }
+    email: {
+      h: "Email"
+      n: "email"
+      r: true
+      sh: "The agent's primary email address, or the member's"
+      t: [
+        "`$ONE`"
+        [
+          "`$STRING`"
+          "`$NULL`"
+        ]
+      ]
+    }
+    icon: {
+      h: "Icon"
+      n: "icon"
+      r: true
+      sh: "The agent's icon; null for members"
+      t: "`$ANY`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: true
+      sh: "The agent's or member's id"
+      t: "`$STRING`"
+    }
+    imageUrl: {
+      h: "Image Url"
+      n: "imageUrl"
+      r: true
+      sh: "The member's picture from their sign-in profile, or the avatar it makes them; null for agents"
+      t: [
+        "`$ONE`"
+        [
+          "`$STRING`"
+          "`$NULL`"
+        ]
+      ]
+    }
+    kind: {
+      h: "Kind"
+      n: "kind"
+      r: true
+      t: "`$STRING`"
+    }
+    listening: {
+      h: "Listening"
+      n: "listening"
+      r: true
+      sh: "Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members"
+      t: [
+        "`$ONE`"
+        [
+          "`$BOOLEAN`"
+          "`$NULL`"
+        ]
+      ]
+    }
+    name: {
+      h: "Name"
+      n: "name"
+      r: true
+      t: [
+        "`$ONE`"
+        [
+          "`$STRING`"
+          "`$NULL`"
+        ]
+      ]
+    }
+    phone: {
+      h: "Phone"
+      n: "phone"
+      r: true
+      sh: "The agent's primary phone number, or the one a member added to their profile"
+      t: [
+        "`$ONE`"
+        [
+          "`$STRING`"
+          "`$NULL`"
+        ]
+      ]
+    }
+    role: {
+      h: "Role"
+      n: "role"
+      r: true
+      sh: "The member's role in the workspace; null for agents"
+      t: "`$ANY`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "listed_teammate"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /team"
+            source: "openapi3"
+            version: 2
+          }
+          m: "GET"
+          o: "/team"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "team"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

@@ -1,0 +1,72 @@
+# Entity: men
+
+main: kit: entity: men: {
+
+  alias: field: {}
+
+  name: "men"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /me"
+            source: "openapi3"
+            version: 2
+          }
+          m: "GET"
+          o: "/me"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "me"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    remove: {
+      name: "remove"
+      points: [
+        {
+          co: {
+            id: "DELETE /me/token"
+            source: "openapi3"
+            version: 2
+          }
+          m: "DELETE"
+          o: "/me/token"
+          q: {
+            "$action": "token"
+          }
+          s: [
+            {
+              lit: "me"
+            }
+            {
+              lit: "token"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+  fields: {
+  }
+
+
+
+}

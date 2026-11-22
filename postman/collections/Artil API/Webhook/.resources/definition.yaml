@@ -1,0 +1,17 @@
+$kind: collection
+id: e2db6560-612c-5065-a973-59543b43617f
+description: |-
+  The **webhook** entity, which belongs to a agent. Its requests address one record by `{{webhook_id}}`, which a list or a create remembers.
+
+  | field | type | required | |
+  |---|---|---|---|
+  | `attempts` | integer | yes |  |
+  | `bearerToken` | string |  |  |
+  | `createdAt` | string | yes |  |
+  | `deliveredAt` | any | yes |  |
+  | `error` | string | yes |  |
+  | `erroredAt` | any | yes |  |
+  | `id` | string | yes |  |
+  | `retryAt` | any | yes |  |
+  | `url` | string | yes |  |
+order: 14000

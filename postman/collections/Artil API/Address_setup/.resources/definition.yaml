@@ -1,0 +1,10 @@
+$kind: collection
+id: "10188567-1bfa-5cea-9c98-c5eb5c53dffe"
+description: |-
+  The **address_setup** entity, which belongs to a agent. Its requests address one record by `{{address_setup_id}}`, which a list or a create remembers.
+
+  | field | type | required | |
+  |---|---|---|---|
+  | `channel` | string | yes |  |
+  | `token` | string |  |  |
+order: 4000

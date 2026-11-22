@@ -1,0 +1,25 @@
+$kind: http-request
+id: "4139bd85-eb1c-5a3a-9e21-091d6633aaea"
+description: |-
+  The `remove` operation of **address**.
+
+  SDK: `client.Address().remove({ agent_id: "example", id: "example_id" })`
+url: "{{base}}/agents/:id/addresses/:addressId"
+method: DELETE
+headers:
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "{{agent_id}}"
+    description: The agent this address belongs to.
+  - key: addressId
+    value: "{{address_id}}"
+    description: The address this request addresses.
+scripts:
+  - type: afterResponse
+    code: |-
+      if (pm.response.code < 300) {
+        pm.collectionVariables.unset("address_id")
+      }
+    language: text/javascript
+order: 6000

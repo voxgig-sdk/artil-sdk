@@ -1,0 +1,183 @@
+
+
+import Path from 'node:path'
+import * as Fs from 'node:fs'
+
+import { test, describe, afterEach } from 'node:test'
+import assert from 'node:assert'
+import { createLiveTransport } from '../../live-runner'
+import { runLiveEntity } from '../../live-entity'
+
+
+import { ArtilSDK, BaseFeature, config, stdutil } from '../../..'
+
+import {
+  envOverride,
+  liveClientOptions,
+  liveDelay,
+  loadEnvLocal,
+  makeCtrl,
+  makeMatch,
+  makeReqdata,
+  makeStepData,
+  makeValid,
+  maybeSkipControl,
+} from '../../utility'
+
+
+loadEnvLocal(__dirname + '/../../../.env.local')
+
+
+describe('AccessEntity', async () => {
+
+  // Per-test live pacing. Delay is read from sdk-test-control.json's
+  // `test.live.delayMs`; only sleeps when ARTIL_TEST_LIVE=TRUE.
+  afterEach(liveDelay('ARTIL_TEST_LIVE'))
+
+  test('instance', async () => {
+    const testsdk = ArtilSDK.test()
+    const ent = testsdk.Access()
+    assert(null != ent)
+  })
+
+
+  test('validate', async (t) => {
+    if (null == (config as any).feature?.validate) {
+      t.skip('feature not present in this SDK: validate')
+      return
+    }
+    const client = ArtilSDK.test(undefined, { feature: { validate: { active: true } } })
+    await assert.rejects(client.Access().update({"agent_id":1,"id":"x"} as any),
+      (err: any) => 'validate_failed' === err.code)
+  })
+
+
+
+  test('basic', async (t) => {
+
+    const live = 'TRUE' === process.env.ARTIL_TEST_LIVE
+    for (const op of ['update']) {
+      if (!live && maybeSkipControl(t, 'entityOp', 'access.' + op, live)) return
+    }
+
+    
+    const setup = basicSetup()
+    if (setup.live) {
+      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{"admit":{"a":true,"h":"Admit","n":"admit","r":true,"sh":"Whether anyone, the workspace's members and agents besides the listed senders, or only the listed senders wake the agent; a new agent starts with team, except on Telegram, which lists the account that creates its bot from Artil, and its…","t":"`$STRING`","key$":"admit","index$":0},"id":{"a":true,"h":"Id","n":"id","r":false,"syn":true,"t":"`$STRING`","key$":"id","index$":1},"senders":{"a":true,"h":"Senders","n":"senders","r":true,"sh":"Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members","t":"`$ARRAY`","key$":"senders","index$":2}},"id":{"field":"id","name":"id"},"name":"access","op":{"update":{"input":"data","name":"update","points":[{"a":true,"bf":["admit","senders"],"co":{"id":"PUT /agents/{id}/access/{channel}","source":"openapi3","version":2},"g":{"params":[{"a":true,"k":"param","n":"agent_id","or":"id","r":true,"t":"`$STRING`","index$":0},{"a":true,"k":"param","n":"id","or":"channel","r":true,"t":"`$STRING`","index$":1}]},"k":"http","m":"PUT","o":"/agents/{id}/access/{channel}","q":{"exist":["agent_id","id"]},"r":{"param":{"channel":"id","id":"agent_id"}},"rs":{"kind":"json","media":"application/json"},"s":[{"lit":"agents"},{"var":"agent_id"},{"lit":"access"},{"var":"id"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"update"}},"relations":{"ancestors":[["$.main.kit.entity.agent"]]},"key$":"access","name__orig":"access","Name":"Access","name_":"access","name-":"access","NAME":"ACCESS","index$":0}, {"active":true,"entity":"access","key$":"BasicAccessFlow","kind":"basic","name":"BasicAccessFlow","param":{},"step":[{"a":true,"d":{"agent_id":"agent01"},"i":{"ref":"access_ref01","srcdatavar":"access_ref01_data","suffix":"_up0","textfield":"admit"},"m":{},"o":"update","s":[{"apply":"TextFieldMark","def":{"mark":"Mark01-access_ref01"}}],"v":[],"index$":0}]}, 'Access', {"PUT /agents/{id}/access/{channel}":{"protocol":"http","requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","properties":{"admit":{"type":"string","enum":["anyone","team","list"],"key$":"admit"},"senders":{"maxItems":200,"type":"array","items":{"type":"string"},"key$":"senders"}},"required":["admit","senders"]}}}},"parameters":[{"in":"path","name":"id","required":true,"description":"The agent's id","schema":{"type":"string"},"index$":0},{"schema":{"type":"string"},"in":"path","name":"channel","required":true,"index$":1}]}}, { strict: LIVE_STRICT, t }, 'TRUE' === process.env.VOXGIG_GETONLY_GUARD ? {"access.update.0":"GET-only live run: needs PUT /agents/{id}/access/{channel}"} : {})
+    }
+    const client = setup.client
+    const struct = setup.struct
+
+    const isempty = struct.isempty
+    const select = struct.select
+
+    let access_ref01_data = Object.values(setup.data.existing.access)[0] as any
+
+    // UPDATE
+    const access_ref01_ent = client.Access()
+    const access_ref01_data_up0: any = {}
+    access_ref01_data_up0.id = access_ref01_data.id
+    access_ref01_data_up0['agent_id'] = setup.idmap['agent_id'] ?? setup.idmap['agent01']
+
+    const access_ref01_markdef_up0 = { name: 'admit', value: 'Mark01-access_ref01_' + setup.now }
+    ;(access_ref01_data_up0 as any)[access_ref01_markdef_up0.name] = access_ref01_markdef_up0.value
+
+    const access_ref01_resdata_up0 = (await access_ref01_ent.update(access_ref01_data_up0)).data()
+    assert(access_ref01_resdata_up0.id === access_ref01_data_up0.id)
+
+    assert((access_ref01_resdata_up0 as any)[access_ref01_markdef_up0.name] === access_ref01_markdef_up0.value)
+
+
+  })
+})
+
+
+
+// main.kit.test.live.strict is true (the default is true): a live
+// request that fails, or a live test missing an input it needs,
+// fails the test.
+// An account with no record for a test to read skips it either way.
+const LIVE_STRICT = true
+
+function basicSetup(extra?: any) {
+  // TODO: fix test def options
+  const options: any = {} // null
+
+  // TODO: needs test utility to resolve path
+  const entityDataFile =
+    Path.resolve(__dirname, 
+      '../../../../.sdk/test/entity/access/AccessTestData.json')
+
+  // TODO: file ready util needed?
+  const entityDataSource = Fs.readFileSync(entityDataFile).toString('utf8')
+
+  // TODO: need a xlang JSON parse utility in voxgig/struct with better error msgs
+  const entityData = JSON.parse(entityDataSource)
+
+  options.entity = entityData.existing
+
+  let client = ArtilSDK.test(options, extra)
+  const struct = client.utility().struct
+  const merge = struct.merge
+  const transform = struct.transform
+
+  let idmap = transform(
+    ['access01','access02','access03','agent01','agent02','agent03'],
+    {
+      '`$PACK`': ['', {
+        '`$KEY`': '`$COPY`',
+        '`$VAL`': ['`$FORMAT`', 'upper', '`$COPY`']
+      }]
+    })
+
+  const env = envOverride({
+    'ARTIL_TEST_ACCESS_ENTID': idmap,
+    'ARTIL_TEST_LIVE': 'FALSE',
+    'ARTIL_TEST_EXPLAIN': 'FALSE',
+    'ARTIL_APIKEY': '',
+  })
+
+  idmap = env['ARTIL_TEST_ACCESS_ENTID']
+
+  const live = 'TRUE' === env.ARTIL_TEST_LIVE
+
+  const transport = createLiveTransport()
+  if (live) {
+    const rawIds = process.env['ARTIL_TEST_ACCESS_ENTID']
+    idmap = rawIds && rawIds.trim() ? JSON.parse(rawIds) : {}
+    if (!idmap || Array.isArray(idmap) || typeof idmap !== 'object') {
+      throw new Error('Live ENTID must be a JSON object')
+    }
+    client = new ArtilSDK(merge([
+      // FIRST, so the generated fields below win: sdk-test-control.json's
+      // test.client.options adds to the live client, it does not redirect it.
+      liveClientOptions(),
+      {
+        apikey: env.ARTIL_APIKEY,
+      },
+      // 'extra || {}', not a bare 'extra': struct.merge returns UNDEFINED when the
+      // last entry is undefined, and basicSetup is normally called with no
+      // argument at all - so a bare 'extra' silently discarded the apikey
+      // and server values above and handed the SDK undefined. Harmless
+      // while there was nothing in that object; not harmless now.
+      extra || {},
+      { system: { fetch: transport.fetch } }
+    ]))
+  }
+
+  const setup = {
+    idmap,
+    env,
+    options,
+    client,
+    struct,
+    data: entityData,
+    explain: 'TRUE' === env.ARTIL_TEST_EXPLAIN,
+    live,
+    transport,
+    now: Date.now(),
+  }
+
+  return setup
+}
+  

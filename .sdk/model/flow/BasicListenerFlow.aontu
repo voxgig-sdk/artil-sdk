@@ -1,0 +1,26 @@
+# BasicListenerFlow
+
+main: kit: flow: BasicListenerFlow:
+{
+  entity: "listener",
+  kind: "basic",
+  name: "BasicListenerFlow",
+  step: [
+    {
+      m: {
+        agent_id: "agent01"
+      }
+
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "listener_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicListenerFlow"
+}

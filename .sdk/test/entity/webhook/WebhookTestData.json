@@ -1,0 +1,73 @@
+{
+  "existing": {
+    "webhook": {
+      "WEBHOOK00": {
+        "attempts": 90,
+        "bearerToken": "s5b",
+        "createdAt": "s5c",
+        "deliveredAt": "s5d",
+        "error": "s5e",
+        "erroredAt": "s5f",
+        "id": "WEBHOOK00",
+        "retryAt": "s61",
+        "url": "s62",
+        "agent_id": "AGENT01"
+      },
+      "WEBHOOK01": {
+        "attempts": 180,
+        "bearerToken": "sb5",
+        "createdAt": "sb6",
+        "deliveredAt": "sb7",
+        "error": "sb8",
+        "erroredAt": "sb9",
+        "id": "WEBHOOK01",
+        "retryAt": "sbb",
+        "url": "sbc",
+        "agent_id": "AGENT01"
+      },
+      "WEBHOOK02": {
+        "attempts": 270,
+        "bearerToken": "s10f",
+        "createdAt": "s110",
+        "deliveredAt": "s111",
+        "error": "s112",
+        "erroredAt": "s113",
+        "id": "WEBHOOK02",
+        "retryAt": "s115",
+        "url": "s116",
+        "agent_id": "AGENT01"
+      }
+    }
+  },
+  "new": {
+    "webhook": {
+      "webhook_ref01": {
+        "attempts": 360,
+        "bearerToken": "s169",
+        "createdAt": "s16a",
+        "deliveredAt": "s16b",
+        "error": "s16c",
+        "erroredAt": "s16d",
+        "retryAt": "s16f",
+        "url": "s170"
+      }
+    }
+  },
+  "requests": {
+    "POST /agents/{id}/webhooks": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /agents/{id}/webhooks": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "DELETE /agents/{id}/webhooks/{webhookId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

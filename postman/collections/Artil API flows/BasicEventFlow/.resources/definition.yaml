@@ -1,0 +1,4 @@
+$kind: collection
+id: "5230d103-b30c-5734-889b-f8c1dd8186b2"
+description: "The `BasicEventFlow` flow of **event**."
+order: 7000

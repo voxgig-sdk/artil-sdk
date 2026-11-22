@@ -1,0 +1,116 @@
+# README wording — YOURS. The scaffold creates this file once and never
+# overwrites it.
+#
+# A slot set here words the generated README files over the same slot of
+# main.kit.info, where apidef puts the spec's metadata. A slot left out keeps
+# the spec's wording. Text edited into a generated README is lost on the next
+# generate; text here is not.
+#
+#   main: kit: text: {
+#     tagline: 'Payments, invoices and refunds from TypeScript, Go and Python.'
+#     summary: 'Acme Pay is a payments API for marketplaces.'
+#     entity_desc: { invoice: 'A bill sent to a customer.' }
+#   }
+#
+# The slots are title, summary, website, tagline, about_md, homepage,
+# docs_url, meta_source and entity_desc. Any other key fails the model build.
+
+# Written in our own words: the summary, the about text and the entity
+# descriptions do not quote Artil's documentation.
+main: kit: text: {
+  title: 'Artil API'
+  summary: 'Artil gives AI agents their own email inboxes, SMS numbers, Telegram bots and Slack apps, and a Message URL where other agents and teammates reach them. Its HTTP API manages agents, their addresses and access rules, sends and reads their messages, and delivers new ones by webhook.'
+  website: 'https://artil.ai'
+  docs_url: 'https://docs.artil.ai/api'
+  about_md: `**Credentials.** Every call takes a bearer token, passed as the \`apikey\` option; the SDK
+sends it as \`Authorization: Bearer ...\`. An agent's token (made in the Artil app on the agent's
+Tokens tab) acts as that agent: it reads and sends the agent's messages and manages its
+addresses, access and webhooks. Creating or deleting an agent needs a workspace member's
+sign-in and refuses an agent's token. \`Me\` load says which the token is. The base URL is
+\`https://app.artil.ai/api\`. The CLI and the MCP server read the token from \`ARTIL_APIKEY\`
+(Artil's own CLI reads the same token from \`ARTIL_TOKEN\`), so an agent's MCP config sets it
+under \`env\`: \`"env": { "ARTIL_APIKEY": "..." }\`.
+
+Resources under an agent take the agent's id as \`agent_id\`. It is the last part of the
+agent's Message URL, \`https://artil.ai/a/<agent-id>\`.
+
+\`\`\`python
+import os
+from artil_sdk import ArtilSDK
+
+client = ArtilSDK({"apikey": os.environ.get("ARTIL_APIKEY", "")})
+agent_id = os.environ.get("ARTIL_AGENT_ID", "YOUR_AGENT_ID")
+
+# Who this token signs in as: a member, or an agent.
+print(client.Me().load().data_get().get("kind"))
+
+# The agent's email addresses, phone numbers and bots.
+for address in client.Address().list({"agent_id": agent_id}):
+    print(address.data_get().get("channel"), address.data_get().get("value"))
+
+# Its latest inbound messages, newest first.
+for message in client.Message().list(
+    {"agent_id": agent_id, "direction": "inbound", "limit": 10}
+):
+    print(message.data_get().get("counterpart"), message.data_get().get("subject"))
+\`\`\`
+
+Sending an email from the agent's primary address, in TypeScript:
+
+\`\`\`ts
+import { ArtilSDK } from '@voxgig-sdk/artil-sdk'
+
+const client = new ArtilSDK({ apikey: process.env.ARTIL_APIKEY ?? '' })
+const agent_id = process.env.ARTIL_AGENT_ID ?? 'YOUR_AGENT_ID'
+
+const sent = await client.Message().create({
+  agent_id,
+  channel: 'email',
+  to: ['someone@example.com'],
+  subject: 'Hello',
+  text: 'A first email from the agent.',
+})
+console.log(sent.data().id)
+\`\`\`
+
+**Sending.** \`Message\` create starts a message with a \`channel\` and recipients in \`to\`,
+answers one when given its id as \`replyTo\`, and passes one on when given its id as
+\`forward\` plus recipients. Attachments go in \`attachments\`: a file the agent already has,
+by its \`id\`, or a text file written inline as \`name\`, \`type\` and \`text\`. \`Event\` create
+sends to the agent's Message URL instead: the message goes straight to whichever client
+listens to the agent, and Artil keeps no copy.
+
+**Paging.** Lists answer plain arrays. Messages come newest first, at most 50 at a time
+(\`limit\`); pass the last one's id as \`before\` for the page before it. Events come newest
+first; pass an event's id as \`after\` for the ones that followed it, oldest first.
+
+**Files.** Sending a file from disk takes multipart form data, which this generation does not
+send. Text files go inline and files the agent has go by id, as above; every other call is
+JSON both ways.
+
+**Scope.** 32 of the 33 operations in Artil's published definition are here, as 15 entities.
+The one left out, \`GET /agents/{id}/events/stream\`, holds a server-sent event stream open,
+which this generation does not read. \`Event\` list with \`after\`, or a webhook, gets the same
+events.
+
+**Not yet run with a token.** Every request was checked against the definition, not against
+Artil.`
+
+  entity_desc: {
+    access: 'Who can wake an agent on each channel: read the rules for every channel, or set the rule for one (its `id` is the channel: email, sms, telegram, slack or url).'
+    address: "An agent's email address, phone number, Telegram bot or Slack bot: list, add, read, change or remove one, or make it the one its channel sends from (`primary`)."
+    address_setup: 'A link where a workspace member creates a Telegram bot or a Slack app for an agent with the provider.'
+    agent: 'An agent account in the workspace: list, create, read, rename or change the icon of one, or delete it with its addresses and messages.'
+    channel: 'The channels an agent can send and receive on, with the labels and the size limits of each.'
+    client: 'The clients that can act as an agent: CLI and OAuth sign-ins, and tokens once they have been used.'
+    connection: "The client that hears an agent's new messages: read it, or make the calling client that one (an agent's own token only)."
+    event: "An agent's events, such as a message arriving: list them, or send a message to the agent's Message URL (create)."
+    listener: "Who hears an agent's new messages now: its connected client and its webhooks."
+    me: 'The member or agent the calling token signs in as, and its workspace.'
+    me_token: 'The calling token itself: remove it to revoke it.'
+    message: 'An email, text, Telegram or Slack message an agent received or sent: list them (by channel, direction or counterpart), read one, or send one, which can answer (`replyTo`) or pass on (`forward`) another.'
+    teammate: "The workspace's agents and members, with the addresses that reach each, and whether anyone listens to each agent."
+    token: 'The tokens members made for an agent, never their values: list them or revoke one.'
+    webhook: "Where an agent's events are posted: list, add or remove one. Adding one returns its signing secret."
+  }
+}

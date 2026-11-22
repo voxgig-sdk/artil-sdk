@@ -1,0 +1,20 @@
+$kind: collection
+id: "1488a1f5-85d5-524d-966b-e19ef49e9085"
+description: |-
+  The **address** entity, which belongs to a agent. Its requests address one record by `{{address_id}}`, which a list or a create remembers.
+
+  | field | type | required | |
+  |---|---|---|---|
+  | `channel` | string | yes |  |
+  | `code` | string |  |  |
+  | `country` | string |  |  |
+  | `createdAt` | string | yes |  |
+  | `domainId` | any | yes |  |
+  | `id` | string | yes |  |
+  | `name` | string | yes |  |
+  | `primary` | boolean | yes |  |
+  | `registering` | boolean |  |  |
+  | `setup` | string |  |  |
+  | `token` | string |  |  |
+  | `value` | string | yes |  |
+order: 3000
