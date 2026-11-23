@@ -29,6 +29,36 @@
 # regenerated in full from the toolchain:
 #
 #   main: kit: copies: 'overwrite'
+# outreach1 standard (2026-11-22): std8 targets plus postman, the standard
+# features (including secrets) and a branded GitHub Pages documentation site.
+# Artil runs a hosted MCP server of its own; go-mcp stays on, as every
+# outreach1 build has it.
+main: kit: doc: edition: 'github-pages': active: true
+# GitHub Pages is enabled for this repository, so generated documentation
+# may link the site.
+main: kit: doc: edition: 'github-pages': published: true
+# Brand palette, from artil.ai's own stylesheet tokens: --primary #1b73d8,
+# --accent #2282ef the lighter tint docgen uses for gradients (never for
+# text), --ink #1f1d1a. The background is its --card #fff rather than its
+# --paper #fbfaf7, on which the primary falls just short of 4.5:1 for link
+# text. Light only: docgen keeps the primary in dark mode, and #1b73d8 on
+# Artil's dark --paper #161513 is under 4:1.
+main: kit: doc: style: mode: 'light'
+main: kit: doc: style: color: {
+  primary: '#1b73d8'
+  accent: '#2282ef'
+  background: '#ffffff'
+  text: '#1f1d1a'
+  darkBackground: '#161513'
+  darkText: '#ece8e0'
+}
+# Published package names, declared so a change in the generator's naming
+# rule cannot rename a released package.
+main: kit: target: ts: publish: registry: package: '@voxgig-sdk/artil-sdk'
+main: kit: target: py: publish: registry: package: 'voxgig-sdk-artil-sdk'
+main: kit: target: lua: publish: registry: package: 'voxgig-sdk-artil-sdk'
+main: kit: target: php: publish: registry: package: 'voxgig-sdk/artil-sdk'
+main: kit: target: rb: publish: registry: package: 'voxgig-sdk-artil-sdk'
 # --- cedar: copies (written by cedar-regen.sh, do not hand-edit)
 # Regenerated in full: not listed in admin data/customized.csv.
 main: kit: copies: 'overwrite'
