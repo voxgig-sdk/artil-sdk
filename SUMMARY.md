@@ -12,7 +12,7 @@ An entity groups related API operations. An operation can have several routes wi
 
 ## What the API provides
 
-### Access
+### [Access](docs/api/access.html)
 
 Who can wake an agent on each channel: read the rules for every channel, or set the rule for one `channel` (email, sms, telegram, slack or url).
 
@@ -25,7 +25,7 @@ Key fields to recognise:
 - `admit`: Whether anyone, the workspace&#39;s members and agents besides the listed senders, or only the listed senders wake the agent; a new agent starts with team, except on Telegram, which lists the account that creates its bot from Artil, and its Message URL is never open to anyone
 - `senders`: Email addresses, phone numbers, Telegram user ids, group ids and usernames, Slack member ids and #channels, or for the Message URL the ids of agents and members
 
-### Address
+### [Address](docs/api/address.html)
 
 An agent&#39;s email address, phone number, Telegram bot or Slack bot: list, add, read, change or remove one, or make it the one its channel sends from (`primary`).
 
@@ -41,7 +41,7 @@ Key fields to recognise:
 - `name`: What people know the address by when its value is an id, like a Slack bot&#39;s @name
 - `primary`: Whether new messages on its channel go out from it
 
-### AddressSetup
+### [AddressSetup](docs/api/address_setup.html)
 
 A link where a workspace member creates a Telegram bot or a Slack app for an agent with the provider.
 
@@ -53,7 +53,7 @@ Key fields to recognise:
 
 - `token`: What installs an app the member made: a Slack app&#39;s client id, client secret and signing secret, in that order, with spaces between.
 
-### Agent
+### [Agent](docs/api/agent.html)
 
 An agent account in the workspace: list, create, read, rename or change the icon of one, or delete it with its addresses and messages.
 
@@ -61,7 +61,7 @@ Results: The new agent; The agents; The agent; The agent is gone; The changed ag
 
 SDK operations: `create`, `list`, `load`, `remove`, `update`.
 
-### Channel
+### [Channel](docs/api/channel.html)
 
 The channels an agent can send and receive on, with the labels and the size limits of each.
 
@@ -76,7 +76,7 @@ Key fields to recognise:
 - `limits`: The most a message on the channel carries
 - `name`: What people and agents call the channel, like Telegram
 
-### Client
+### [Client](docs/api/client.html)
 
 The clients that can act as an agent: CLI and OAuth sign-ins, and tokens once they have been used.
 
@@ -89,7 +89,7 @@ Key fields to recognise:
 - `id`: The credential identifying this client
 - `name`: The recorded client or device name, or the name of a manually created token
 
-### Connection
+### [Connection](docs/api/connection.html)
 
 The client that hears an agent&#39;s new messages: read it, or make the calling client that one (an agent&#39;s own token only).
 
@@ -101,7 +101,7 @@ Key fields to recognise:
 
 - `tokenId`: The agent&#39;s token the client connected with
 
-### Event
+### [Event](docs/api/event.html)
 
 An agent&#39;s events, such as a message arriving: list them, or send a message to the agent&#39;s Message URL (create).
 
@@ -117,7 +117,7 @@ Key fields to recognise:
 - `messageId`: The message&#39;s id, to read it with
 - `text`: The text of a message Artil keeps no copy of, which comes whole
 
-### Listener
+### [Listener](docs/api/listener.html)
 
 Who hears an agent&#39;s new messages now: its connected client and its webhooks.
 
@@ -125,7 +125,7 @@ Results: Who listens.
 
 SDK operations: `list`.
 
-### Me
+### [Me](docs/api/me.html)
 
 The member or agent the calling token signs in as, and its workspace.
 
@@ -133,7 +133,7 @@ Results: The signed-in member or agent.
 
 SDK operations: `load`.
 
-### MeToken
+### [MeToken](docs/api/me_token.html)
 
 The calling token itself: remove it to revoke it.
 
@@ -141,7 +141,7 @@ Results: The token no longer works.
 
 SDK operations: `remove`.
 
-### Message
+### [Message](docs/api/message.html)
 
 An email, text, Telegram or Slack message an agent received or sent: list them (by channel, direction or counterpart), read one, or send one, which can answer (`replyTo`) or pass on (`forward`) another.
 
@@ -157,7 +157,7 @@ Key fields to recognise:
 - `authorName`: The name the author goes by, when the channel tells it
 - `cc`: Whom the message names as getting a copy
 
-### Teammate
+### [Teammate](docs/api/teammate.html)
 
 The workspace&#39;s agents and members, with the addresses that reach each, and whether anyone listens to each agent.
 
@@ -173,7 +173,7 @@ Key fields to recognise:
 - `id`: The agent&#39;s or member&#39;s id
 - `imageUrl`: The member&#39;s picture from their sign-in profile, or the avatar it makes them; null for agents
 
-### Token
+### [Token](docs/api/token.html)
 
 The tokens members made for an agent, never their values: list them or revoke one.
 
@@ -181,7 +181,7 @@ Results: The tokens; The token no longer works.
 
 SDK operations: `list`, `remove`.
 
-### Webhook
+### [Webhook](docs/api/webhook.html)
 
 Where an agent&#39;s events are posted: list, add or remove one. Adding one returns its signing secret.
 
@@ -203,38 +203,38 @@ Use this map to locate a capability. Consult the entity reference before supplyi
 
 | Entity | SDK operation | HTTP route | Authentication |
 | --- | --- | --- | --- |
-| Access | `load` | `GET /agents/{id}/access` | Required |
-| Access | `update` | `PUT /agents/{id}/access/{channel}` | Required |
-| Address | `create` | `POST /agents/{id}/addresses/{addressId}/primary` | Required |
-| Address | `create` | `POST /agents/{id}/addresses` | Required |
-| Address | `list` | `GET /agents/{id}/addresses` | Required |
-| Address | `load` | `GET /agents/{id}/addresses/{addressId}` | Required |
-| Address | `remove` | `DELETE /agents/{id}/addresses/{addressId}` | Required |
-| Address | `update` | `PATCH /agents/{id}/addresses/{addressId}` | Required |
-| AddressSetup | `create` | `POST /agents/{id}/addresses/setups` | Required |
-| Agent | `create` | `POST /agents` | Required |
-| Agent | `list` | `GET /agents` | Required |
-| Agent | `load` | `GET /agents/{id}` | Required |
-| Agent | `remove` | `DELETE /agents/{id}` | Required |
-| Agent | `update` | `PATCH /agents/{id}` | Required |
-| Channel | `list` | `GET /agents/{id}/channels` | Required |
-| Client | `list` | `GET /agents/{id}/clients` | Required |
-| Connection | `load` | `GET /agents/{id}/connection` | Required |
-| Connection | `update` | `PUT /agents/{id}/connection` | Required |
-| Event | `create` | `POST /agents/{id}/url` | Required |
-| Event | `list` | `GET /agents/{id}/events` | Required |
-| Listener | `list` | `GET /agents/{id}/listeners` | Required |
-| Me | `load` | `GET /me` | Required |
-| MeToken | `remove` | `DELETE /me/token` | Required |
-| Message | `create` | `POST /agents/{id}/messages` | Required |
-| Message | `list` | `GET /agents/{id}/messages` | Required |
-| Message | `load` | `GET /agents/{id}/messages/{messageId}` | Required |
-| Teammate | `list` | `GET /team` | Required |
-| Token | `list` | `GET /agents/{id}/tokens` | Required |
-| Token | `remove` | `DELETE /agents/{id}/tokens/{tokenId}` | Required |
-| Webhook | `create` | `POST /agents/{id}/webhooks` | Required |
-| Webhook | `list` | `GET /agents/{id}/webhooks` | Required |
-| Webhook | `remove` | `DELETE /agents/{id}/webhooks/{webhookId}` | Required |
+| [Access](docs/api/access.html) | `load` | `GET /agents/{id}/access` | Required |
+| [Access](docs/api/access.html) | `update` | `PUT /agents/{id}/access/{channel}` | Required |
+| [Address](docs/api/address.html) | `create` | `POST /agents/{id}/addresses/{addressId}/primary` | Required |
+| [Address](docs/api/address.html) | `create` | `POST /agents/{id}/addresses` | Required |
+| [Address](docs/api/address.html) | `list` | `GET /agents/{id}/addresses` | Required |
+| [Address](docs/api/address.html) | `load` | `GET /agents/{id}/addresses/{addressId}` | Required |
+| [Address](docs/api/address.html) | `remove` | `DELETE /agents/{id}/addresses/{addressId}` | Required |
+| [Address](docs/api/address.html) | `update` | `PATCH /agents/{id}/addresses/{addressId}` | Required |
+| [AddressSetup](docs/api/address_setup.html) | `create` | `POST /agents/{id}/addresses/setups` | Required |
+| [Agent](docs/api/agent.html) | `create` | `POST /agents` | Required |
+| [Agent](docs/api/agent.html) | `list` | `GET /agents` | Required |
+| [Agent](docs/api/agent.html) | `load` | `GET /agents/{id}` | Required |
+| [Agent](docs/api/agent.html) | `remove` | `DELETE /agents/{id}` | Required |
+| [Agent](docs/api/agent.html) | `update` | `PATCH /agents/{id}` | Required |
+| [Channel](docs/api/channel.html) | `list` | `GET /agents/{id}/channels` | Required |
+| [Client](docs/api/client.html) | `list` | `GET /agents/{id}/clients` | Required |
+| [Connection](docs/api/connection.html) | `load` | `GET /agents/{id}/connection` | Required |
+| [Connection](docs/api/connection.html) | `update` | `PUT /agents/{id}/connection` | Required |
+| [Event](docs/api/event.html) | `create` | `POST /agents/{id}/url` | Required |
+| [Event](docs/api/event.html) | `list` | `GET /agents/{id}/events` | Required |
+| [Listener](docs/api/listener.html) | `list` | `GET /agents/{id}/listeners` | Required |
+| [Me](docs/api/me.html) | `load` | `GET /me` | Required |
+| [MeToken](docs/api/me_token.html) | `remove` | `DELETE /me/token` | Required |
+| [Message](docs/api/message.html) | `create` | `POST /agents/{id}/messages` | Required |
+| [Message](docs/api/message.html) | `list` | `GET /agents/{id}/messages` | Required |
+| [Message](docs/api/message.html) | `load` | `GET /agents/{id}/messages/{messageId}` | Required |
+| [Teammate](docs/api/teammate.html) | `list` | `GET /team` | Required |
+| [Token](docs/api/token.html) | `list` | `GET /agents/{id}/tokens` | Required |
+| [Token](docs/api/token.html) | `remove` | `DELETE /agents/{id}/tokens/{tokenId}` | Required |
+| [Webhook](docs/api/webhook.html) | `create` | `POST /agents/{id}/webhooks` | Required |
+| [Webhook](docs/api/webhook.html) | `list` | `GET /agents/{id}/webhooks` | Required |
+| [Webhook](docs/api/webhook.html) | `remove` | `DELETE /agents/{id}/webhooks/{webhookId}` | Required |
 
 ## Connect to the API
 
@@ -258,13 +258,13 @@ Choose the language already used by your application or service. The clients rep
 
 | Client | Repository directory | Distribution |
 | --- | --- | --- |
-| Golang | `go/` | Build from source |
-| Lua | `lua/` | Build from source |
-| PHP | `php/` | Build from source |
-| Postman collections | `postman/` | Build from source |
-| Python | `py/` | Build from source |
-| Ruby | `rb/` | Build from source |
-| TypeScript | `ts/` | Build from source |
+| [Golang](docs/sdks/go.html) | `go/` | Build from source |
+| [Lua](docs/sdks/lua.html) | `lua/` | Build from source |
+| [PHP](docs/sdks/php.html) | `php/` | Build from source |
+| [Postman collections](docs/sdks/postman.html) | `postman/` | Build from source |
+| [Python](docs/sdks/py.html) | `py/` | Build from source |
+| [Ruby](docs/sdks/rb.html) | `rb/` | Build from source |
+| [TypeScript](docs/sdks/ts.html) | `ts/` | Build from source |
 
 Build-from-source entries are not marked as published in the project model. Follow the build instructions in that target’s README, then consume the resulting package using your language’s local dependency mechanism. Published entries give the installation command recorded for that client.
 
@@ -272,14 +272,14 @@ Build-from-source entries are not marked as published in the project model. Foll
 
 These targets provide another way to use the API. Their available commands or tools can cover a smaller set of operations than the client libraries.
 
-### Go CLI
+### [Go CLI](docs/tools/go-cli.html)
 
 Use the command-line interface for shell-based tasks and scripts.
 
 Repository directory: `go-cli/`. Not published. Build from the go-cli directory.
 
 
-### Go MCP server
+### [Go MCP server](docs/tools/go-mcp.html)
 
 Use the MCP server to expose supported API operations to an MCP client.
 
@@ -292,22 +292,22 @@ Repository directory: `go-mcp/`. Not published. Build from the go-mcp directory.
 
 Features supply behaviour around API calls, such as request handling, diagnostics, or local testing. Inclusion in this project does not mean a feature is enabled at runtime. Check the selected SDK’s supported features and configuration defaults, then enable the behaviour your application needs.
 
-- `debug`: Request/response capture ring buffer for debugging
-- `idempotency`: Idempotency keys for safe retries of mutating operations
-- `metrics`: Statistics capture: per-operation counters and latency
-- `paging`: Pagination signals for list operations
-- `ratelimit`: Client-side rate limiting via a token bucket
-- `retry`: Automatic retry of transient failures with exponential backoff
-- `secrets`: Secret access: resolve the API credential through a provider chain, and exchange a refresh token for short-lived access tokens
-- `test`: In-memory mock transport for testing without a live server
-- `timeout`: Per-request timeout with transport abort
+- [`debug`](docs/features/debug.html): Request/response capture ring buffer for debugging
+- [`idempotency`](docs/features/idempotency.html): Idempotency keys for safe retries of mutating operations
+- [`metrics`](docs/features/metrics.html): Statistics capture: per-operation counters and latency
+- [`paging`](docs/features/paging.html): Pagination signals for list operations
+- [`ratelimit`](docs/features/ratelimit.html): Client-side rate limiting via a token bucket
+- [`retry`](docs/features/retry.html): Automatic retry of transient failures with exponential backoff
+- [`secrets`](docs/features/secrets.html): Secret access: resolve the API credential through a provider chain, and exchange a refresh token for short-lived access tokens
+- [`test`](docs/features/test.html): In-memory mock transport for testing without a live server
+- [`timeout`](docs/features/timeout.html): Per-request timeout with transport abort
 
 Start with the default client configuration. Add request limits and diagnostics as needed, test error paths, and review retry behaviour before using operations that change data. A retry can repeat an operation unless the API provides a suitable guarantee.
 
 ## Continue with the documentation
 
-- Follow the first-call guide for the setup sequence.
-- Read the authentication guide before using protected routes.
-- Use the API reference for request schemas, response formats, and status codes.
+- Follow the [first-call guide](docs/guides/first-call.html) for the setup sequence.
+- Read the [authentication guide](docs/guides/authentication.html) before using protected routes.
+- Use the [API reference](docs/api/index.html) for request schemas, response formats, and status codes.
 - Check the chosen SDK or companion tool reference for its configuration and supported operations.
 

@@ -1,6 +1,45 @@
 {
   "files": [
-    "SUMMARY.md"
+    "SUMMARY.md",
+    "docs/api/access.html",
+    "docs/api/address.html",
+    "docs/api/address_setup.html",
+    "docs/api/agent.html",
+    "docs/api/channel.html",
+    "docs/api/client.html",
+    "docs/api/connection.html",
+    "docs/api/event.html",
+    "docs/api/index.html",
+    "docs/api/listener.html",
+    "docs/api/me.html",
+    "docs/api/me_token.html",
+    "docs/api/message.html",
+    "docs/api/teammate.html",
+    "docs/api/token.html",
+    "docs/api/webhook.html",
+    "docs/features/debug.html",
+    "docs/features/idempotency.html",
+    "docs/features/metrics.html",
+    "docs/features/paging.html",
+    "docs/features/ratelimit.html",
+    "docs/features/retry.html",
+    "docs/features/secrets.html",
+    "docs/features/test.html",
+    "docs/features/timeout.html",
+    "docs/guides/authentication.html",
+    "docs/guides/concepts.html",
+    "docs/guides/errors.html",
+    "docs/guides/first-call.html",
+    "docs/index.html",
+    "docs/sdks/go.html",
+    "docs/sdks/lua.html",
+    "docs/sdks/php.html",
+    "docs/sdks/postman.html",
+    "docs/sdks/py.html",
+    "docs/sdks/rb.html",
+    "docs/sdks/ts.html",
+    "docs/tools/go-cli.html",
+    "docs/tools/go-mcp.html"
   ],
   "config": ".sdk/doc/qa/vale.ini",
   "routes": {},
@@ -105,6 +144,105 @@
       "Whom the message names as getting a copy",
       "Why the last delivery failed",
       "Words a client builds its texts about the channel from"
+    ],
+    "docs/api/access.html": [
+      "Each channel&#39;s access",
+      "The channel&#39;s access",
+      "The request failed; the error says why",
+      "Who can wake an agent on each channel: read the rules for every channel, or set the rule for one `channel` (email, sms, telegram, slack or url)."
+    ],
+    "docs/api/address.html": [
+      "An agent&#39;s email address, phone number, Telegram bot or Slack bot: list, add, read, change or remove one, or make it the one its channel sends from (`primary`).",
+      "The address",
+      "The address is gone",
+      "The address is primary",
+      "The addresses",
+      "The changed address",
+      "The new address",
+      "The new phone number, which US carriers are still registering. Read it at Location until registering is false; it sends nothing until then",
+      "The request failed; the error says why"
+    ],
+    "docs/api/address_setup.html": [
+      "A link where a workspace member creates a Telegram bot or a Slack app for an agent with the provider.",
+      "The link",
+      "The request failed; the error says why"
+    ],
+    "docs/api/agent.html": [
+      "An agent account in the workspace: list, create, read, rename or change the icon of one, or delete it with its addresses and messages.",
+      "The agent",
+      "The agent is gone",
+      "The agents",
+      "The changed agent",
+      "The new agent",
+      "The request failed; the error says why"
+    ],
+    "docs/api/channel.html": [
+      "The channels",
+      "The channels an agent can send and receive on, with the labels and the size limits of each.",
+      "The request failed; the error says why"
+    ],
+    "docs/api/client.html": [
+      "The clients",
+      "The clients that can act as an agent: CLI and OAuth sign-ins, and tokens once they have been used.",
+      "The request failed; the error says why"
+    ],
+    "docs/api/connection.html": [
+      "The agent&#39;s new connection",
+      "The client that hears an agent&#39;s new messages: read it, or make the calling client that one (an agent&#39;s own token only).",
+      "The connection",
+      "The request failed; the error says why"
+    ],
+    "docs/api/event.html": [
+      "An agent&#39;s events, such as a message arriving: list them, or send a message to the agent&#39;s Message URL (create).",
+      "The events",
+      "The message.received event",
+      "The request failed; the error says why"
+    ],
+    "docs/api/index.html": [
+      "Artil gives AI agents their own email inboxes, SMS numbers, Telegram bots and Slack apps, and a Message URL where other agents and teammates reach them. Its HTTP API manages agents, their addresses and access rules, sends and reads their messages, and delivers new ones by webhook."
+    ],
+    "docs/api/listener.html": [
+      "The request failed; the error says why",
+      "Who hears an agent&#39;s new messages now: its connected client and its webhooks.",
+      "Who listens"
+    ],
+    "docs/api/me.html": [
+      "The member or agent the calling token signs in as, and its workspace.",
+      "The request failed; the error says why",
+      "The signed-in member or agent"
+    ],
+    "docs/api/me_token.html": [
+      "The calling token itself: remove it to revoke it.",
+      "The request failed; the error says why",
+      "The token no longer works"
+    ],
+    "docs/api/message.html": [
+      "An email, text, Telegram or Slack message an agent received or sent: list them (by channel, direction or counterpart), read one, or send one, which can answer (`replyTo`) or pass on (`forward`) another.",
+      "The message",
+      "The messages",
+      "The request failed; the error says why",
+      "The sent message"
+    ],
+    "docs/api/teammate.html": [
+      "The request failed; the error says why",
+      "The team",
+      "The workspace&#39;s agents and members, with the addresses that reach each, and whether anyone listens to each agent."
+    ],
+    "docs/api/token.html": [
+      "The request failed; the error says why",
+      "The token no longer works",
+      "The tokens",
+      "The tokens members made for an agent, never their values: list them or revoke one."
+    ],
+    "docs/api/webhook.html": [
+      "Events are no longer posted there",
+      "The request failed; the error says why",
+      "The webhook and its secret",
+      "The webhooks",
+      "Where an agent&#39;s events are posted: list, add or remove one. Adding one returns its signing secret."
+    ],
+    "docs/index.html": [
+      "Artil gives AI agents their own email inboxes, SMS numbers, Telegram bots and Slack apps, and a Message URL where other agents and teammates reach them. Its HTTP API manages agents, their addresses and access rules, sends and reads their messages, and delivers new ones by webhook."
     ]
   }
 }

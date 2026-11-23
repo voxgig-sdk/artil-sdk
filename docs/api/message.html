@@ -1,0 +1,1176 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Message | Artil API</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><a class="skip" href="#content">Skip to content</a>
+<header class="site-header"><a class="site-title" href="../index.html">Artil API<span>SDK documentation</span></a><div class="site-links"><a class="repo-link" href="https://github.com/voxgig-sdk/artil-sdk">voxgig-sdk/artil-sdk</a></div></header>
+<div class="site-notice" role="note"></div>
+<div class="shell"><nav class="site-nav" aria-label="Documentation"><div class="search"><label for="search">Search documentation</label><input id="search" type="search" data-base="../" placeholder="Find a guide or reference"><div id="results" aria-live="polite"></div></div><details><summary>Overview</summary><a href="../index.html">Artil API</a></details>
+<details open><summary>API</summary><a href="../api/index.html">API overview</a>
+<a href="../api/access.html">Access</a>
+<a href="../api/address.html">Address</a>
+<a href="../api/address_setup.html">AddressSetup</a>
+<a href="../api/agent.html">Agent</a>
+<a href="../api/channel.html">Channel</a>
+<a href="../api/client.html">Client</a>
+<a href="../api/connection.html">Connection</a>
+<a href="../api/event.html">Event</a>
+<a href="../api/listener.html">Listener</a>
+<a href="../api/me.html">Me</a>
+<a href="../api/me_token.html">MeToken</a>
+<a aria-current="page" href="../api/message.html">Message</a><div class="nav-sections"><a class="nav-section" href="#post-agentsidmessages">POST /agents/{id}/messages</a>
+<a class="nav-section" href="#get-agentsidmessages">GET /agents/{id}/messages</a>
+<a class="nav-section" href="#get-agentsidmessagesmessageid">GET /agents/{id}/messages/{messageId}</a></div>
+<a href="../api/teammate.html">Teammate</a>
+<a href="../api/token.html">Token</a>
+<a href="../api/webhook.html">Webhook</a></details>
+<details><summary>Guides</summary><a href="../guides/authentication.html">Authentication</a>
+<a href="../guides/first-call.html">Make your first API call</a>
+<a href="../guides/errors.html">Handle errors</a>
+<a href="../guides/concepts.html">Entities, SDKs, and tools</a></details>
+<details><summary>SDKs</summary><a href="../sdks/go.html">Golang</a>
+<a href="../sdks/lua.html">Lua</a>
+<a href="../sdks/php.html">PHP</a>
+<a href="../sdks/postman.html">Postman collections</a>
+<a href="../sdks/py.html">Python</a>
+<a href="../sdks/rb.html">Ruby</a>
+<a href="../sdks/ts.html">TypeScript</a></details>
+<details><summary>Tools</summary><a href="../tools/go-cli.html">Go CLI</a>
+<a href="../tools/go-mcp.html">Go MCP server</a></details>
+<details><summary>Features</summary><a href="../features/debug.html">Debug capture</a>
+<a href="../features/idempotency.html">Idempotency</a>
+<a href="../features/metrics.html">Metrics</a>
+<a href="../features/paging.html">Paging</a>
+<a href="../features/ratelimit.html">Rate limiting</a>
+<a href="../features/retry.html">Retry</a>
+<a href="../features/secrets.html">Secrets</a>
+<a href="../features/test.html">Test transport</a>
+<a href="../features/timeout.html">Timeout</a></details></nav><main id="content"><div class="page-context"><span class="section-dot" aria-hidden="true"></span>API</div><h1 id="message">Message</h1>
+<p>An email, text, Telegram or Slack message an agent received or sent: list them (by channel, direction or counterpart), read one, or send one, which can answer (<code>replyTo</code>) or pass on (<code>forward</code>) another.</p>
+<h2 id="operations">Operations</h2>
+<p>Every route this entity exposes. Each route links to its own reference on this page.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Route</th>
+<th>SDK operation</th>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST</code></td>
+<td><a href="#post-agentsidmessages"><code>/agents/{id}/messages</code></a></td>
+<td><code>create</code></td>
+<td>The sent message</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><a href="#get-agentsidmessages"><code>/agents/{id}/messages</code></a></td>
+<td><code>list</code></td>
+<td>The messages</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><a href="#get-agentsidmessagesmessageid"><code>/agents/{id}/messages/{messageId}</code></a></td>
+<td><code>load</code></td>
+<td>The message</td>
+</tr>
+</tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<p>One example per SDK, generated from the API model. The argument names are the parameters and fields of this entity, and the values are placeholders. The examples are not compiled or executed.</p>
+<h3 id="golang">Golang</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/go.html#set-up-the-client">Golang setup</a>, then call the operations:</p>
+<pre><code class="language-go">messages, err := client.Message(nil).List(map[string]any{&quot;agent_id&quot;: &quot;example&quot;}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(messages)
+message, err := client.Message(nil).Load(map[string]any{&quot;agent_id&quot;: &quot;example&quot;, &quot;id&quot;: &quot;example_id&quot;}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(message)
+created, err := client.Message(nil).Create(map[string]any{&quot;agent_id&quot;: &quot;example&quot;, &quot;text&quot;: &quot;example&quot;}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(created)
+</code></pre>
+<h3 id="lua">Lua</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/lua.html#set-up-the-client">Lua setup</a>, then call the operations:</p>
+<pre><code class="language-lua">local messages, err = client:Message():list({ agent_id = &quot;example&quot; })
+local message, err = client:Message():load({ agent_id = &quot;example&quot;, id = &quot;example_id&quot; })
+local created, err = client:Message():create({ agent_id = &quot;example&quot;, text = &quot;example&quot; })
+</code></pre>
+<h3 id="php">PHP</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/php.html#set-up-the-client">PHP setup</a>, then call the operations:</p>
+<pre><code class="language-php">$messages = $client-&gt;Message()-&gt;list([&quot;agent_id&quot; =&gt; &quot;example&quot;]);
+$message = $client-&gt;Message()-&gt;load([&quot;agent_id&quot; =&gt; &quot;example&quot;, &quot;id&quot; =&gt; &quot;example_id&quot;]);
+$created = $client-&gt;Message()-&gt;create([&quot;agent_id&quot; =&gt; &quot;example&quot;, &quot;text&quot; =&gt; &quot;example&quot;]);
+</code></pre>
+<h3 id="python">Python</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/py.html#set-up-the-client">Python setup</a>, then call the operations:</p>
+<pre><code class="language-py">messages = client.Message().list({&quot;agent_id&quot;: &quot;example&quot;})
+message = client.Message().load({&quot;agent_id&quot;: &quot;example&quot;, &quot;id&quot;: &quot;example_id&quot;})
+created = client.Message().create({ &quot;agent_id&quot;: &quot;example&quot;, &quot;text&quot;: &quot;example&quot; })
+</code></pre>
+<h3 id="ruby">Ruby</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/rb.html#set-up-the-client">Ruby setup</a>, then call the operations:</p>
+<pre><code class="language-rb">messages = client.Message.list({ &quot;agent_id&quot; =&gt; &quot;example&quot; })
+message = client.Message.load({ &quot;agent_id&quot; =&gt; &quot;example&quot;, &quot;id&quot; =&gt; &quot;example_id&quot; })
+created = client.Message.create({ &quot;agent_id&quot; =&gt; &quot;example&quot;, &quot;text&quot; =&gt; &quot;example&quot; })
+</code></pre>
+<h3 id="typescript">TypeScript</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/ts.html#set-up-the-client">TypeScript setup</a>, then call the operations:</p>
+<pre><code class="language-ts">const messages = await client.Message().list({ agent_id: &quot;example&quot; })
+const message = await client.Message().load({ agent_id: &quot;example&quot;, id: &quot;example_id&quot; })
+const created = await client.Message().create({ agent_id: &quot;example&quot;, text: &quot;example&quot; })
+</code></pre>
+<h2 id="fields">Fields</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>addressId</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>The agent's address the message came to or went from; all zeros on url, where the agent's id is its address</td>
+</tr>
+<tr>
+<td><code>admission</code></td>
+<td><code>any</code></td>
+<td>Yes</td>
+<td>Who the sender of a received message is to the agent: <code>team</code> for a member or agent of the workspace, <code>listed</code> for a sender on the channel's list, and <code>anyone</code> for everyone else, including senders who could not be verified</td>
+</tr>
+<tr>
+<td><code>attachments</code></td>
+<td><code>array</code></td>
+<td>Yes</td>
+<td>Attachments</td>
+</tr>
+<tr>
+<td><code>author</code></td>
+<td><code>one,string,null</code></td>
+<td>Yes</td>
+<td>Who wrote an inbound message in a group, such as a Telegram user id or the email of someone in a Slack channel</td>
+</tr>
+<tr>
+<td><code>authorName</code></td>
+<td><code>one,string,null</code></td>
+<td>Yes</td>
+<td>The name the author goes by, when the channel tells it</td>
+</tr>
+<tr>
+<td><code>cc</code></td>
+<td><code>array</code></td>
+<td>Yes</td>
+<td>Whom the message names as getting a copy</td>
+</tr>
+<tr>
+<td><code>channel</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>The channel's kind, from listChannels</td>
+</tr>
+<tr>
+<td><code>client</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>On url, the client you send from, like Codex, which the agent sees beside your name.</td>
+</tr>
+<tr>
+<td><code>counterpart</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Who sent an inbound message, or the group it came in, or the recipients of an outbound one</td>
+</tr>
+<tr>
+<td><code>counterpartName</code></td>
+<td><code>one,string,null</code></td>
+<td>Yes</td>
+<td>The name an inbound message's sender or group goes by, when the channel tells it</td>
+</tr>
+<tr>
+<td><code>createdAt</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Created At</td>
+</tr>
+<tr>
+<td><code>direction</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Direction</td>
+</tr>
+<tr>
+<td><code>error</code></td>
+<td><code>one,string,null</code></td>
+<td>Yes</td>
+<td>Why a failed message was not sent or did not arrive</td>
+</tr>
+<tr>
+<td><code>forward</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>Forward</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Id</td>
+</tr>
+<tr>
+<td><code>refusal</code></td>
+<td><code>any</code></td>
+<td>Yes</td>
+<td>Why a refused message did not wake the agent</td>
+</tr>
+<tr>
+<td><code>replyTo</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>Reply To</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td><code>reported</code> when the recipient marked an email the agent sent as spam</td>
+</tr>
+<tr>
+<td><code>subject</code></td>
+<td><code>one,string,null</code></td>
+<td>Yes</td>
+<td>Subject</td>
+</tr>
+<tr>
+<td><code>text</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Text</td>
+</tr>
+<tr>
+<td><code>thread</code></td>
+<td><code>any</code></td>
+<td>Yes</td>
+<td>For received and imported email, its Message-ID and References; for email the agent sent, those of the email it answered</td>
+</tr>
+<tr>
+<td><code>to</code></td>
+<td><code>array</code></td>
+<td>Yes</td>
+<td>Whom the message names as its recipients; an inbound one names the agent unless it got a blind copy</td>
+</tr>
+</tbody>
+</table>
+<h2 id="create">create</h2>
+<h3 id="post-agentsidmessages" class="operation" data-method="post"><code>POST</code> /agents/{id}/messages</h3>
+<p>Operation ID: <code>sendMessage</code>.</p>
+<p>Authentication: bearer token (<code>token</code>) or oauth2 (<code>oauth</code>).</p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>In</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td><code>path</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>The agent's id</td>
+</tr>
+<tr>
+<td><code>Idempotency-Key</code></td>
+<td><code>header</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>A key of your choice, unique to this message. Sending again with the same key returns the message the first request sent instead of sending it twice, so a retry after a timeout is safe.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="request-body">Request body</h4>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>attachments</code></td>
+<td><code>array of object or object</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>cc</code></td>
+<td><code>array of string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>channel</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>The channel to start a conversation on, by its kind, from listChannels</td>
+</tr>
+<tr>
+<td><code>client</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>On url, the client you send from, like Codex, which the agent sees beside your name. Without it, Artil names the client your token was made for</td>
+</tr>
+<tr>
+<td><code>forward</code></td>
+<td><code>string (uuid)</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>replyTo</code></td>
+<td><code>string (uuid)</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>subject</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>text</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>thread</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>The thread of your client you send from, which an answer to the message wakes</td>
+</tr>
+<tr>
+<td><code>to</code></td>
+<td><code>array of string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><code>multipart/form-data</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>draft</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>The message as JSON, with the fields of a JSON request</td>
+</tr>
+<tr>
+<td><code>file</code></td>
+<td><code>string (binary) or array of string (binary)</code></td>
+<td>No</td>
+<td>The files to send, one part each</td>
+</tr>
+</tbody>
+</table>
+<h4 id="responses">Responses</h4>
+<h5 id="201-the-sent-message" class="status" data-status="2xx">201: The sent message</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>addressId</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td>The agent's address the message came to or went from; all zeros on url, where the agent's id is its address</td>
+</tr>
+<tr>
+<td><code>admission</code></td>
+<td><code>enum: team, listed, anyone or null</code></td>
+<td>Yes</td>
+<td>Who the sender of a received message is to the agent: <code>team</code> for a member or agent of the workspace, <code>listed</code> for a sender on the channel's list, and <code>anyone</code> for everyone else, including senders who could not be verified</td>
+</tr>
+<tr>
+<td><code>attachments</code></td>
+<td><code>array of object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>attachments[].id</code></td>
+<td><code>string (uuid) or null</code></td>
+<td>Yes</td>
+<td>The file's id, to send it on in attachments; null when Artil kept only the file's description</td>
+</tr>
+<tr>
+<td><code>attachments[].name</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>attachments[].size</code></td>
+<td><code>number</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>attachments[].type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>attachments[].url</code></td>
+<td><code>string,null</code></td>
+<td>Yes</td>
+<td>Where to download the file: a link that needs no sign-in and expires after 15 minutes, so read the message again for a new one; null when Artil kept only the file's description</td>
+</tr>
+<tr>
+<td><code>author</code></td>
+<td><code>string,null</code></td>
+<td>Yes</td>
+<td>Who wrote an inbound message in a group, such as a Telegram user id or the email of someone in a Slack channel</td>
+</tr>
+<tr>
+<td><code>authorName</code></td>
+<td><code>string,null</code></td>
+<td>Yes</td>
+<td>The name the author goes by, when the channel tells it</td>
+</tr>
+<tr>
+<td><code>cc</code></td>
+<td><code>array of string</code></td>
+<td>Yes</td>
+<td>Whom the message names as getting a copy</td>
+</tr>
+<tr>
+<td><code>channel</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>The channel's kind, from listChannels</td>
+</tr>
+<tr>
+<td><code>counterpart</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Who sent an inbound message, or the group it came in, or the recipients of an outbound one</td>
+</tr>
+<tr>
+<td><code>counterpartName</code></td>
+<td><code>string,null</code></td>
+<td>Yes</td>
+<td>The name an inbound message's sender or group goes by, when the channel tells it</td>
+</tr>
+<tr>
+<td><code>createdAt</code></td>
+<td><code>string (date-time)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>direction</code></td>
+<td><code>enum: inbound, outbound</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>error</code></td>
+<td><code>string,null</code></td>
+<td>Yes</td>
+<td>Why a failed message was not sent or did not arrive</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>refusal</code></td>
+<td><code>enum: self, spam, plan_limit, rate_limit, sender, outsider, ... or null</code></td>
+<td>Yes</td>
+<td>Why a refused message did not wake the agent</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>enum: received, refused, sending, sent, failed, imported, ...</code></td>
+<td>Yes</td>
+<td><code>reported</code> when the recipient marked an email the agent sent as spam</td>
+</tr>
+<tr>
+<td><code>subject</code></td>
+<td><code>string,null</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>text</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>thread</code></td>
+<td><code>object or null</code></td>
+<td>Yes</td>
+<td>For received and imported email, its Message-ID and References; for email the agent sent, those of the email it answered</td>
+</tr>
+<tr>
+<td><code>to</code></td>
+<td><code>array of string</code></td>
+<td>Yes</td>
+<td>Whom the message names as its recipients; an inbound one names the agent unless it got a blind copy</td>
+</tr>
+</tbody>
+</table>
+<h5 id="4xx-the-request-failed-the-error-says-why">4XX: The request failed; the error says why</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>error</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>error.code</code></td>
+<td><code>enum: invalid_input, unauthorized, forbidden, plan_limit, not_found, conflict, ...</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>error.message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h5 id="5xx-the-request-failed-the-error-says-why">5XX: The request failed; the error says why</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>error</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>error.code</code></td>
+<td><code>enum: invalid_input, unauthorized, forbidden, plan_limit, not_found, conflict, ...</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>error.message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="list">list</h2>
+<h3 id="get-agentsidmessages" class="operation" data-method="get"><code>GET</code> /agents/{id}/messages</h3>
+<p>Operation ID: <code>listMessages</code>.</p>
+<p>Authentication: bearer token (<code>token</code>) or oauth2 (<code>oauth</code>).</p>
+<h4 id="parameters-1">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>In</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td><code>path</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>The agent's id</td>
+</tr>
+<tr>
+<td><code>channel</code></td>
+<td><code>query</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>The channel's kind, from listChannels</td>
+</tr>
+<tr>
+<td><code>direction</code></td>
+<td><code>query</code></td>
+<td><code>enum: inbound, outbound</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td><code>query</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>counterpart</code></td>
+<td><code>query</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>Keep the messages from or to this address or number</td>
+</tr>
+<tr>
+<td><code>before</code></td>
+<td><code>query</code></td>
+<td><code>string (uuid)</code></td>
+<td>No</td>
+<td>List the messages older than this one, to page back</td>
+</tr>
+<tr>
+<td><code>search</code></td>
+<td><code>query</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>Find the messages that hold these words, best match first. Only self-hosted Artil Connect servers search for now, and Artil Cloud answers forbidden</td>
+</tr>
+</tbody>
+</table>
+<h4 id="responses-1">Responses</h4>
+<h5 id="200-the-messages" class="status" data-status="2xx">200: The messages</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[].addressId</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td>The agent's address the message came to or went from; all zeros on url, where the agent's id is its address</td>
+</tr>
+<tr>
+<td><code>[].admission</code></td>
+<td><code>enum: team, listed, anyone or null</code></td>
+<td>Yes</td>
+<td>Who the sender of a received message is to the agent: <code>team</code> for a member or agent of the workspace, <code>listed</code> for a sender on the channel's list, and <code>anyone</code> for everyone else, including senders who could not be verified</td>
+</tr>
+<tr>
+<td><code>[].attachments</code></td>
+<td><code>array of object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].attachments[].id</code></td>
+<td><code>string (uuid) or null</code></td>
+<td>Yes</td>
+<td>The file's id, to send it on in attachments; null when Artil kept only the file's description</td>
+</tr>
+<tr>
+<td><code>[].attachments[].name</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].attachments[].size</code></td>
+<td><code>number</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].attachments[].type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].attachments[].url</code></td>
+<td><code>string,null</code></td>
+<td>Yes</td>
+<td>Where to download the file: a link that needs no sign-in and expires after 15 minutes, so read the message again for a new one; null when Artil kept only the file's description</td>
+</tr>
+<tr>
+<td><code>[].author</code></td>
+<td><code>string,null</code></td>
+<td>Yes</td>
+<td>Who wrote an inbound message in a group, such as a Telegram user id or the email of someone in a Slack channel</td>
+</tr>
+<tr>
+<td><code>[].authorName</code></td>
+<td><code>string,null</code></td>
+<td>Yes</td>
+<td>The name the author goes by, when the channel tells it</td>
+</tr>
+<tr>
+<td><code>[].cc</code></td>
+<td><code>array of string</code></td>
+<td>Yes</td>
+<td>Whom the message names as getting a copy</td>
+</tr>
+<tr>
+<td><code>[].channel</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>The channel's kind, from listChannels</td>
+</tr>
+<tr>
+<td><code>[].counterpart</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Who sent an inbound message, or the group it came in, or the recipients of an outbound one</td>
+</tr>
+<tr>
+<td><code>[].counterpartName</code></td>
+<td><code>string,null</code></td>
+<td>Yes</td>
+<td>The name an inbound message's sender or group goes by, when the channel tells it</td>
+</tr>
+<tr>
+<td><code>[].createdAt</code></td>
+<td><code>string (date-time)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].direction</code></td>
+<td><code>enum: inbound, outbound</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].error</code></td>
+<td><code>string,null</code></td>
+<td>Yes</td>
+<td>Why a failed message was not sent or did not arrive</td>
+</tr>
+<tr>
+<td><code>[].id</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].refusal</code></td>
+<td><code>enum: self, spam, plan_limit, rate_limit, sender, outsider, ... or null</code></td>
+<td>Yes</td>
+<td>Why a refused message did not wake the agent</td>
+</tr>
+<tr>
+<td><code>[].status</code></td>
+<td><code>enum: received, refused, sending, sent, failed, imported, ...</code></td>
+<td>Yes</td>
+<td><code>reported</code> when the recipient marked an email the agent sent as spam</td>
+</tr>
+<tr>
+<td><code>[].subject</code></td>
+<td><code>string,null</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].text</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].thread</code></td>
+<td><code>object or null</code></td>
+<td>Yes</td>
+<td>For received and imported email, its Message-ID and References; for email the agent sent, those of the email it answered</td>
+</tr>
+<tr>
+<td><code>[].to</code></td>
+<td><code>array of string</code></td>
+<td>Yes</td>
+<td>Whom the message names as its recipients; an inbound one names the agent unless it got a blind copy</td>
+</tr>
+</tbody>
+</table>
+<h5 id="4xx-the-request-failed-the-error-says-why-1">4XX: The request failed; the error says why</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>error</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>error.code</code></td>
+<td><code>enum: invalid_input, unauthorized, forbidden, plan_limit, not_found, conflict, ...</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>error.message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h5 id="5xx-the-request-failed-the-error-says-why-1">5XX: The request failed; the error says why</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>error</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>error.code</code></td>
+<td><code>enum: invalid_input, unauthorized, forbidden, plan_limit, not_found, conflict, ...</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>error.message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="load">load</h2>
+<h3 id="get-agentsidmessagesmessageid" class="operation" data-method="get"><code>GET</code> /agents/{id}/messages/{messageId}</h3>
+<p>Operation ID: <code>readMessage</code>.</p>
+<p>Authentication: bearer token (<code>token</code>) or oauth2 (<code>oauth</code>).</p>
+<h4 id="parameters-2">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>In</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td><code>path</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>The agent's id</td>
+</tr>
+<tr>
+<td><code>messageId</code></td>
+<td><code>path</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="responses-2">Responses</h4>
+<h5 id="200-the-message" class="status" data-status="2xx">200: The message</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>addressId</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td>The agent's address the message came to or went from; all zeros on url, where the agent's id is its address</td>
+</tr>
+<tr>
+<td><code>admission</code></td>
+<td><code>enum: team, listed, anyone or null</code></td>
+<td>Yes</td>
+<td>Who the sender of a received message is to the agent: <code>team</code> for a member or agent of the workspace, <code>listed</code> for a sender on the channel's list, and <code>anyone</code> for everyone else, including senders who could not be verified</td>
+</tr>
+<tr>
+<td><code>attachments</code></td>
+<td><code>array of object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>attachments[].id</code></td>
+<td><code>string (uuid) or null</code></td>
+<td>Yes</td>
+<td>The file's id, to send it on in attachments; null when Artil kept only the file's description</td>
+</tr>
+<tr>
+<td><code>attachments[].name</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>attachments[].size</code></td>
+<td><code>number</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>attachments[].type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>attachments[].url</code></td>
+<td><code>string,null</code></td>
+<td>Yes</td>
+<td>Where to download the file: a link that needs no sign-in and expires after 15 minutes, so read the message again for a new one; null when Artil kept only the file's description</td>
+</tr>
+<tr>
+<td><code>author</code></td>
+<td><code>string,null</code></td>
+<td>Yes</td>
+<td>Who wrote an inbound message in a group, such as a Telegram user id or the email of someone in a Slack channel</td>
+</tr>
+<tr>
+<td><code>authorName</code></td>
+<td><code>string,null</code></td>
+<td>Yes</td>
+<td>The name the author goes by, when the channel tells it</td>
+</tr>
+<tr>
+<td><code>cc</code></td>
+<td><code>array of string</code></td>
+<td>Yes</td>
+<td>Whom the message names as getting a copy</td>
+</tr>
+<tr>
+<td><code>channel</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>The channel's kind, from listChannels</td>
+</tr>
+<tr>
+<td><code>counterpart</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Who sent an inbound message, or the group it came in, or the recipients of an outbound one</td>
+</tr>
+<tr>
+<td><code>counterpartName</code></td>
+<td><code>string,null</code></td>
+<td>Yes</td>
+<td>The name an inbound message's sender or group goes by, when the channel tells it</td>
+</tr>
+<tr>
+<td><code>createdAt</code></td>
+<td><code>string (date-time)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>direction</code></td>
+<td><code>enum: inbound, outbound</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>error</code></td>
+<td><code>string,null</code></td>
+<td>Yes</td>
+<td>Why a failed message was not sent or did not arrive</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>refusal</code></td>
+<td><code>enum: self, spam, plan_limit, rate_limit, sender, outsider, ... or null</code></td>
+<td>Yes</td>
+<td>Why a refused message did not wake the agent</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>enum: received, refused, sending, sent, failed, imported, ...</code></td>
+<td>Yes</td>
+<td><code>reported</code> when the recipient marked an email the agent sent as spam</td>
+</tr>
+<tr>
+<td><code>subject</code></td>
+<td><code>string,null</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>text</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>thread</code></td>
+<td><code>object or null</code></td>
+<td>Yes</td>
+<td>For received and imported email, its Message-ID and References; for email the agent sent, those of the email it answered</td>
+</tr>
+<tr>
+<td><code>to</code></td>
+<td><code>array of string</code></td>
+<td>Yes</td>
+<td>Whom the message names as its recipients; an inbound one names the agent unless it got a blind copy</td>
+</tr>
+</tbody>
+</table>
+<h5 id="4xx-the-request-failed-the-error-says-why-2">4XX: The request failed; the error says why</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>error</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>error.code</code></td>
+<td><code>enum: invalid_input, unauthorized, forbidden, plan_limit, not_found, conflict, ...</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>error.message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h5 id="5xx-the-request-failed-the-error-says-why-2">5XX: The request failed; the error says why</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>error</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>error.code</code></td>
+<td><code>enum: invalid_input, unauthorized, forbidden, plan_limit, not_found, conflict, ...</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>error.message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</main></div>
+<script src="../assets/search.js" defer></script></body></html>

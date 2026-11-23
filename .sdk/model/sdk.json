@@ -45,7 +45,7 @@
         },
         "edition": {
           "github-pages": {
-            "active": false,
+            "active": true,
             "base": "node_modules/@voxgig/docgen/project/.sdk",
             "brand": {},
             "filter": {
@@ -60,7 +60,7 @@
               "path": "docs"
             },
             "package": "@voxgig/docgen",
-            "published": false,
+            "published": true,
             "site": {
               "active": true
             },
@@ -96,12 +96,12 @@
         },
         "style": {
           "color": {
-            "accent": "#00c6d8",
-            "background": "#f5f5f9",
-            "darkBackground": "#0f1117",
-            "darkText": "#e6edf3",
-            "primary": "#e70042",
-            "text": "#0a0a0a"
+            "accent": "#2282ef",
+            "background": "#ffffff",
+            "darkBackground": "#161513",
+            "darkText": "#ece8e0",
+            "primary": "#1b73d8",
+            "text": "#1f1d1a"
           },
           "font": "Nunito, system-ui, sans-serif",
           "fontFile": "",
@@ -6181,7 +6181,7 @@
             "registry": {
               "active": false,
               "name": "luarocks",
-              "package": "",
+              "package": "voxgig-sdk-artil-sdk",
               "state": "pending",
               "url": "https://luarocks.org",
               "vault": {
@@ -6248,7 +6248,7 @@
             "registry": {
               "active": false,
               "name": "packagist",
-              "package": "",
+              "package": "voxgig-sdk/artil-sdk",
               "state": "pending",
               "url": "https://packagist.org",
               "vault": {
@@ -6400,7 +6400,7 @@
             "registry": {
               "active": false,
               "name": "pypi",
-              "package": "",
+              "package": "voxgig-sdk-artil-sdk",
               "state": "pending",
               "url": "https://pypi.org",
               "vault": {
@@ -6473,7 +6473,7 @@
             "registry": {
               "active": false,
               "name": "rubygems",
-              "package": "",
+              "package": "voxgig-sdk-artil-sdk",
               "state": "pending",
               "url": "https://rubygems.org",
               "vault": {
@@ -6551,7 +6551,7 @@
             "registry": {
               "active": false,
               "name": "npm",
-              "package": "",
+              "package": "@voxgig-sdk/artil-sdk",
               "state": "pending",
               "url": "https://registry.npmjs.org",
               "vault": {

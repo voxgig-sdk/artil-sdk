@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Teammate | Artil API</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><a class="skip" href="#content">Skip to content</a>
+<header class="site-header"><a class="site-title" href="../index.html">Artil API<span>SDK documentation</span></a><div class="site-links"><a class="repo-link" href="https://github.com/voxgig-sdk/artil-sdk">voxgig-sdk/artil-sdk</a></div></header>
+<div class="site-notice" role="note"></div>
+<div class="shell"><nav class="site-nav" aria-label="Documentation"><div class="search"><label for="search">Search documentation</label><input id="search" type="search" data-base="../" placeholder="Find a guide or reference"><div id="results" aria-live="polite"></div></div><details><summary>Overview</summary><a href="../index.html">Artil API</a></details>
+<details open><summary>API</summary><a href="../api/index.html">API overview</a>
+<a href="../api/access.html">Access</a>
+<a href="../api/address.html">Address</a>
+<a href="../api/address_setup.html">AddressSetup</a>
+<a href="../api/agent.html">Agent</a>
+<a href="../api/channel.html">Channel</a>
+<a href="../api/client.html">Client</a>
+<a href="../api/connection.html">Connection</a>
+<a href="../api/event.html">Event</a>
+<a href="../api/listener.html">Listener</a>
+<a href="../api/me.html">Me</a>
+<a href="../api/me_token.html">MeToken</a>
+<a href="../api/message.html">Message</a>
+<a aria-current="page" href="../api/teammate.html">Teammate</a><div class="nav-sections"><a class="nav-section" href="#get-team">GET /team</a></div>
+<a href="../api/token.html">Token</a>
+<a href="../api/webhook.html">Webhook</a></details>
+<details><summary>Guides</summary><a href="../guides/authentication.html">Authentication</a>
+<a href="../guides/first-call.html">Make your first API call</a>
+<a href="../guides/errors.html">Handle errors</a>
+<a href="../guides/concepts.html">Entities, SDKs, and tools</a></details>
+<details><summary>SDKs</summary><a href="../sdks/go.html">Golang</a>
+<a href="../sdks/lua.html">Lua</a>
+<a href="../sdks/php.html">PHP</a>
+<a href="../sdks/postman.html">Postman collections</a>
+<a href="../sdks/py.html">Python</a>
+<a href="../sdks/rb.html">Ruby</a>
+<a href="../sdks/ts.html">TypeScript</a></details>
+<details><summary>Tools</summary><a href="../tools/go-cli.html">Go CLI</a>
+<a href="../tools/go-mcp.html">Go MCP server</a></details>
+<details><summary>Features</summary><a href="../features/debug.html">Debug capture</a>
+<a href="../features/idempotency.html">Idempotency</a>
+<a href="../features/metrics.html">Metrics</a>
+<a href="../features/paging.html">Paging</a>
+<a href="../features/ratelimit.html">Rate limiting</a>
+<a href="../features/retry.html">Retry</a>
+<a href="../features/secrets.html">Secrets</a>
+<a href="../features/test.html">Test transport</a>
+<a href="../features/timeout.html">Timeout</a></details></nav><main id="content"><div class="page-context"><span class="section-dot" aria-hidden="true"></span>API</div><h1 id="teammate">Teammate</h1>
+<p>The workspace's agents and members, with the addresses that reach each, and whether anyone listens to each agent.</p>
+<h2 id="operations">Operations</h2>
+<p>Every route this entity exposes. Each route links to its own reference on this page.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Route</th>
+<th>SDK operation</th>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><a href="#get-team"><code>/team</code></a></td>
+<td><code>list</code></td>
+<td>The team</td>
+</tr>
+</tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<p>One example per SDK, generated from the API model. The argument names are the parameters and fields of this entity, and the values are placeholders. The examples are not compiled or executed.</p>
+<h3 id="golang">Golang</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/go.html#set-up-the-client">Golang setup</a>, then call the operations:</p>
+<pre><code class="language-go">teammates, err := client.Teammate(nil).List(nil, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(teammates)
+</code></pre>
+<h3 id="lua">Lua</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/lua.html#set-up-the-client">Lua setup</a>, then call the operations:</p>
+<pre><code class="language-lua">local teammates, err = client:Teammate():list()
+</code></pre>
+<h3 id="php">PHP</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/php.html#set-up-the-client">PHP setup</a>, then call the operations:</p>
+<pre><code class="language-php">$teammates = $client-&gt;Teammate()-&gt;list();
+</code></pre>
+<h3 id="python">Python</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/py.html#set-up-the-client">Python setup</a>, then call the operations:</p>
+<pre><code class="language-py">teammates = client.Teammate().list()
+</code></pre>
+<h3 id="ruby">Ruby</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/rb.html#set-up-the-client">Ruby setup</a>, then call the operations:</p>
+<pre><code class="language-rb">teammates = client.Teammate.list()
+</code></pre>
+<h3 id="typescript">TypeScript</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/ts.html#set-up-the-client">TypeScript setup</a>, then call the operations:</p>
+<pre><code class="language-ts">const teammates = await client.Teammate().list()
+</code></pre>
+<h2 id="fields">Fields</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>addresses</code></td>
+<td><code>array</code></td>
+<td>Yes</td>
+<td>Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td><code>one,string,null</code></td>
+<td>Yes</td>
+<td>The agent's primary email address, or the member's</td>
+</tr>
+<tr>
+<td><code>icon</code></td>
+<td><code>any</code></td>
+<td>Yes</td>
+<td>The agent's icon; null for members</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>The agent's or member's id</td>
+</tr>
+<tr>
+<td><code>imageUrl</code></td>
+<td><code>one,string,null</code></td>
+<td>Yes</td>
+<td>The member's picture from their sign-in profile, or the avatar it makes them; null for agents</td>
+</tr>
+<tr>
+<td><code>kind</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Kind</td>
+</tr>
+<tr>
+<td><code>listening</code></td>
+<td><code>one,boolean,null</code></td>
+<td>Yes</td>
+<td>Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td><code>one,string,null</code></td>
+<td>Yes</td>
+<td>Name</td>
+</tr>
+<tr>
+<td><code>phone</code></td>
+<td><code>one,string,null</code></td>
+<td>Yes</td>
+<td>The agent's primary phone number, or the one a member added to their profile</td>
+</tr>
+<tr>
+<td><code>role</code></td>
+<td><code>any</code></td>
+<td>Yes</td>
+<td>The member's role in the workspace; null for agents</td>
+</tr>
+</tbody>
+</table>
+<h2 id="list">list</h2>
+<h3 id="get-team" class="operation" data-method="get"><code>GET</code> /team</h3>
+<p>Operation ID: <code>listTeam</code>.</p>
+<p>Authentication: bearer token (<code>token</code>) or oauth2 (<code>oauth</code>).</p>
+<h4 id="responses">Responses</h4>
+<h5 id="200-the-team" class="status" data-status="2xx">200: The team</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[].addresses</code></td>
+<td><code>array of object</code></td>
+<td>Yes</td>
+<td>Where to reach them: the agent's primary address on each channel it has one on, or the member's email address and phone number</td>
+</tr>
+<tr>
+<td><code>[].addresses[].channel</code></td>
+<td><code>enum: email, sms, telegram, slack</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].addresses[].value</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>The email address, phone number, Telegram bot's @username, or Slack bot's workspace and member ids</td>
+</tr>
+<tr>
+<td><code>[].email</code></td>
+<td><code>string,null</code></td>
+<td>Yes</td>
+<td>The agent's primary email address, or the member's</td>
+</tr>
+<tr>
+<td><code>[].icon</code></td>
+<td><code>enum: bot, sparkles, bug, message-square, headphones, search, ... or null</code></td>
+<td>Yes</td>
+<td>The agent's icon; null for members</td>
+</tr>
+<tr>
+<td><code>[].id</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>The agent's or member's id</td>
+</tr>
+<tr>
+<td><code>[].imageUrl</code></td>
+<td><code>string,null</code></td>
+<td>Yes</td>
+<td>The member's picture from their sign-in profile, or the avatar it makes them; null for agents</td>
+</tr>
+<tr>
+<td><code>[].kind</code></td>
+<td><code>enum: agent, member</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].listening</code></td>
+<td><code>boolean,null</code></td>
+<td>Yes</td>
+<td>Whether a client or webhook hears the agent now, so a message at its Message URL reaches it; null for members</td>
+</tr>
+<tr>
+<td><code>[].name</code></td>
+<td><code>string,null</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].phone</code></td>
+<td><code>string,null</code></td>
+<td>Yes</td>
+<td>The agent's primary phone number, or the one a member added to their profile</td>
+</tr>
+<tr>
+<td><code>[].role</code></td>
+<td><code>enum: admin, member or null</code></td>
+<td>Yes</td>
+<td>The member's role in the workspace; null for agents</td>
+</tr>
+</tbody>
+</table>
+<h5 id="4xx-the-request-failed-the-error-says-why">4XX: The request failed; the error says why</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>error</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>error.code</code></td>
+<td><code>enum: invalid_input, unauthorized, forbidden, plan_limit, not_found, conflict, ...</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>error.message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h5 id="5xx-the-request-failed-the-error-says-why">5XX: The request failed; the error says why</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>error</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>error.code</code></td>
+<td><code>enum: invalid_input, unauthorized, forbidden, plan_limit, not_found, conflict, ...</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>error.message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</main></div>
+<script src="../assets/search.js" defer></script></body></html>
