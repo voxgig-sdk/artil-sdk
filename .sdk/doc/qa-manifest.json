@@ -4,6 +4,23 @@
   ],
   "config": ".sdk/doc/qa/vale.ini",
   "routes": {},
+  "identifiers": [
+    "Access",
+    "Address",
+    "AddressSetup",
+    "Agent",
+    "Channel",
+    "Client",
+    "Connection",
+    "Event",
+    "Listener",
+    "Me",
+    "MeToken",
+    "Message",
+    "Teammate",
+    "Token",
+    "Webhook"
+  ],
   "quoted": {
     "SUMMARY.md": [
       "A link where a workspace member creates a Telegram bot or a Slack app for an agent with the provider.",
